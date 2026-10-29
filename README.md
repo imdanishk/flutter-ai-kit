@@ -1,6 +1,6 @@
 # Flutter AI kit
 
-Small, agent-agnostic instructions that help any AI coding agent build Flutter apps the way your project already does. It works with OpenCode, Claude Code, Codex, Cursor, Gemini CLI, Antigravity, VS Code Copilot and other tools that read the open [Agent Skills](https://agentskills.io) format or `AGENTS.md`.
+Small, agent-agnostic instructions that help any AI coding agent build Flutter apps the way your project already does. It works with OpenCode, Claude Code, Codex, Cursor, Gemini CLI, Antigravity, VS Code Copilot, Grok Build and other tools that read the open [Agent Skills](https://agentskills.io) format or `AGENTS.md`.
 
 Status: v0.1, not benchmarked. Early: expect rough edges and please report them. The skills are short on purpose and contain only what an agent does not already know: how to read your project's conventions, a complete feature recipe for one stack, a review checklist, and an estimation method.
 
@@ -43,6 +43,7 @@ dart tool/install.dart --target C:\path\to\your_flutter_app
 
 - `--claude` also copies skills to `.claude/skills` and adds `@AGENTS.md` to `CLAUDE.md` (Claude Code reads `CLAUDE.md`, not `AGENTS.md`)
 - `--copilot` also copies skills to `.github/skills` (VS Code Copilot)
+- `--grok` also copies skills to `.grok/skills` (Grok Build reads `AGENTS.md` and `.grok/skills`)
 - `--dry-run` shows what would change and writes nothing
 
 Skills always go to `.agents/skills/`, which OpenCode, Codex, Cursor, Gemini CLI and Antigravity read. Running the installer again updates the kit's own skill folders and the managed block only; your other files and your project profile are left alone.

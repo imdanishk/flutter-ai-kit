@@ -1,6 +1,6 @@
 // Installs the Flutter AI kit into a Flutter project.
 //
-//   dart tool/install.dart --target <project> [--claude] [--copilot] [--dry-run]
+//   dart tool/install.dart --target <project> [--claude] [--copilot] [--grok] [--dry-run]
 //
 // Uses only the Dart SDK (no packages). Safe to run again: it replaces the kit's
 // own skill folders and the managed block in AGENTS.md, and leaves everything
@@ -14,6 +14,7 @@ void main(List<String> args) {
   var target = '';
   var claude = false;
   var copilot = false;
+  var grok = false;
   var dryRun = false;
   for (var i = 0; i < args.length; i++) {
     switch (args[i]) {
@@ -24,6 +25,8 @@ void main(List<String> args) {
         claude = true;
       case '--copilot':
         copilot = true;
+      case '--grok':
+        grok = true;
       case '--dry-run':
         dryRun = true;
       case '-h' || '--help':
@@ -62,6 +65,7 @@ void main(List<String> args) {
   final destinations = <String>['.agents/skills'];
   if (claude) destinations.add('.claude/skills');
   if (copilot) destinations.add('.github/skills');
+  if (grok) destinations.add('.grok/skills');
 
   for (final dest in destinations) {
     for (final skill in skills) {
@@ -145,6 +149,7 @@ Usage: dart tool/install.dart --target <flutter project> [options]
 
   --claude    also copy skills to .claude/skills and add @AGENTS.md to CLAUDE.md
   --copilot   also copy skills to .github/skills (VS Code Copilot)
+  --grok      also copy skills to .grok/skills (Grok Build)
   --dry-run   show what would change, write nothing
 
 Skills always go to .agents/skills (read by OpenCode, Codex, Cursor, Gemini CLI,
