@@ -1,0 +1,4 @@
+- [ ] `dart tool/check.dart` passes
+- [ ] Skill is under 500 lines and carries knowledge an agent would not guess
+- [ ] `CHANGELOG.md` updated under Unreleased
+- [ ] Tried with (agent and model):

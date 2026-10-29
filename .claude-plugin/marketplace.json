@@ -1,0 +1,12 @@
+{
+  "name": "flutter-ai-kit",
+  "description": "Flutter skills for AI coding agents",
+  "owner": { "name": "Danish" },
+  "plugins": [
+    {
+      "name": "flutter-ai-kit",
+      "source": "./",
+      "description": "Project profile, feature recipe, review, new-project setup and estimation skills for Flutter"
+    }
+  ]
+}

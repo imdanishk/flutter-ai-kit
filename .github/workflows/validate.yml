@@ -1,0 +1,26 @@
+name: validate
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+      - name: Repository checks
+        run: dart tool/check.dart
+      - name: Validate skills against the Agent Skills spec
+        run: |
+          pip install skills-ref
+          for d in skills/*/; do agentskills validate "$d"; done
+      - name: Installer smoke test
+        run: |
+          mkdir -p /tmp/app && echo "name: app" > /tmp/app/pubspec.yaml
+          dart tool/install.dart --target /tmp/app --claude --copilot
+          test -f /tmp/app/.agents/skills/flutter-feature/SKILL.md
+          test -f /tmp/app/AGENTS.md
+          dart tool/install.dart --target /tmp/app --claude --copilot
+          test "$(grep -c 'flutter-ai-kit:start' /tmp/app/AGENTS.md)" = "1"
