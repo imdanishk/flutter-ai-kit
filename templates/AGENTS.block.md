@@ -6,5 +6,5 @@
 - Never edit generated files (`*.g.dart`, `*.freezed.dart`, `*.gr.dart`, `*.config.dart`). Run code generation instead.
 - Ask before adding a package, and say which Android and iOS setup it needs.
 - Write tests only when asked.
-- Skills (in `.agents/skills/`): `flutter-project-profile`, `flutter-feature`, `flutter-review`, `flutter-new-project`, `flutter-estimate`. Use the one that matches the task.
+- Skills (in `.agents/skills/`): `flutter-project-profile`, `flutter-feature`, `flutter-feature-notes`, `flutter-review`, `flutter-new-project`, `flutter-estimate`. Use the one that matches the task.
 <!-- flutter-ai-kit:end -->

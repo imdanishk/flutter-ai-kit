@@ -4,6 +4,16 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-30
+
+### Added
+- Skill `flutter-feature-notes`: a feature index (about 230 features) and detailed, dated entries for sign-in and security, chat and social, commerce and maps, and data and platform surfaces, plus setup guides for data sharing, payments, media and notifications.
+- `docs/REFRESH.md`: how to refresh the notes every two weeks.
+
+### Known gaps
+- Roughly a third of the detailed entries are marked `Partly verified` or `Unverified (Verify)`, mainly in commerce and maps. Confirm them against current sources before relying on them.
+- The index lists about 230 features; only the areas above have detailed entries.
+
 ## [0.2.0] - 2026-10-29
 
 ### Added

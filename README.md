@@ -10,6 +10,7 @@ Status: v0.1, not benchmarked. Early: expect rough edges and please report them.
 |---|---|
 | `flutter-project-profile` | Detect the stack and conventions and record a short profile in `AGENTS.md` |
 | `flutter-feature` | Add or change a feature following the project's own patterns, then generate code and analyze |
+| `flutter-feature-notes` | Look up how a feature is built in Flutter: package, backend needs, Android/iOS setup, custom work, store risks, with verified/unverified status |
 | `flutter-review` | Read-only review of a diff with file and line findings |
 | `flutter-new-project` | Create the base architecture (Cubit, Freezed, injectable, auto_route) with shared core types |
 | `flutter-estimate` | AI-assisted effort ranges with approach class, backend dependency and Android/iOS differences |
@@ -53,6 +54,10 @@ Then open the project in your agent and say: "Run the flutter-project-profile sk
 ## Updating
 
 Install the new release over the old one (option 3), run `npx skills update` (option 1), or `/plugin marketplace update flutter-ai-kit` (option 2). Versions follow [Semantic Versioning](https://semver.org/); see [CHANGELOG.md](CHANGELOG.md).
+
+## Feature notes
+
+`flutter-feature-notes` holds research on how common app features are built in Flutter. Every entry ends with a dated status (verified, partly verified or unverified). Packages and store rules change quickly, so treat the notes as a starting point and let the agent re-check them. How to refresh them: `docs/REFRESH.md`.
 
 ## Choices
 

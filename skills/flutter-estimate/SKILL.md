@@ -18,7 +18,7 @@ An estimate for AI-assisted work measures the developer's attention time, not th
    - Third-party SDK or vendor (say the vendor, cost model and approval steps)
    - Native code required (say Android, iOS or both)
    - Limited or not realistic on Flutter (say what can be achieved instead)
-3. **Check the facts that decide it.** Before recommending a package, check its current version, maintenance, platform support and licence on pub.dev; do not rely on memory. If you cannot check, label the claim unverified. If `references/` contains a feature note, use it and report its verified date.
+3. **Check the facts that decide it.** Before recommending a package, check its current version, maintenance, platform support and licence on pub.dev; do not rely on memory. If you cannot check, label the claim unverified. Use the `flutter-feature-notes` skill for the feature, and report the verified date of the entry you used.
 4. **Name the Android and iOS differences** that change the work (permissions, background limits, store review, entitlements, extensions) as none, minor or significant.
 5. **Estimate with the drivers in `references/estimation.md`.** Give a low to high range of attention time per part and in total. Show the assumptions that would move the range.
 6. **Report** in this shape: summary line; table (part, approach class, custom work after the package, backend dependency, Android/iOS difference, range); assumptions; risks and unknowns; questions still open; what you would build first to cut the biggest uncertainty.
