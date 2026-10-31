@@ -2,7 +2,7 @@
 
 Small, agent-agnostic instructions that help any AI coding agent build Flutter apps the way your project already does. It works with OpenCode, Claude Code, Codex, Cursor, Gemini CLI, Antigravity, VS Code Copilot, Grok Build and other tools that read the open [Agent Skills](https://agentskills.io) format or `AGENTS.md`.
 
-Status: v0.1, not benchmarked. Early: expect rough edges and please report them. The skills are short on purpose and contain only what an agent does not already know: how to read your project's conventions, a complete feature recipe for one stack, a review checklist, and an estimation method.
+Status: v0.1, not benchmarked. Early: expect rough edges and please report them. The skills are short on purpose and contain only what an agent does not already know: how to read your project's conventions, complete feature recipes for two stacks (Cubit with Freezed, and Riverpod), a review checklist, and an estimation method.
 
 ## What you get
 

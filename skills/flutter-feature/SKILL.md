@@ -28,4 +28,7 @@ license: Apache-2.0
 
 ## References
 
-- `references/bloc-freezed-recipe.md`: a complete feature slice for the Cubit, Freezed, injectable and auto_route stack. Read it only when the project uses that stack and has no suitable exemplar, or when asked to start a feature from scratch.
+- `references/bloc-freezed-recipe.md`: a complete feature slice for the Cubit, Freezed, injectable and auto_route stack.
+- `references/riverpod-recipe.md`: a complete feature slice for Riverpod 3.
+
+Read the recipe that matches the project's stack only when the project has no suitable exemplar feature, or when asked to start a feature from scratch.
