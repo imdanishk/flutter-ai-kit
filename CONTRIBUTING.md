@@ -17,10 +17,9 @@ MAJOR.MINOR.PATCH. The version lives in `.claude-plugin/plugin.json` only. Patch
 
 ## Releasing (maintainers)
 
-1. Move the `Unreleased` notes under a new `## [x.y.z] - date` heading.
+1. Move the `Unreleased` notes under a new `## [x.y.z] - date` heading in `CHANGELOG.md`.
 2. Set `version` in `.claude-plugin/plugin.json`.
-3. `dart tool/check.dart`
-4. Commit, then `git tag vX.Y.Z && git push --tags`. The release workflow builds the zip and publishes the GitHub release.
+3. Merge to `main`. The `release` workflow notices the new version, runs `dart tool/check.dart`, builds the zip and publishes the GitHub release and its tag. No manual tagging.
 
 ## Conduct
 

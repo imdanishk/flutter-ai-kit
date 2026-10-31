@@ -5,5 +5,5 @@
 3. In this folder: `git init -b main`, `git add .`, `git commit -m "Initial release"`, then `git remote add origin ...` and `git push -u origin main`.
 4. On GitHub: add the description, and topics `flutter`, `dart`, `ai-agents`, `agent-skills`, `claude-code`, `opencode`, `codex`, `cursor`. Turn on private vulnerability reporting (Settings, Security).
 5. Check the `validate` workflow turns green on the first push.
-6. Release: `git tag v0.1.0 && git push --tags`. The `release` workflow publishes the zip and notes.
+6. Release: bump `version` in `.claude-plugin/plugin.json` and merge to `main`; the `release` workflow tags and publishes automatically.
 7. Test each install route from a clean folder before announcing it.

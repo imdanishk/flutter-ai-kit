@@ -1,7 +1,11 @@
 name: release
+# Publishes a GitHub release automatically when the version in
+# .claude-plugin/plugin.json changes on main. No manual tagging needed.
 on:
   push:
-    tags: ['v*']
+    branches: [main]
+    paths: ['.claude-plugin/plugin.json']
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -12,17 +16,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dart-lang/setup-dart@v1
-      - name: Check version, changelog and skills
-        run: dart tool/check.dart --tag "${GITHUB_REF_NAME}"
-      - name: Build zip
-        run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          git archive --format=zip --prefix="flutter-ai-kit-${VERSION}/" -o "flutter-ai-kit-${VERSION}.zip" HEAD
-      - name: Extract release notes
-        run: |
-          VERSION="${GITHUB_REF_NAME#v}"
-          awk -v v="$VERSION" '$0 ~ "^## \\[" v "\\]" {f=1; next} /^## \[/ {f=0} f' CHANGELOG.md > notes.md
-      - name: Publish release
+      - name: Read version
+        id: v
+        run: echo "version=$(jq -r .version .claude-plugin/plugin.json)" >> "$GITHUB_OUTPUT"
+      - name: Skip if this version is already released
+        id: exists
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "${GITHUB_REF_NAME}" "flutter-ai-kit-${GITHUB_REF_NAME#v}.zip" --title "${GITHUB_REF_NAME}" --notes-file notes.md
+        run: |
+          if gh release view "v${{ steps.v.outputs.version }}" >/dev/null 2>&1; then echo "done=true" >> "$GITHUB_OUTPUT"; else echo "done=false" >> "$GITHUB_OUTPUT"; fi
+      - name: Check version, changelog and skills
+        if: steps.exists.outputs.done == 'false'
+        run: dart tool/check.dart --tag "v${{ steps.v.outputs.version }}"
+      - name: Build zip and notes
+        if: steps.exists.outputs.done == 'false'
+        run: |
+          VERSION="${{ steps.v.outputs.version }}"
+          git archive --format=zip --prefix="flutter-ai-kit-${VERSION}/" -o "flutter-ai-kit-${VERSION}.zip" HEAD
+          awk -v v="$VERSION" '$0 ~ "^## \\[" v "\\]" {f=1; next} /^## \[/ {f=0} f' CHANGELOG.md > notes.md
+      - name: Publish release (creates the tag)
+        if: steps.exists.outputs.done == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ steps.v.outputs.version }}"
+          gh release create "v${VERSION}" "flutter-ai-kit-${VERSION}.zip" --target "${GITHUB_SHA}" --title "v${VERSION}" --notes-file notes.md
