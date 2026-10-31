@@ -4,6 +4,11 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-10-31
+
+### Changed
+- Releases are now published automatically when the version in `.claude-plugin/plugin.json` changes on `main` (no manual tagging).
+
 ## [0.3.1] - 2026-10-31
 
 ### Changed
