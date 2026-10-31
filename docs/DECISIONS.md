@@ -13,4 +13,4 @@
 
 - Only the Cubit, Freezed, injectable, auto_route stack has a recipe. Riverpod, plain BLoC and GetX projects work through the profile skill but have no recipe.
 - No skills yet for accessibility, performance profiling, platform channels, or release and store submission.
-- Feature notes cover four areas in detail; the rest of the feature index has briefs only. About a third of the detailed entries still need verification.
+- Feature notes cover four areas in detail; the rest of the feature index has briefs only. About a quarter of the detailed entries (22 of 79) are still partly verified or unverified.

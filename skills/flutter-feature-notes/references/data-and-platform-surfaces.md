@@ -53,27 +53,27 @@ Related first-pass docs: `01-data-sharing-and-linking.md`, `03-media-and-video.m
 <!-- meta: size=M; days=1-5; deps=flutter-only; platform-difference=none -->
 - **Brief:** Generated equality, copyWith, unions and JSON parsing instead of hand-written boilerplate.
 - **Seen in:** Not user-visible.
-- **Recommended approach:** json_serializable 6.15.2 (published 2026-10-20, google.dev) for JSON, plus freezed 4.0.3 (published 2026-10-17, dash-overflow.net) where unions or copyWith are needed. The freezed page says Dart 3 sealed classes replace its `when`/`map`, and that primary constructors are stable from Dart 3.13, so freezed is now mainly for `==`, `toString` and copyWith. Prefer plain sealed classes for simple states. build_runner's version was not opened (Verify).
+- **Recommended approach:** json_serializable 6.15.2 (published 2026-10-20, google.dev) for JSON, plus freezed 4.0.3 (published 2026-10-17, dash-overflow.net) where unions or copyWith are needed. The freezed page says Dart 3 sealed classes replace its `when`/`map`, and that primary constructors are stable from Dart 3.13, so freezed is now mainly for `==`, `toString` and copyWith. Prefer plain sealed classes for simple states. The generator runner is build_runner 2.17.1 (published 2026-10-14, tools.dart.dev verified publisher, not discontinued); the page's command is `dart run build_runner build`, with `dart run build_runner watch` for watch mode.
 - **Effort:** M, 1-5 days to set up and convert; range driven by existing model count and freezed 2-to-4 migration.
 - **Depends on:** Flutter-only.
 - **Android/iOS differences:** None.
 - **Custom work after the package:** CI step that runs the generator and checks for stale output; decide whether generated files are committed.
 - **Pitfalls and store review:** Major-version jumps (freezed 3 migration guide exists); slow build_runner on big repos.
 - **What to tell the requester:** Internal only. Cuts bugs, not visible features.
-- **Status:** Verified 2026-10-30 from https://pub.dev/packages/freezed and https://pub.dev/packages/json_serializable; build_runner Verify.
+- **Status:** Verified 2026-10-30 from https://pub.dev/packages/freezed and https://pub.dev/packages/json_serializable; build_runner verified 2026-10-31 from https://pub.dev/packages/build_runner.
 
 ### Clean architecture and repository pattern
 <!-- meta: size=L; days=5-15; deps=flutter-only; platform-difference=none -->
 - **Brief:** Layering (UI, logic, data) so features are testable and teams do not collide.
 - **Seen in:** Not user-visible.
-- **Recommended approach:** Flutter's official app-architecture guide: UI layer (views and view models), data layer (repositories wrapping services), optional domain layer. Add the domain/use-case layer only where logic is reused by several view models; a mandatory use-case class per call is overhead for most screens. Use a Result type for errors.
+- **Recommended approach:** Flutter's official app-architecture guide: UI layer (views and view models, one view model per view), data layer (repositories as source of truth, wrapping stateless services), optional domain layer. The recommendations page rates the domain layer as conditional: add use-cases only when a view model merges several repositories, is very complex, or logic is reused by several view models; the page says use-cases "in most apps ... add unnecessary overhead". Rated "strongly recommend": repository pattern, abstract repository classes (swap implementations per environment), dependency injection, MVVM with no logic in widgets, unidirectional data flow, immutable models, and fakes for tests. Rated "recommend": commands for user actions, freezed or built_value for immutable models, go_router, standard naming. The page suggests the `provider` package for injection and ChangeNotifier for view models; this kit's default (Cubit with get_it) is a team choice that keeps the layering. The design-patterns page lists Result (error handling without exceptions), Command, optimistic state, offline-first, key-value and SQL articles.
 - **Effort:** L, 5-15 days for the template and one reference feature; ongoing cost per feature is small. Range driven by strictness.
 - **Depends on:** Flutter-only.
 - **Android/iOS differences:** None.
-- **Custom work after the package:** No package; write the folder structure, base classes, lint rules, and a worked example feature. Sub-pages of the guide (concepts, recommendations, design patterns) were not opened, so details of its Result and command patterns are Verify.
+- **Custom work after the package:** No package; write the folder structure, base classes, lint rules, and a worked example feature. The individual Result and Command articles and the concepts pages were not opened, so their code details are Verify.
 - **Pitfalls and store review:** Over-layering small apps; DTO-to-model mapping boilerplate.
 - **What to tell the requester:** Costs time up front, saves time on every later feature.
-- **Status:** Partly verified: only the intro page https://docs.flutter.dev/app-architecture was opened; layer details are Verify.
+- **Status:** Partly verified 2026-10-31 from https://docs.flutter.dev/app-architecture/guide, https://docs.flutter.dev/app-architecture/design-patterns and https://docs.flutter.dev/app-architecture/recommendations (earlier: the intro page); the individual design-pattern articles and concepts pages remain Verify.
 
 ### REST networking
 <!-- meta: size=M; days=2-6; deps=flutter-only, backend; platform-difference=none -->
@@ -118,14 +118,14 @@ Related first-pass docs: `01-data-sharing-and-linking.md`, `03-media-and-video.m
 <!-- meta: size=L; days=15-40; deps=flutter-only, backend, paid-service; platform-difference=none -->
 - **Brief:** Local database as the source of truth, an outbox of pending writes, and conflict handling when back online.
 - **Seen in:** WhatsApp (queued messages), Notion, Google Docs.
-- **Recommended approach:** drift 2.35.3 (published 2026-10-23, simonbinder.eu; Android, iOS, desktop, web) with your own outbox, for modest scope. Choose powersync 2.5.0 (published 2026-10-19, powersync.com) when you need multi-device sync over Postgres, MongoDB, MySQL or SQL Server; it needs the PowerSync service, and hosting cost is Verify.
+- **Recommended approach:** drift 2.35.3 (published 2026-10-23, simonbinder.eu; Android, iOS, desktop, web) with your own outbox, for modest scope. Choose powersync 2.5.0 (published 2026-10-19, powersync.com) when you need multi-device sync over Postgres, MongoDB, MySQL or SQL Server; it needs the PowerSync service. Cloud pricing on its pricing page (2026-10-31): Free at $0 per month (2 GB synced, 500 MB hosted, 50 peak concurrent clients, deactivated after 1 week of inactivity), Pro from $49 per month and Team from $599 per month (each 30 GB synced, 10 GB hosted, 1,000 peak concurrent clients, then usage charges), Enterprise custom. Free is not suitable for production. The page lists a self-hosting option but gives no terms (Verify). Flutter's design-patterns page also has an offline-first article (not opened).
 - **Effort:** L, 15-40 days. Driven by number of synced entities and conflict rules, which are product decisions.
 - **Depends on:** Backend (idempotent writes, change feed or sync service); possibly a paid service.
 - **Android/iOS differences:** None.
 - **Custom work after the package:** Schema migrations, outbox with retry, conflict policy (last write wins or merge), delete tombstones, sync status UI, data wipe on logout.
 - **Pitfalls and store review:** Conflicts and migrations are the real cost.
 - **What to tell the requester:** Read caching is cheap; true offline editing with sync is a project. Ask which data must be editable offline.
-- **Status:** Verified 2026-10-30 from https://pub.dev/packages/drift and https://pub.dev/packages/powersync; PowerSync pricing Verify.
+- **Status:** Verified 2026-10-30 from https://pub.dev/packages/drift and https://pub.dev/packages/powersync; pricing verified 2026-10-31 from https://www.powersync.com/pricing; self-hosting terms remain Verify.
 
 ### Background processing
 <!-- meta: size=M; days=2-5; deps=flutter-only, native-android, native-ios; platform-difference=significant -->
@@ -226,14 +226,14 @@ Related first-pass docs: `01-data-sharing-and-linking.md`, `03-media-and-video.m
 <!-- meta: size=M; days=3-8; deps=native-ios, native-android; platform-difference=significant -->
 - **Brief:** Make app content searchable from system search and assistants.
 - **Seen in:** Apple Notes, Mail and Messages index content for system search.
-- **Recommended approach:** flutter_core_spotlight 1.0.4 is iOS only and was last published 2021-07-05: treat as stale. Recommend a small Pigeon bridge to Core Spotlight (`CSSearchableIndex`) and Android shortcuts. App Actions details were not researched (Verify).
+- **Recommended approach:** flutter_core_spotlight 1.0.4 is iOS only (ciannapps.com) and was last published about five years ago (2021-07-05): treat as stale, though not marked discontinued. Recommend a small Pigeon bridge to Core Spotlight (`CSSearchableIndex`). On Android, App Actions are current (Android developer page, updated 2026-07-16): Android 5 (API 21) or higher, phones only, declared as `<capability>` elements in `shortcuts.xml` mapped to built-in intents and fulfilled by an activity or deep link, registered by uploading to Google Play Console. Triggering is not guaranteed. Static shortcuts reach Assistant through `<capability-binding>`; dynamic shortcuts reach Google surfaces only when pushed with the Google Shortcuts Integration Library. Each capability needs a fallback intent with no required parameters. The App Actions pages do not mention AppFunctions, so how the two relate is Verify. Apple's Core Spotlight pages returned only a short description ("index your content so people can find it from Spotlight and Safari"), so the iOS indexing and deletion API details are Verify.
 - **Effort:** M, 3-8 days.
 - **Depends on:** Native code.
 - **Android/iOS differences:** Significant: separate APIs, no shared package.
 - **Custom work after the package:** Indexing triggers, deleting entries on logout, handling taps to deep link.
 - **Pitfalls and store review:** Indexing personal data raises privacy duties; delete on sign-out.
 - **What to tell the requester:** iOS Spotlight is straightforward; Android equivalents differ and need scoping.
-- **Status:** Partly verified (flutter_core_spotlight page); App Actions Verify.
+- **Status:** Partly verified 2026-10-31 from https://pub.dev/packages/flutter_core_spotlight, https://developer.android.com/develop/devices/assistant/overview, https://developer.android.com/develop/devices/assistant/action-schema and https://developer.android.com/develop/ui/views/launch/shortcuts/creating-shortcuts; Apple Core Spotlight page bodies could not be read, so iOS API details remain Verify.
 
 ### Quick Settings tiles
 <!-- meta: size=M; days=2-5; deps=native-android; platform-difference=significant -->
@@ -291,14 +291,14 @@ Related first-pass docs: `01-data-sharing-and-linking.md`, `03-media-and-video.m
 <!-- meta: size=L; days=10-30; deps=flutter-only, native-android, native-ios, store-approval; platform-difference=significant -->
 - **Brief:** Remote-first, focus-driven UI on TV.
 - **Seen in:** Netflix, YouTube, Disney+.
-- **Recommended approach:** Android TV and Fire TV: a normal Android build with TV manifest entries (Verify) and dpad 3.1.1 (published 2026-10-07, fluttercandies.com) for focus regions. dpad's 3.0 was a rewrite of 2.x and it has about 5k downloads. tvOS: flutter_tvos 1.1.3 (fluttertv.dev) is part of a separate open-source embedder project, not official Flutter, so treat as high risk.
+- **Recommended approach:** Android TV and Fire TV: a normal Android build with TV manifest entries and dpad 3.1.1 (published 2026-10-07, fluttercandies.com) for focus regions. dpad's 3.0 was a rewrite of 2.x and it has about 5k downloads. tvOS: flutter_tvos 1.1.3 (fluttertv.dev) is part of a separate open-source embedder project, not official Flutter, so treat as high risk. Android TV manifest (Android developer docs): an activity with the `LEANBACK_LAUNCHER` intent category (without it the app is invisible on TV), `android.hardware.touchscreen` required false (needed to count as a TV app on Google Play), `android.software.leanback` (false runs on phone and TV; true limits Google Play to Android TV), and an `android:banner` of 320 x 180 pixels containing the app name. The docs recommend Compose for TV for native UI and describe Leanback as deprecated; neither applies to Flutter UI. Google Play TV quality rules (minimum tier): every function reachable with the five-way d-pad, Back returns to the TV home screen, landscape without letterboxing, no text cut off by screen edges, Android App Bundle required, and from 2026-08-01 support for 32-bit and 64-bit plus 16 KB page size. Apps without the manifest entries are not reviewed as TV apps. Fire TV (Amazon docs): Fire OS is an Android fork and most Android apps run, but Amazon services must replace Google services, so plugins depending on Google Play services need replacements.
 - **Effort:** L, 10-30 days; tvOS higher.
 - **Depends on:** Native manifest, store listings.
 - **Android/iOS differences:** Significant.
 - **Custom work after the package:** Focus design, remote keys, 10-foot layouts, TV-specific store assets.
-- **Pitfalls and store review:** TV store quality rules (Verify).
+- **Pitfalls and store review:** Screens not reachable by d-pad miss the Google Play TV minimum tier; plugins that depend on Google services may need replacements on Fire TV. Fire TV manifest and Amazon Appstore submission rules, and Apple tvOS review rules, are Verify.
 - **What to tell the requester:** Android TV likely fine; Apple TV is experimental.
-- **Status:** Partly verified: https://pub.dev/packages/dpad and https://pub.dev/packages/flutter_tvos; TV manifest and store rules Verify.
+- **Status:** Partly verified 2026-10-31 from https://pub.dev/packages/dpad and https://pub.dev/packages/flutter_tvos (earlier pass), https://developer.android.com/training/tv/get-started/create, https://developer.android.com/docs/quality-guidelines/tv-app-quality and https://developer.amazon.com/docs/fire-tv/get-started-with-fire-tv.html; Amazon requirements pages and Apple tvOS pages could not be read, so Fire TV manifest and Appstore rules and tvOS store rules remain Verify.
 
 ### Desktop, web and multi-window
 <!-- meta: size=M; days=5-15; deps=flutter-only; platform-difference=minor -->
@@ -317,27 +317,27 @@ Related first-pass docs: `01-data-sharing-and-linking.md`, `03-media-and-video.m
 <!-- meta: size=M; days=4-10; deps=backend, native-ios, native-android, third-party-sdk; platform-difference=significant -->
 - **Brief:** Add tickets, loyalty or boarding passes to Apple Wallet and Google Wallet.
 - **Seen in:** Airline apps, Starbucks, Ticketmaster.
-- **Recommended approach:** The backend must create and sign the pass. pass_flutter 2.0.2 (2023-08-09) only saves and reads passes; add_to_wallet 0.0.2 (2021-08-19) wraps the Apple Add button; both stale. add_to_google_wallet 0.0.5 (2024-08-28, Android, thedroidsonroids.com) is a button widget. Recommend a small native bridge to `PKAddPassesViewController` on iOS and the Google save link or that button on Android (Verify).
+- **Recommended approach:** The backend must create and sign the pass. pass_flutter 2.0.2 (2023-08-09) only saves and reads passes; add_to_wallet 0.0.2 (2021-08-19) wraps the Apple Add button; both stale. add_to_google_wallet 0.0.5 (2024-08-28, Android, thedroidsonroids.com) is a button widget. Recommend a small native bridge to PassKit on iOS (Apple says apps show the localized Add to Wallet badge through the PassKit API; the `PKAddPassesViewController` class name was not on a page opened) and the Google save link or button on Android. Apple (Wallet get-started page): a paid developer account, a signing certificate, and passes signed with it; if the certificate expires, installed passes keep working but you cannot sign new passes or send updates, and if it is revoked passes stop working properly; updates arrive by push or pull-to-refresh; QR, Aztec and PDF417 barcodes are supported. Google (Wallet Android page): create an issuer account, a pass class and a pass object, encode them in a JWT, add `com.google.android.gms:play-services-pay` (page uses 16.5.0), check `getPayApiAvailabilityStatus` with `SAVE_PASSES` before showing the button, and use the official button (48 dp high, at least 200 dp wide). New Google issuer accounts start in demo mode: passes go only to Admin or Developer users and listed test accounts until you request publishing access in the dashboard.
 - **Effort:** M, 4-10 days; backend signing dominates.
 - **Depends on:** Backend; Apple pass certificates and Google Wallet issuer account.
 - **Android/iOS differences:** Significant.
 - **Custom work after the package:** Pass design and signing service, update pushes.
-- **Pitfalls and store review:** Certificate expiry; Google Wallet issuer approval (Verify).
+- **Pitfalls and store review:** Apple certificate expiry blocks new passes and updates; Google demo mode until publishing access is granted (review criteria and timing are not stated on the page, Verify).
 - **What to tell the requester:** Feasible, mostly backend.
-- **Status:** Partly verified from the four package pages above; Apple/Google Wallet requirements Verify.
+- **Status:** Partly verified 2026-10-31 from the four package pages (earlier pass), https://developer.apple.com/wallet/get-started/, https://developer.apple.com/wallet/, https://developers.google.com/wallet/generic/android and https://developers.google.com/wallet/generic/getting-started/issuer-onboarding; Apple Pass Type ID, `.pkpass` format and update-server details (the Apple documentation pages returned no body) and Google publishing-access criteria remain Verify.
 
 ### App Clips and Instant Apps
-<!-- meta: size=L; days=8-20; deps=native-ios, native-android, store-approval; platform-difference=significant -->
+<!-- meta: size=L; days=8-20; deps=native-ios, store-approval; platform-difference=significant -->
 - **Brief:** Tiny install-free entry points opened from links, QR codes or NFC.
 - **Seen in:** Apple promotes App Clips for parking, scooter rental and food ordering (Verify per app).
-- **Recommended approach:** Flutter docs describe an iOS App Clip target: deployment target 16.0 or higher, 15 MB uncompressed limit "larger apps may still exceed", a bundle-id Associated Domain, and extra Xcode build phases. No Flutter guide for Android Instant Apps was found (Verify).
+- **Recommended approach:** Flutter docs describe an iOS App Clip target: deployment target 16.0 or higher, 15 MB uncompressed limit "larger apps may still exceed", a bundle-id Associated Domain, and extra Xcode build phases. Android: Google Play Instant is deprecated per the Android developer page: from December 2025 Instant Apps cannot be published on Google Play, the Play Instant APIs no longer work, and Google recommends deep links into the regular app. Plan iOS App Clips only; Android needs deep links instead (see `01-data-sharing-and-linking.md`).
 - **Effort:** L, 8-20 days.
 - **Depends on:** Native targets; associated domains; store configuration.
-- **Android/iOS differences:** Significant.
+- **Android/iOS differences:** Significant: iOS has App Clips; Android has no instant-app equivalent any more.
 - **Custom work after the package:** Xcode setup, size reduction, invocation URLs, handoff to the full app.
 - **Pitfalls and store review:** `flutter attach` cannot auto-discover the session; use the debug URI.
 - **What to tell the requester:** Check release-size feasibility first.
-- **Status:** Partly verified from https://docs.flutter.dev/platform-integration/ios/ios-app-clip; Android Verify.
+- **Status:** Verified 2026-10-31 from https://developer.android.com/topic/google-play-instant (Android side) and, in an earlier pass, https://docs.flutter.dev/platform-integration/ios/ios-app-clip (iOS side). The Android page shows "last updated 2026-06-24" with a December 2025 deprecation date; the exact sunset timing is Verify.
 
 ### Matter and smart home
 <!-- meta: size=L; days=15-40; deps=native-ios, native-android, third-party-sdk; platform-difference=significant -->
@@ -356,11 +356,11 @@ Related first-pass docs: `01-data-sharing-and-linking.md`, `03-media-and-video.m
 <!-- meta: size=M; days=3-8; deps=native-android, native-ios; platform-difference=significant -->
 - **Brief:** Floating video and multi-window layouts.
 - **Seen in:** YouTube, Netflix, Google Meet.
-- **Recommended approach:** See `03-media-and-video.md` for PiP (pip_kit and native_picture_in_picture, both early versions). Split-screen is Android `resizeableActivity` plus adaptive layouts; iPad multitasking is a Verify.
+- **Recommended approach:** See `03-media-and-video.md` for PiP (pip_kit and native_picture_in_picture, both early versions). Android PiP (Android developer docs): API 26 or higher; set `android:supportsPictureInPicture="true"` plus `configChanges` (`screenSize|smallestScreenSize|screenLayout|orientation`) on the activity; Android 12 adds `setAutoEnterEnabled` for smooth entry (earlier versions call `enterPictureInPictureMode()`); check `FEATURE_PICTURE_IN_PICTURE` at runtime because low-RAM devices may disable it; hide non-video UI while in PiP; Android TV PiP needs Android 14 or higher. Android split-screen: `resizeableActivity` defaults to true for apps targeting API 24 or higher; on API 31 and higher large screens all apps support multi-window, and on API 36 and higher it is ignored on screens 600 dp wide or more, so the work is adaptive layout, not a manifest switch. Declare `<layout>` minimum sizes where needed. iPad multitasking was not researched (Verify).
 - **Effort:** M, 3-8 days.
 - **Depends on:** Native config on both platforms.
 - **Android/iOS differences:** Significant: iOS PiP cannot show Flutter's video_player texture.
 - **Custom work after the package:** Enter PiP from the video screen, resize layouts.
 - **Pitfalls and store review:** Test on real devices.
 - **What to tell the requester:** Android easy, iOS needs native video.
-- **Status:** Partly verified from `03-media-and-video.md`; split-screen Verify.
+- **Status:** Partly verified 2026-10-31: Android PiP and split-screen from https://developer.android.com/develop/ui/views/picture-in-picture, https://developer.android.com/develop/ui/compose/system/picture-in-picture and https://developer.android.com/develop/ui/compose/layouts/adaptive/support-multi-window-mode; the iOS PiP claim rests on `03-media-and-video.md` (not reopened) and iPad multitasking remains Verify.

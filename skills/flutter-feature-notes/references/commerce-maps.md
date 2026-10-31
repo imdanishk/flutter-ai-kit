@@ -21,40 +21,40 @@ Shared assumptions: one mid/senior Flutter developer, finished designs and backe
 <!-- meta: size=L; days=10-20; deps=flutter-only, backend, third-party-sdk, paid-service; platform-difference=minor -->
 - **Brief:** Cart with quantities and promo codes, saved items, address and delivery slot selection, payment, order confirmation.
 - **Seen in:** Amazon, Shopify-based stores, Zalando, Instacart.
-- **Recommended approach:** Server-owned cart (the backend calculates totals, tax, shipping and discounts) and a thin Flutter state layer; payment through flutter_stripe PaymentSheet and the `pay` wallet buttons, as in `02-payments-and-subscriptions.md`. Rejected: client-side totals (tamperable) and the store billing API for physical goods.
+- **Recommended approach:** Server-owned cart (the backend calculates totals, tax, shipping and discounts) and a thin Flutter state layer; payment through flutter_stripe 14.2.0 (flutterstripe.io, published 2026-10-14; its page recommends PaymentSheet and supports Apple Pay and Google Pay) and, for wallet buttons, pay 3.3.0 (google.dev, 2025-11-21), as in `02-payments-and-subscriptions.md`. Rejected: client-side totals (tamperable) and the store billing API for physical goods.
 - **Effort:** L, 10-20 days. Drives the range: guest carts and merging on login, address book, promo rules, payment edge cases, order idempotency.
 - **Depends on:** Backend (mostly), paid payment processor, Apple Pay merchant setup and Google Pay Business Console.
-- **Android/iOS differences:** Minor: Apple Pay and Google Pay setup, Stripe activity theme on Android (see 02).
+- **Android/iOS differences:** Minor. iOS: Apple Pay merchant identifier and payment processing certificate; flutter_stripe needs iOS 13.0. Android: Google Pay Business Console account; flutter_stripe needs API level 21+, Kotlin 1.8.0+, an AppCompat-based activity theme and `FlutterFragmentActivity`.
 - **Custom work after the package:** Cart persistence, optimistic updates, stock-conflict handling, retry-safe order submission, 3-D Secure return handling.
-- **Pitfalls and store review:** Physical goods must not use in-app purchase (guideline 3.1.3(e), see 02). Verify tax and invoice rules per country.
+- **Pitfalls and store review:** Apple guideline 3.1.3(e) says apps selling physical goods or services consumed outside the app must use purchase methods other than in-app purchase, such as Apple Pay or card entry. Verify tax and invoice rules per country.
 - **What to tell the requester:** Achievable at near parity with big retailers. Ask who calculates tax and shipping, which payment methods, and whether guest checkout is needed.
-- **Status:** Partly verified (payment facts reused from 02, verified 2026-10-14); cart design is judgment.
+- **Status:** Verified 2026-10-30 from https://pub.dev/packages/flutter_stripe, https://pub.dev/packages/pay and https://developer.apple.com/app-store/review/guidelines/. Cart design is judgment; tax and invoice rules unverified (Verify).
 
 ### Reviews and ratings
 <!-- meta: size=M; days=3-6; deps=flutter-only, backend; platform-difference=none -->
 - **Brief:** Star ratings, written reviews with photos, helpful votes and moderation.
 - **Seen in:** Amazon, Google Maps, Uber (driver rating), Airbnb.
-- **Recommended approach:** Build the star input with built-in widgets; flutter_rating_bar 4.0.1 still works but was last published 2022-05-18, so I would not add a dependency for a 20-line widget. Photo upload via the image picker and your storage backend.
+- **Recommended approach:** Build the star input with built-in widgets; flutter_rating_bar 4.0.1 still works but was last published 2022-05-18, so I would not add a dependency for a 20-line widget. Photo upload via image_picker 1.2.4 (flutter.dev, published 2026-10-06; `pickMultiImage()` for several photos; iOS needs `NSPhotoLibraryUsageDescription` and `NSCameraUsageDescription`, Android needs no setup) and your storage backend.
 - **Effort:** M, 3-6 days. Drives the range: photos, edit/delete, report flow.
 - **Depends on:** Backend with moderation and abuse handling.
 - **Android/iOS differences:** None.
 - **Custom work after the package:** Rating summary bars, sorting and filtering, accessibility labels (Semantics) for stars, profanity or spam report flow.
-- **Pitfalls and store review:** User-generated content needs reporting, blocking and moderation to satisfy Apple guideline 1.2 (Verify wording).
+- **Pitfalls and store review:** Apple guideline 1.2 requires apps with user-generated content to have a method for filtering objectionable material, a mechanism to report offensive content with timely responses, the ability to block abusive users, and published contact information.
 - **What to tell the requester:** Easy on the app side; moderation policy and fake-review prevention are the real work.
-- **Status:** Verified 2026-10-30 from https://pub.dev/packages/flutter_rating_bar. Store guideline unverified (Verify).
+- **Status:** Verified 2026-10-30 from https://pub.dev/packages/flutter_rating_bar, https://pub.dev/packages/image_picker, https://developer.apple.com/app-store/review/guidelines/ and https://docs.flutter.dev/ui/accessibility/assistive-technologies (which only confirms that `Semantics` customises the accessibility tree). Google Play user-generated content rules unverified (Verify).
 
 ### Food and grocery menus with modifiers
 <!-- meta: size=M; days=5-10; deps=flutter-only, backend; platform-difference=none -->
 - **Brief:** Product pages with required and optional choices (size, toppings, substitutions), min/max rules and live price.
 - **Seen in:** Uber Eats, DoorDash, Instacart.
-- **Recommended approach:** Data-driven forms: the backend sends option groups with rules and prices, Flutter renders them generically and validates locally; the server recomputes the price. No package needed.
+- **Recommended approach:** Data-driven forms: the backend sends option groups with rules and prices, Flutter renders them generically and validates locally; the server recomputes the price. No package needed: Flutter's own `Form` with a `GlobalKey<FormState>` and field `validator` functions (docs.flutter.dev form validation recipe) covers required choices and min/max counts, and `autovalidateMode` can show errors as the user taps. Judgment: option-group widgets are custom code.
 - **Effort:** M, 5-10 days. Drives the range: nested modifiers, availability by time, substitutions.
 - **Depends on:** Backend schema for option groups.
 - **Android/iOS differences:** None.
 - **Custom work after the package:** Option-group widgets, validation, sticky price bar, cart line equality (same item, different options), reorder.
-- **Pitfalls and store review:** Cart line merging bugs are the usual defect. Verify allergen disclosure rules by country.
-- **What to tell the requester:** Achievable, and the schema matters more than the UI. Ask for the most complex menu item you must support.
-- **Status:** Unverified (Verify); judgment-based, no sources opened.
+- **Pitfalls and store review:** Cart line merging bugs are the usual defect (judgment). Allergens: the European Commission page says Regulation (EU) 1169/2011 makes allergen information mandatory for non-prepacked food, including restaurants and cafes, with the same labelling requirements for online and distance selling. Rules for other countries are unverified (Verify).
+- **What to tell the requester:** Achievable, and the schema matters more than the UI. Ask for the most complex menu item you must support and which countries you sell in.
+- **Status:** Partly verified 2026-10-31 from https://docs.flutter.dev/cookbook/forms/validation (page says it reflects Flutter 3.47, updated 2026-10-06) and the European Commission food information legislation page. Menu design is judgment; allergen rules outside the European Union unverified (Verify).
 
 ### Booking and reservations
 <!-- meta: size=M; days=5-10; deps=flutter-only, backend; platform-difference=none -->
@@ -75,25 +75,25 @@ Shared assumptions: one mid/senior Flutter developer, finished designs and backe
 - **Seen in:** Uber, Lyft, Bolt, DoorDash.
 - **Recommended approach:** The backend computes the quote (distance and time from a routing API, plus rules and demand), signs it with an expiry, and the app only displays it and sends the quote id back at checkout. Rejected: any pricing logic in the client.
 - **Effort:** M, 3-7 days. Drives the range: price breakdown screens, expiry and refresh handling, promos.
-- **Depends on:** Backend, routing service (see Places, geocoding, directions below).
+- **Depends on:** Backend, routing service (see Places, geocoding, directions below). Google's Compute Routes returns `distanceMeters`, `duration` and an encoded polyline for the fields you request in a field mask; plain requests bill at the Essentials tier (10,000 free, then $5 per 1,000), while traffic-aware routing (`TRAFFIC_AWARE`) bills at the Pro tier (5,000 free, then $10 per 1,000 up to 100,000 events).
 - **Android/iOS differences:** None.
 - **Custom work after the package:** Quote screen, countdown and re-quote on expiry, breakdown sheet, currency formatting.
-- **Pitfalls and store review:** Estimate versus final price mismatches cause support load; show "estimated" wording. Verify local price-display regulations.
+- **Pitfalls and store review:** Estimate versus final price mismatches cause support load; show "estimated" wording (judgment). Verify local price-display regulations. Traffic-aware quotes cost double per request, so cache quotes by route.
 - **What to tell the requester:** The app part is small; pricing rules are a business and backend task. Ask for the formula and whether prices are locked.
-- **Status:** Unverified (Verify); judgment-based.
+- **Status:** Partly verified 2026-10-31 from https://developers.google.com/maps/documentation/routes/usage-and-billing, https://developers.google.com/maps/documentation/routes/compute_route_directions and https://developers.google.com/maps/billing-and-pricing/pricing. Quote design is judgment; price-display regulations unverified (Verify).
 
 ### Recommendations and personalisation
 <!-- meta: size=M; days=4-8; deps=flutter-only, backend; platform-difference=none -->
 - **Brief:** Personalised home feeds, "because you bought" carousels, and ranking.
 - **Seen in:** Netflix, Amazon, Spotify, Uber Eats.
-- **Recommended approach:** Ranking lives on the server (own model, or a vendor such as Algolia Recommend, Verify). Flutter renders sectioned feeds from a server-driven layout and logs impressions and taps. Rejected: on-device ranking, except for trivial "recently viewed".
+- **Recommended approach:** Ranking lives on the server (own model, or a hosted vendor). Algolia Recommend offers frequently bought together, related items, trending items and looking-similar models; the models need event history (for example 1,000 or more conversion events for frequently bought together, 250 or more for trending), return up to 30 items and retrain once daily. Its overview page names no Flutter client, and the algolia_helper_flutter page does not mention Recommend, so plan to call it from your backend (client options Verify). Flutter renders sectioned feeds from a server-driven layout and logs impressions and taps (judgment). Rejected: on-device ranking, except for trivial "recently viewed".
 - **Effort:** M, 4-8 days for the client; model work is separate.
-- **Depends on:** Backend and data pipeline; possibly a paid service.
+- **Depends on:** Backend and data pipeline; possibly a paid service (Algolia Recommend pricing not stated on the page opened, Verify).
 - **Android/iOS differences:** None.
 - **Custom work after the package:** Section renderer, lazy loading, impression tracking, skeleton loaders, feedback actions ("not interested").
-- **Pitfalls and store review:** Tracking for personalisation can require consent and, on iOS, App Tracking Transparency if it is cross-app (Verify).
+- **Pitfalls and store review:** Apple's user privacy page defines tracking as linking your app's data with other companies' data for targeted advertising or advertising measurement, or sharing it with data brokers, and requires App Tracking Transparency permission for that. It does not explicitly address first-party personalisation, but it warns that a third-party analytics or advertising SDK can bring your data into scope. Privacy-law consent (for example in the European Union) is unverified (Verify).
 - **What to tell the requester:** The UI is easy; relevance quality needs data and time. Do not promise Netflix-level results at launch.
-- **Status:** Unverified (Verify).
+- **Status:** Partly verified 2026-10-31 from https://www.algolia.com/doc/guides/algolia-recommend/overview/, https://pub.dev/packages/algolia_helper_flutter and https://developer.apple.com/app-store/user-privacy-and-data-use/. Feed design is judgment; Algolia pricing, Flutter access and privacy-law consent unverified (Verify).
 
 ## Maps, places and routing
 
@@ -114,14 +114,14 @@ Shared assumptions: one mid/senior Flutter developer, finished designs and backe
 <!-- meta: size=M; days=4-8; deps=flutter-only, backend, third-party-sdk, paid-service; platform-difference=minor -->
 - **Brief:** Address autocomplete, converting addresses to coordinates and back, drawing a route and showing an ETA.
 - **Seen in:** Uber, Uber Eats, Lyft, Google Maps.
-- **Recommended approach:** Autocomplete with flutter_google_places_sdk 0.4.3 (published 2025-12-30; whether it uses the new Places SDK is unconfirmed). Routes and ETA from your backend calling Google's Routes API; the app only draws the returned polyline. For simple reverse geocoding use geocoding 5.0.0 (baseflow.com, 2026-07-03; platform geocoders, `IO_ERROR` signals rate limiting). Rejected: flutter_polyline_points 3.1.0 as default (last published 2025-09-20, puts the API key in app code).
+- **Recommended approach:** Autocomplete with flutter_google_places_sdk 0.4.3 (sparta.guru, verified publisher, BSD-3-Clause, about 10 months old at capture; README says it uses each platform's native Places library so the key can be restricted to your app; it does not say whether that is the new or legacy Places SDK, or mention session tokens, so Verify both). Routes and ETA from your backend calling Google's Routes API; the app only draws the returned polyline. For simple geocoding use geocoding 5.0.1 (baseflow.com, MIT, Android, iOS and macOS; platform geocoders, `IO_ERROR` usually means rate limiting). Rejected: flutter_polyline_points 3.1.0 as default (last published 2025-09-20; its README examples put the API key in app code, though it supports both Directions and Routes API).
 - **Effort:** M, 4-8 days. Drives the range: backend proxy, session tokens, saved places.
-- **Depends on:** Paid Google Maps Platform (Geocoding and Compute Routes: 10,000 free then about $5 per 1,000 at the Essentials tier; legacy Directions is still listed); backend for routing.
-- **Android/iOS differences:** Minor: Android geocoder depends on Google services availability.
+- **Depends on:** Paid Google Maps Platform: Geocoding and Compute Routes Essentials 10,000 free then $5 per 1,000 (up to 100,000 events); traffic-aware Compute Routes is Pro (5,000 free, then $10); Autocomplete requests (new) 10,000 free then $2.83 per 1,000, with session usage listed as unlimited free; legacy Directions still listed. Backend for routing.
+- **Android/iOS differences:** Minor: the geocoding README says Android geocoding depends on Google Play Services, which is unavailable in some countries.
 - **Custom work after the package:** Debounced autocomplete, recent places, polyline decoding, ETA refresh.
-- **Pitfalls and store review:** Traffic-aware routing may fall in a higher billing tier (Verify). Autocomplete without session tokens costs more (Verify).
+- **Pitfalls and store review:** Google's session token page (legacy Places) says requests without a token are each billed under the Per Request SKU; it does not describe new Places API sessions (Verify).
 - **What to tell the requester:** Achievable. Ask expected daily requests, since cost scales with usage.
-- **Status:** Verified 2026-10-30 from the pub.dev pages above and https://developers.google.com/maps/billing-and-pricing/pricing. Places SDK version and tiers unverified (Verify).
+- **Status:** Verified 2026-10-31 from https://pub.dev/packages/flutter_google_places_sdk, https://pub.dev/packages/geocoding, https://pub.dev/packages/flutter_polyline_points, https://developers.google.com/maps/billing-and-pricing/pricing, https://developers.google.com/maps/documentation/routes/usage-and-billing and the Places session tokens page. Places SDK generation, new-API session billing and exact pub.dev dates for geocoding and the Places package unverified (Verify).
 
 ### Order tracking and live status
 <!-- meta: size=L; days=10-18; deps=flutter-only, backend, third-party-sdk, paid-service; platform-difference=minor -->
@@ -130,11 +130,11 @@ Shared assumptions: one mid/senior Flutter developer, finished designs and backe
 - **Recommended approach:** Push status changes with the transport your backend already has (GraphQL subscriptions or WebSocket; web_socket_channel 3.0.3 was published 2025-04-17 and its page does not mention auto-reconnect, so add your own backoff). Use FCM for background updates (see 04). Show the courier on google_maps_flutter with an animated marker. Rejected: polling every few seconds.
 - **Effort:** L, 10-18 days. Drives the range: reconnect and resume, marker interpolation, ETA updates.
 - **Depends on:** Backend realtime layer, courier app sending location, maps key.
-- **Android/iOS differences:** Minor: push setup per 04.
+- **Android/iOS differences:** Minor. iOS: Firebase's Flutter page requires push notifications plus the Background fetch and Remote notifications modes, and an APNs authentication key uploaded to Firebase. Android: Android 7.0 or higher with Google Play services.
 - **Custom work after the package:** Timeline widget, state machine, reconnect and catch-up on resume, smoothing, "arriving" notifications.
-- **Pitfalls and store review:** The app is suspended in the background, so rely on push for status changes there.
+- **Pitfalls and store review:** The Firebase page says a notification tap opens the app, and `getInitialMessage()` (terminated) and `onMessageOpenedApp` (background) deliver the message, so route taps to the order screen. Relying on push while backgrounded is judgment; background handlers and message types are not on that page (Verify).
 - **What to tell the requester:** Achievable at near parity; smoothness depends on location update frequency from the courier.
-- **Status:** Partly verified (web_socket_channel page, 2026-10-30); design is judgment.
+- **Status:** Partly verified 2026-10-31 from https://pub.dev/packages/web_socket_channel (3.0.3, 2025-04-17, tools.dev publisher, no reconnect mention) and https://firebase.google.com/docs/cloud-messaging/flutter/client. Design is judgment; map marker animation not tested (Verify).
 
 ### Ride-sharing driver tracking
 <!-- meta: size=L; days=15-30; deps=flutter-only, backend, third-party-sdk, paid-service, native-android, native-ios, store-approval; platform-difference=significant -->

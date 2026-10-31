@@ -4,6 +4,12 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-10-31
+
+### Changed
+- Re-verified 55 of the detailed feature entries against current sources. Corrections include: Firebase App Check defaults to DeviceCheck on iOS (App Attest is opt-in); Google Play Instant is deprecated; `flutter_chat_ui` 2.x is a rewrite of 1.x; a third-party Camera Kit plugin exists.
+- 22 of 79 entries remain partly verified or unverified (each says what is still to check).
+
 ## [0.3.0] - 2026-10-30
 
 ### Added
@@ -11,7 +17,7 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 - `docs/REFRESH.md`: how to refresh the notes every two weeks.
 
 ### Known gaps
-- Roughly a third of the detailed entries are marked `Partly verified` or `Unverified (Verify)`, mainly in commerce and maps. Confirm them against current sources before relying on them.
+- Roughly a third of the detailed entries were marked `Partly verified` or `Unverified (Verify)` at this release; see 0.3.1 for the rerun.
 - The index lists about 230 features; only the areas above have detailed entries.
 
 ## [0.2.0] - 2026-10-29

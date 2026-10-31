@@ -47,14 +47,14 @@ Shared assumptions: one mid/senior Flutter developer, design and backend APIs re
 <!-- meta: size=M; days=5-12; deps=backend, third-party-sdk, native-android, native-ios; platform-difference=significant -->
 - **Brief:** Passwordless sign-in using device-bound FIDO credentials (Face ID, fingerprint, screen lock), synced through iCloud Keychain or Google Password Manager.
 - **Seen in:** Google, PayPal, Amazon, WhatsApp.
-- **Recommended approach:** `passkeys` 2.23.1 (corbado.com, Sep 14, 2026), which needs Flutter 3.35 or later. Alternatives: Auth0 or Supabase built-in passkeys (Supabase marks them beta). The package contains no server; you need a WebAuthn relying-party server.
+- **Recommended approach:** `passkeys` 2.23.1 (corbado.com, Sep 14, 2026, BSD-3-Clause, not discontinued), which needs Dart 3.9 and Flutter 3.35 or later and supports Android, iOS, macOS, web and Windows. Alternatives: `auth0_flutter` (supports passkeys on Android, iOS and web) or Supabase built-in passkeys (Supabase marks them beta: Verify). The package contains no server; you need a WebAuthn relying-party server.
 - **Effort:** M, 5-12 days, mostly backend WebAuthn and recovery flows; the client part is small.
 - **Depends on:** Backend WebAuthn server (custom or managed); hosted domain files.
-- **Android/iOS differences:** significant. Android: `assetlinks.json` with the `get_login_creds` relation and all signing fingerprints including the Play upload key, served without redirects. iOS and macOS: apple-app-site-association file plus Associated Domains `webcredentials:` entitlement. The relying-party ID must match the domain. Same hosting pattern as App Links in 01-data-sharing-and-linking.md.
+- **Android/iOS differences:** significant. Android: `assetlinks.json` served without redirects as `application/json`; the relying-party ID must match the hosting domain (relation name and which signing fingerprints to list: Verify). iOS: enable biometrics; simulators need enrolled Face ID; the package page documents the apple-app-site-association file and Associated Domains entitlement for macOS (the exact iOS `webcredentials:` entry: Verify). Same hosting pattern as App Links in 01-data-sharing-and-linking.md.
 - **Custom work after the package:** Registration and sign-in ceremonies, fallback login, credential management screen, account recovery.
-- **Pitfalls and store review:** Needs a signed-in Google account and screen lock on Android. Minimum OS versions: Verify.
+- **Pitfalls and store review:** The package page gives no general minimum OS. Restore credentials need Android 9 (API 28) or later with Google Play services; the PRF extension needs iOS 18 or later. The Auth0 SDK states Android 9 or later and iOS 16.6 or later for its mobile passkey methods.
 - **What to tell the requester:** Feasible, but a server is mandatory and a fallback login must remain. Ask whether passkeys replace or supplement passwords.
-- **Status:** Verified 2026-10-30 from pub.dev/packages/passkeys and auth0_flutter. OS minimums: Verify.
+- **Status:** Partly verified 2026-10-30 from pub.dev/packages/passkeys and pub.dev/packages/auth0_flutter. Verify: Supabase beta label, Android assetlinks relation and fingerprints, iOS entitlement entry (Apple and Android passkey pages did not return their text).
 
 ## Sessions and local protection
 
@@ -62,40 +62,40 @@ Shared assumptions: one mid/senior Flutter developer, design and backend APIs re
 <!-- meta: size=S; days=1-2; deps=flutter-only, native-android, native-ios; platform-difference=minor -->
 - **Brief:** Fingerprint or face check to unlock the app or confirm a sensitive action.
 - **Seen in:** Banking apps, WhatsApp chat lock, 1Password.
-- **Recommended approach:** `local_auth` 3.0.2 (flutter.dev, Jul 9, 2026). No credible alternative needed.
+- **Recommended approach:** `local_auth` 3.0.2 (flutter.dev, Jul 9, 2026; Android SDK 24 or later, iOS 13 or later, macOS and Windows). No credible alternative needed.
 - **Effort:** S, 1-2 days, driven by fallback and error states.
 - **Depends on:** Flutter-only plus platform setup.
-- **Android/iOS differences:** Minor. `biometricOnly: true` forces biometrics; by default PIN or pattern is allowed as fallback. Android needs a FragmentActivity-based activity and the biometric permission; iOS needs the Face ID usage description (Verify exact keys in the platform READMEs).
-- **Custom work after the package:** Lockout handling, enrolment checks, what happens when biometrics change.
-- **Pitfalls and store review:** The result is a boolean on the client, not proof for a server; bind real secrets to a keystore key if needed (Verify).
+- **Android/iOS differences:** Minor. `biometricOnly: true` forces biometrics (not supported on Windows); by default PIN, pattern or passcode is allowed as fallback. Android: use `FlutterFragmentActivity` (a `FragmentActivity` is required), add the `USE_BIOMETRIC` permission, and make the `LaunchTheme` parent a `Theme.AppCompat` theme to prevent crashes on Android 8 and below. iOS: add `NSFaceIDUsageDescription` to `Info.plist`.
+- **Custom work after the package:** Lockout handling (the package throws `LocalAuthException` with codes such as `temporaryLockout` and `biometricLockout`), enrolment checks, what happens when biometrics change.
+- **Pitfalls and store review:** The result is a boolean on the client, not proof for a server; binding real secrets to a keystore key is not covered by the package pages (Verify).
 - **What to tell the requester:** Easy. It is a convenience gate, not server-grade authentication.
-- **Status:** Partly verified (version and `biometricOnly` behaviour from pub.dev/packages/local_auth; platform keys: Verify).
+- **Status:** Verified 2026-10-30 from pub.dev/packages/local_auth, local_auth_android and local_auth_darwin. Keystore binding advice: Verify.
 
 ### Token refresh and sessions
 <!-- meta: size=M; days=2-5; deps=flutter-only, backend; platform-difference=none -->
 - **Brief:** Attach access tokens, refresh on 401 once, queue parallel requests, and sign out cleanly when refresh fails.
 - **Seen in:** Any app with accounts (Instagram, Uber, Netflix).
-- **Recommended approach:** A `dio` interceptor with a single in-flight refresh future, tokens in `flutter_secure_storage` 11.2.0 (steenbakker.dev; default Android storage is RSA-OAEP key wrapping with AES-GCM, min SDK 23). Ferry or GraphQL users do the same in a link. Not verified: current `dio` version.
+- **Recommended approach:** A `dio` 5.11.1 (flutter.cn, Sep 4, 2026, not discontinued) interceptor; its docs describe `QueuedInterceptor`, which runs requests through the interceptor one at a time, a fit for a single in-flight refresh. Tokens go in `flutter_secure_storage` 11.2.0 (Sep 16, 2026; Android AES-GCM with RSA-OAEP key wrapping, min SDK 23; iOS Keychain, default accessibility `unlocked`). Ferry or GraphQL users do the same in a link.
 - **Effort:** M, 2-5 days. Driven by race conditions and multi-device logout.
 - **Depends on:** Backend refresh endpoint with rotation.
-- **Android/iOS differences:** None in Dart. Keychain data surviving uninstall on iOS: Verify.
+- **Android/iOS differences:** None in Dart. Android backups can break stored keys (`Failed to unwrap key`); the package advises `android:allowBackup="false"`. Keychain data surviving uninstall on iOS: the package page does not say (Verify).
 - **Custom work after the package:** Everything: queueing, retry policy, forced-logout events, token expiry on app resume.
 - **Pitfalls and store review:** Concurrent refreshes invalidating rotated tokens is the classic bug.
 - **What to tell the requester:** Achievable; quality depends on backend token design.
-- **Status:** Partly verified (flutter_secure_storage only); dio: Verify.
+- **Status:** Partly verified 2026-10-30 from pub.dev/packages/dio and flutter_secure_storage. Verify: iOS Keychain survival after uninstall; the refresh pattern itself is design advice, not documented by either page.
 
 ### MFA
 <!-- meta: size=M; days=3-8; deps=backend, third-party-sdk, paid-service; platform-difference=minor -->
 - **Brief:** Second factor (SMS or authenticator code) at sign-in or for sensitive actions.
 - **Seen in:** Google, GitHub, banking apps.
-- **Recommended approach:** Use the identity provider's MFA: `firebase_auth` multi-factor, or `auth0_flutter` (MFA supported, verified). Prefer TOTP over SMS. Rejected: custom MFA.
+- **Recommended approach:** Use the identity provider's MFA: `firebase_auth` multi-factor, or `auth0_flutter` (its page describes an `mfa_token` flow during login and a My Account API for managing MFA methods). Prefer TOTP over SMS in principle, but the Firebase Flutter guide documents SMS only; its TOTP guides cover iOS, Android and web. Rejected: custom MFA.
 - **Effort:** M, 3-8 days for enrolment, challenge and recovery codes.
-- **Depends on:** Provider tier (Firebase SMS MFA needs Identity Platform, Verify), SMS cost.
-- **Android/iOS differences:** Minor; SMS auto-fill differs, as in phone OTP.
-- **Custom work after the package:** Enrolment UI, challenge screen, backup codes, lost-device support.
-- **Pitfalls and store review:** Account recovery is the hard part.
+- **Depends on:** Firebase needs the upgrade to Authentication with Identity Platform; SMS cost (pricing: Verify).
+- **Android/iOS differences:** Minor; SMS auto-fill differs, as in phone OTP. Windows has no Firebase MFA.
+- **Custom work after the package:** Enrolment UI, challenge screen (catch `FirebaseAuthMultiFactorException`), backup codes, lost-device support.
+- **Pitfalls and store review:** Firebase requires a verified email before enrolment. Phone, anonymous and Apple Game Center sign-in cannot carry MFA, and multi-tenant use is unsupported on Flutter. Account recovery is the hard part.
 - **What to tell the requester:** Achievable; ask which factors and risk level.
-- **Status:** Unverified (Verify): the Firebase MFA page could not be opened.
+- **Status:** Verified 2026-10-30 from firebase.google.com/docs/auth/flutter/multi-factor, firebase.google.com/docs/auth/android/totp-mfa and pub.dev/packages/auth0_flutter. Verify: Flutter TOTP support, SMS pricing.
 
 ### Secure PIN / app lock
 <!-- meta: size=M; days=3-6; deps=flutter-only; platform-difference=none -->
@@ -104,11 +104,11 @@ Shared assumptions: one mid/senior Flutter developer, design and backend APIs re
 - **Recommended approach:** `local_auth` 3.0.2 plus `flutter_secure_storage` 11.2.0; store a salted hash of the PIN, never the PIN. Custom lifecycle observer for lock timing.
 - **Effort:** M, 3-6 days: lock-on-resume, retry limits, task switcher blur.
 - **Depends on:** Flutter-only.
-- **Android/iOS differences:** None in logic; hiding the task-switcher snapshot needs native handling on both (Verify).
+- **Android/iOS differences:** None in logic. Platform setup for biometrics is as in Biometric auth (Android `FragmentActivity` and `USE_BIOMETRIC`; iOS `NSFaceIDUsageDescription`). Hiding the task-switcher snapshot needs native handling on both (Verify).
 - **Custom work after the package:** All of it: PIN screens, lockout, forgot-PIN flow, privacy overlay.
 - **Pitfalls and store review:** Forgot-PIN must tie back to sign-in.
 - **What to tell the requester:** Easy to build; local only, not a server defence.
-- **Status:** Partly verified (package pages only).
+- **Status:** Partly verified 2026-10-30 from pub.dev/packages/local_auth, local_auth_android, local_auth_darwin and flutter_secure_storage (versions, platform setup, storage). Verify: salted-hash PIN design and task-switcher blur have no source page.
 
 ## Client hardening
 
@@ -116,68 +116,68 @@ Shared assumptions: one mid/senior Flutter developer, design and backend APIs re
 <!-- meta: size=M; days=3-7; deps=backend, third-party-sdk, native-android, native-ios; platform-difference=significant -->
 - **Brief:** Prove to the backend that requests come from the genuine app on a genuine device.
 - **Seen in:** Google apps, banking and game apps.
-- **Recommended approach:** `firebase_app_check` 0.5.1 (firebase.google.com, Oct 23, 2026), using Play Integrity on Android and App Attest or DeviceCheck on iOS. Alternative for non-Firebase backends: call the Play Integrity and App Attest APIs through a custom channel.
+- **Recommended approach:** `firebase_app_check` 0.5.1 (firebase.google.com, Oct 23, 2026; Android, iOS, macOS, web, Windows). Defaults: Play Integrity on Android, DeviceCheck on iOS and macOS; App Attest is opt-in (`AppleProvider.appAttest`, iOS 14 or later, macOS 14 or later); a debug provider exists for emulators and CI. Alternative for non-Firebase backends: call the Play Integrity and App Attest APIs through a custom channel.
 - **Effort:** M, 3-7 days, driven by backend enforcement and debug-token handling.
 - **Depends on:** Firebase or backend verification; Play Console and Apple capability.
-- **Android/iOS differences:** significant. Android registers the signing SHA-256; iOS needs the App Attest capability. Providers: Verify, the page did not state them.
+- **Android/iOS differences:** significant. Register each app with its provider in the Firebase console and call `activate()` after `Firebase.initializeApp()`. Some Android devices need "Meets basic device integrity" enabled in Play Console. Signing SHA-256 registration and the App Attest Xcode capability: Verify, the page did not state them.
 - **Custom work after the package:** Server-side token check, staged enforcement, debug providers for CI.
 - **Pitfalls and store review:** Rooted or older devices may fail legitimately.
 - **What to tell the requester:** Raises the bar; does not stop determined attackers.
-- **Status:** Partly verified (version from pub.dev/packages/firebase_app_check; providers: Verify).
+- **Status:** Partly verified 2026-10-30 from pub.dev/packages/firebase_app_check and firebase.google.com/docs/app-check/flutter/default-providers. Correction: iOS default is DeviceCheck, not App Attest. Verify: SHA-256 and App Attest capability steps, Play Integrity quotas.
 
 ### Root, jailbreak and hook detection
 <!-- meta: size=M; days=2-5; deps=third-party-sdk, paid-service, native-android, native-ios; platform-difference=minor -->
 - **Brief:** Runtime checks for rooted or jailbroken devices, hooking tools and tampering.
 - **Seen in:** Banking, payment and game apps.
-- **Recommended approach:** `freerasp` 8.2.4 (talsec.app, Oct 5, 2026). It detects root or jailbreak, hooks (Frida, LSPosed) and untrusted installs; freemium with a fair usage policy. Rejected: abandoned single-purpose root checkers.
+- **Recommended approach:** `freerasp` 8.2.4 (talsec.app, published about 25 days before 2026-10-31; Android and iOS; not discontinued; MIT for the open-source part plus Talsec binary components). It detects root or jailbreak (Magisk, KernelSU, checkra1n), unlocked bootloader, hooks (Frida, LSPosed, Shadow), UI automation (Appium) and untrusted installs. The free tier has a fair usage policy. Other root checkers were not evaluated.
 - **Effort:** M, 2-5 days.
-- **Depends on:** Talsec account; commercial tier for more.
-- **Android/iOS differences:** Minor; setup values per platform are in Talsec's guide (Verify).
+- **Depends on:** Talsec's Flutter integration guide (not opened); the commercial tier adds AppiCrypt backend protection, extra features and support.
+- **Android/iOS differences:** Minor (unverified); the package page gives no per-platform setup and points to Talsec's guide (Verify).
 - **Custom work after the package:** Decide the response (warn, limit, block), report to backend.
 - **Pitfalls and store review:** False positives block legitimate users; detection can be bypassed.
 - **What to tell the requester:** A deterrent, not a guarantee.
-- **Status:** Verified 2026-10-30 from pub.dev/packages/freerasp; setup details: Verify.
+- **Status:** Verified 2026-10-31 from pub.dev/packages/freerasp (version, platforms, detections, licence, tiers). Verify: per-platform setup (Talsec guide not opened), exact publish date.
 
 ### Certificate pinning
 <!-- meta: size=M; days=1-3; deps=flutter-only, backend; platform-difference=minor -->
 - **Brief:** Reject TLS connections whose certificate does not match known fingerprints.
 - **Seen in:** Banking apps, Twitter, Signal.
-- **Recommended approach:** `http_certificate_pinning` 3.0.2 (softarch.dev, Jul 21, 2026; Dio interceptor, `http` client or direct check), pinning the SHA-256 of an intermediate or public key with a backup pin.
+- **Recommended approach:** `http_certificate_pinning` 3.0.2 (softarch.dev, published about 3 months before 2026-10-31; Apache-2.0; Android and iOS; not discontinued). It compares the server certificate's SHA-1 or SHA-256 fingerprint with fingerprints you supply, through a Dio interceptor, an `http` client or a direct check. Which certificate in the chain is compared, and whether a public-key pin is possible: Verify.
 - **Effort:** S-M, 1-3 days, mostly rotation process.
-- **Depends on:** Backend certificate operations.
-- **Android/iOS differences:** Minor; Android network security config is an alternative (Verify).
+- **Depends on:** Backend certificate operations; `dio` (>=4.0.6 <6.0.0) and `http` (^1.3.0) as package dependencies.
+- **Android/iOS differences:** Minor (unverified); the page lists no platform setup. Android network security config as an alternative: Verify.
 - **Custom work after the package:** Pin rotation plan, backup pins, remote kill switch.
-- **Pitfalls and store review:** Expired pins brick the app until updated.
+- **Pitfalls and store review:** Expired pins brick the app until updated. The package's `http` example uses mismatched variable names (`allowedSHAFingerprints` and `certificateSHA256Fingerprints`), so do not copy it unchanged.
 - **What to tell the requester:** Doable, but it creates an operational burden; ask who rotates certificates.
-- **Status:** Partly verified (pub.dev page only).
+- **Status:** Partly verified 2026-10-31 from pub.dev/packages/http_certificate_pinning only. Verify: certificate compared, platform setup, Android network security config alternative, backup-pin and rotation advice (design advice, no source page).
 
 ### Obfuscation
-<!-- meta: size=S; days=0-1; deps=flutter-only; platform-difference=none -->
-- **Brief:** Rename Dart symbols in release builds to slow reverse engineering.
+<!-- meta: size=S; days=0-1; deps=flutter-only; platform-difference=minor -->
+- **Brief:** Rename function and class names in compiled Dart code in release builds to slow reverse engineering. It does not encrypt resources.
 - **Seen in:** Banking and game apps.
-- **Recommended approach:** `flutter build --obfuscate --split-debug-info=<dir>`; keep the symbols for crash deobfuscation.
+- **Recommended approach:** `flutter build <target> --obfuscate --split-debug-info=<dir>`, release builds only. Supported targets: `apk`, `appbundle`, `aar`, `ios`, `ipa`, `ios-framework`, Linux, macOS and Windows. Web is not supported (release web builds are minified instead). Add `--extra-gen-snapshot-options=--save-obfuscation-map=<file>` for a name map.
 - **Effort:** S, under a day plus CI changes.
 - **Depends on:** Flutter-only.
-- **Android/iOS differences:** None.
-- **Custom work after the package:** Store symbols per release and upload to the crash tool.
-- **Pitfalls and store review:** Secrets still ship in the binary.
+- **Android/iOS differences:** Minor. Same flags; each build writes a symbols file named per platform and architecture, and a crash must be matched to the right one.
+- **Custom work after the package:** Back up the symbols file per release; decode crashes with `flutter symbolize -i <trace> -d <symbols>`; upload to the crash tool (Verify).
+- **Pitfalls and store review:** Flutter's page calls storing secrets in an app a poor practice. Code that relies on names breaks (for example `runtimeType.toString()` checks); enum names are not obfuscated.
 - **What to tell the requester:** Slows analysis only.
-- **Status:** Unverified (Verify): Flutter docs page not opened.
+- **Status:** Verified 2026-10-31 from docs.flutter.dev/deployment/obfuscate. Verify: crash tool upload steps (no source page).
 
 ## Privacy and compliance
 
 ### Privacy manifest (iOS)
 <!-- meta: size=S; days=1-2; deps=native-ios, store-approval; platform-difference=significant -->
-- **Brief:** `PrivacyInfo.xcprivacy` declares tracking, collected data and required-reason API use for the app and its SDKs.
+- **Brief:** `PrivacyInfo.xcprivacy` describes the privacy practices of the app and its SDKs (keys include `NSPrivacyTracking`, `NSPrivacyTrackingDomains`, `NSPrivacyCollectedDataTypes` and `NSPrivacyAccessedAPITypes`).
 - **Seen in:** Every App Store app.
-- **Recommended approach:** Add the app manifest in Xcode and update plugins to versions that ship their own manifests; Xcode can generate an aggregated privacy report.
+- **Recommended approach:** Add the app manifest in Xcode (steps: Verify) and update plugins to versions that ship their own manifests. Xcode combines the manifests of all SDKs into one report, which helps fill the privacy labels. Apple's SDK list includes Flutter and many Flutter plugins (for example `path_provider`, `url_launcher`, `sqflite`).
 - **Effort:** S, 1-2 days, driven by SDK count.
 - **Depends on:** Native iOS configuration; store approval.
 - **Android/iOS differences:** iOS only, significant.
 - **Custom work after the package:** Audit each plugin, match the manifest to the App Store privacy answers.
-- **Pitfalls and store review:** Missing manifests or reason codes cause upload warnings or rejection (Verify current enforcement).
+- **Pitfalls and store review:** Apple requires the manifest and a signature for listed SDKs when a new app includes them or an update adds them; Xcode checks that a new SDK version has the same signer. The page gives no enforcement date or consequence (Verify in App Store Connect feedback).
 - **What to tell the requester:** Mandatory housekeeping.
-- **Status:** Unverified (Verify): Apple and Flutter pages did not return the article text.
+- **Status:** Partly verified 2026-10-31 from developer.apple.com/support/third-party-SDK-requirements. Verify: Apple's manifest and required-reason API documentation pages and docs.flutter.dev's privacy manifest page returned no article text; required-reason codes, enforcement, Flutter-specific steps.
 
 ### App Tracking Transparency
 <!-- meta: size=S; days=1-1; deps=third-party-sdk, native-ios, store-approval; platform-difference=significant -->
@@ -194,42 +194,42 @@ Shared assumptions: one mid/senior Flutter developer, design and backend APIs re
 
 ### Consent (GDPR, UMP)
 <!-- meta: size=M; days=2-4; deps=third-party-sdk, paid-service; platform-difference=minor -->
-- **Brief:** Consent form for personalised ads in the EU and UK.
+- **Brief:** Consent form for personalised ads, shown by the User Messaging Platform (UMP); the AdMob page names the EEA, UK and Switzerland as test regions.
 - **Seen in:** Ad-supported apps (Duolingo, news and game apps).
-- **Recommended approach:** UMP through `google_mobile_ads` 9.2.0 (google.dev, Oct 21, 2026). Rejected: custom dialogs for ad consent.
-- **Effort:** M, 2-4 days, driven by message setup in AdMob and a privacy-options entry point.
-- **Depends on:** AdMob account and consent message.
-- **Android/iOS differences:** Minor; each platform needs its AdMob app ID.
-- **Custom work after the package:** Gate ad loading, settings re-entry, testing by debug geography.
-- **Pitfalls and store review:** API names: Verify.
-- **What to tell the requester:** Required if ads run in the EU.
-- **Status:** Partly verified (version only; the AdMob privacy page could not be opened).
+- **Recommended approach:** UMP through `google_mobile_ads` 9.2.0 (google.dev, published about 9 days before 2026-10-31; Android and iOS). Flow: `ConsentInformation.instance.requestConsentInfoUpdate` at every launch, then `ConsentForm.loadAndShowConsentFormIfRequired`. Rejected: custom dialogs for ad consent.
+- **Effort:** M, 2-4 days, driven by message setup and the privacy-options entry point.
+- **Depends on:** AdMob account and a message created under Privacy & messaging.
+- **Android/iOS differences:** Minor (unverified). The SDK picks the message by the app's AdMob application ID; per-platform ID setup: Verify.
+- **Custom work after the package:** Gate ad requests on `canRequestAds()`; show a privacy-options control only when `getPrivacyOptionsRequirementStatus()` says required, opening `showPrivacyOptionsForm`; test with `ConsentDebugSettings` (`testIdentifiers`, `debugGeography`).
+- **Pitfalls and store review:** Do not rely on cached consent; remove test identifiers before release; `reset()` is for testing only. After an error the SDK uses the previous session's status.
+- **What to tell the requester:** Needed for personalised ads where the message applies; whether it is legally required in your markets: Verify with legal advice.
+- **Status:** Partly verified 2026-10-31 from developers.google.com/admob/flutter/privacy and pub.dev/packages/google_mobile_ads. Verify: AdMob application ID setup per platform, legal scope.
 
 ### Play Data Safety and Apple privacy labels
 <!-- meta: size=S; days=1-2; deps=store-approval; platform-difference=significant -->
 - **Brief:** Store disclosures of collected data and sharing.
 - **Seen in:** Every store listing.
-- **Recommended approach:** Inventory data per SDK, then fill both forms from the same sheet.
+- **Recommended approach:** Inventory data per SDK, then fill both forms from the same sheet. Xcode's combined SDK manifest report helps with the Apple labels.
 - **Effort:** S, 1-2 days.
-- **Depends on:** Store consoles.
+- **Depends on:** Store consoles. Apple labels are entered in App Store Connect by the Account Holder, Admins or App Managers.
 - **Android/iOS differences:** significant: separate forms and wording.
-- **Custom work after the package:** Keep forms synced with each release.
-- **Pitfalls and store review:** Google counts SDK data and requires a privacy policy; the form is not verified by Google but misstatements risk enforcement.
+- **Custom work after the package:** Keep forms synced with each release. Apple lets you change label answers at any time without an app update, but answers are required for each new app and update.
+- **Pitfalls and store review:** Google counts SDK data and requires a privacy policy; the form is not verified by Google but misstatements risk enforcement. Apple labels must cover data collected by you and third-party partners (SDKs included); data processed only on the device is not "collected"; a public privacy policy URL is required.
 - **What to tell the requester:** Mandatory and ongoing.
-- **Status:** Verified 2026-10-30 from support.google.com/googleplay/android-developer/answer/10787469; Apple labels: Verify.
+- **Status:** Verified 2026-10-31 for Apple labels from developer.apple.com/app-store/app-privacy-details and developer.apple.com/support/third-party-SDK-requirements; Play Data Safety verified 2026-10-30 from support.google.com/googleplay/android-developer/answer/10787469.
 
 ### Account deletion and age gating
 <!-- meta: size=M; days=3-8; deps=backend, store-approval; platform-difference=significant -->
 - **Brief:** Users must be able to delete their account in-app; some apps must restrict by age.
 - **Seen in:** Instagram, Spotify, TikTok.
-- **Recommended approach:** Backend deletion job plus in-app flow and a web deletion link. For age signals, `age_range_signals` exists on pub.dev; version and maturity: Verify.
+- **Recommended approach:** Backend deletion job plus in-app flow and a web deletion link. For age signals, `age_range_signals` 0.10.1 (povhe.si, MIT, not discontinued, pre-1.0) wraps the Play Age Signals API (beta; Android 6.0 or later; needs an access request and a Google Play install) and Apple's Declared Age Range (iOS 26.0 or later; entitlement `com.apple.developer.declared-age-range`; older versions throw `UnsupportedPlatformException`). Play returns age ranges, with signals for Brazil and Texas so far, and may not be used for advertising or analytics.
 - **Effort:** M, 3-8 days, driven by data retention and third-party deletion.
 - **Depends on:** Backend; store approval.
 - **Android/iOS differences:** significant. Apple 5.1.1(v) requires in-app deletion. Google requires an in-app path plus a web link entered in the Data safety form.
 - **Custom work after the package:** Everything.
 - **Pitfalls and store review:** Cancelling subscriptions first must be explained.
 - **What to tell the requester:** Release blocker; ask retention rules.
-- **Status:** Verified 2026-10-30 from Apple guidelines and support.google.com/googleplay/android-developer/answer/13327111; age signals: Unverified (Verify).
+- **Status:** Verified 2026-10-30 from Apple guidelines and support.google.com/googleplay/android-developer/answer/13327111. Age signals verified 2026-10-31 from pub.dev/packages/age_range_signals, developer.android.com/google/play/age-signals and .../use-age-signals-api. Verify: Apple's Declared Age Range documentation (not opened), age-law scope per region.
 
 ### Kids and family compliance
 <!-- meta: size=M; days=5-15; deps=backend, third-party-sdk, store-approval; platform-difference=significant -->
@@ -238,8 +238,8 @@ Shared assumptions: one mid/senior Flutter developer, design and backend APIs re
 - **Recommended approach:** Decide first whether the app targets children; minimise SDKs and avoid analytics and ads.
 - **Effort:** M, 5-15 days, mostly policy and SDK removal.
 - **Depends on:** Legal review; store approval.
-- **Android/iOS differences:** significant. Apple Kids Category forbids third-party analytics and ads and requires parental gates (verified). Google Families needs certified ad SDKs and a declared age group.
-- **Custom work after the package:** Parental gate, consent flow, data minimisation.
-- **Pitfalls and store review:** Misdeclared audiences lead to removal.
+- **Android/iOS differences:** significant. Apple Kids Category (guideline 1.3): no third-party analytics or advertising, with limited exceptions (analytics that collect no IDFA or identifiable data; contextual ads from services with documented kids policies and human ad review); no personal or device information sent to third parties; links out and purchases only behind a parental gate. Google Families: declare target age groups; apps solely for children must not send the advertising ID or collect precise location; only approved SDKs; Families Self-Certified Ads SDKs and no interest-based ads for children or users of unknown age; mixed-audience apps need a neutral age screen.
+- **Custom work after the package:** Parental gate, consent flow, data minimisation. Apple notes a parental gate is not parental consent for data collection.
+- **Pitfalls and store review:** Misdeclared audiences lead to removal (Google). Apple reserves "For Kids" wording in metadata for the Kids Category.
 - **What to tell the requester:** Get legal advice first.
-- **Status:** Verified 2026-10-30 from Apple guidelines and support.google.com/googleplay/android-developer/answer/9893335; legal specifics: Verify.
+- **Status:** Verified 2026-10-31 from developer.apple.com/app-store/review/guidelines (1.3, 5.1.4) and support.google.com/googleplay/android-developer/answer/9893335. Verify: COPPA and GDPR specifics (no legal source opened).
