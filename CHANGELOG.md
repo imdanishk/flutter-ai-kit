@@ -4,6 +4,11 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-11-01
+
+### Changed
+- Ride-sharing and logistics entries now cite the current `google_navigation_flutter` and `flutter_background_geolocation` package pages (requirements, licence). 20 of 79 detailed entries remain partly verified.
+
 ## [0.4.0] - 2026-10-31
 
 ### Added

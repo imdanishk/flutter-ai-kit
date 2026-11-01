@@ -145,9 +145,9 @@ Shared assumptions: one mid/senior Flutter developer, finished designs and backe
 - **Depends on:** Backend dispatch and realtime, routing and maps services, native background configuration, App Review justification for background location.
 - **Android/iOS differences:** Significant: `ACCESS_BACKGROUND_LOCATION` and foreground service on Android; Always authorization and background mode on iOS (see 04).
 - **Custom work after the package:** Trip state machine, offline queue of location points, throttling by distance, in-app navigation hand-off.
-- **Pitfalls and store review:** Apple may reject unjustified background location (see 04). Turn-by-turn in-app needs the Mapbox navigation SDK or a hand-off to the maps app (Verify).
+- **Pitfalls and store review:** Apple may reject unjustified background location (see 04). In-app turn-by-turn: `google_navigation_flutter` 0.11.2 (Google, Apache-2.0, beta until 1.0) needs Android API 24 or later, iOS 16 or later with Swift Package Manager (CocoaPods unsupported), the background location mode and a Google Cloud API key restricted to the Navigation SDK and Maps SDKs; the user must accept Google's navigation terms in the app, and Mobility Services need a conversation with Google sales. The alternative is a hand-off to the maps app. A Mapbox navigation option: Verify.
 - **What to tell the requester:** Core tracking is feasible; a full Uber clone is a product, not a feature. Ask whether navigation, pooling and payments are in scope.
-- **Status:** Partly verified (04 reused); navigation options unverified (Verify).
+- **Status:** Partly verified 2026-11-01 for Google navigation from https://pub.dev/packages/google_navigation_flutter; tracking parts reuse 04. Verify: Mapbox navigation, Google Mobility Services pricing, matching and dispatch design (judgment).
 
 ## Background tracking and field work
 
@@ -168,11 +168,11 @@ Shared assumptions: one mid/senior Flutter developer, finished designs and backe
 <!-- meta: size=L; days=15-30; deps=flutter-only, backend, third-party-sdk, native-android, native-ios, store-approval; platform-difference=significant -->
 - **Brief:** Drivers or technicians with job lists, proof of delivery (signature, photo, barcode), offline work and live location for dispatchers.
 - **Seen in:** FedEx, Samsara-style fleet apps, ServiceTitan.
-- **Recommended approach:** Combine the background tracking entry above, a local database with a sync queue, signature and barcode packages from the utilities inventory, and a dispatcher web dashboard. Maps via google_maps_flutter.
+- **Recommended approach:** Combine the background tracking entry above, a local database with a sync queue, signature and barcode packages from the utilities inventory, and a dispatcher web dashboard. For managed background tracking use `flutter_background_geolocation` (paid licence for release builds, see the entry above). Maps via google_maps_flutter.
 - **Effort:** L, 15-30 days. Drives the range: offline sync and conflict handling.
 - **Depends on:** Backend with job assignment, background location, store justification.
 - **Android/iOS differences:** Significant background rules (see 04).
 - **Custom work after the package:** Offline sync, proof-of-delivery flow, route ordering (backend), battery policy.
 - **Pitfalls and store review:** Employee tracking needs clear consent and privacy wording (Verify).
 - **What to tell the requester:** Feasible; scope offline behaviour and OS background limits before promising continuous tracking.
-- **Status:** Unverified (Verify); combines entries above.
+- **Status:** Partly verified 2026-11-01: the tracking package and its licence come from https://pub.dev/packages/flutter_background_geolocation; the rest combines the entries above and is judgment. Verify: employee-tracking consent rules by region.
