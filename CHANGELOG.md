@@ -4,6 +4,12 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-01
+
+### Added
+- `flutter-new-project`: Riverpod variant.
+- `flutter-review`: stack-specific checks for Cubit/bloc and Riverpod.
+
 ## [0.4.1] - 2026-11-01
 
 ### Changed

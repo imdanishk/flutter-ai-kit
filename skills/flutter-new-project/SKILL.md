@@ -14,7 +14,7 @@ Use only for a new or empty project. For an existing project, run `flutter-proje
    - project name and organization id
    - platforms (default Android and iOS)
    - Flutter version pinned with FVM (default yes; ask which version, or use the current stable)
-   - stack: Cubit with Freezed, injectable with get_it, auto_route (default). If the developer wants another stack, build it from their choice and skip the assets below.
+   - stack: Cubit with Freezed, injectable with get_it, auto_route (default), or Riverpod 3 (see the Riverpod variant below). For any other stack, build it from the developer's choice and skip the assets that do not apply.
    - flavors (dev, staging, prod) now or later (default later)
 2. **Create the app** with `flutter create` (prefix `fvm` when pinned: `fvm use <version>` first, then `fvm flutter create .`). Commit `.fvmrc`; ignore `.fvm/` in git.
 3. **Add packages with the package manager**, not by hand-editing versions: `flutter pub add flutter_bloc bloc freezed_annotation injectable get_it auto_route` and `flutter pub add --dev build_runner freezed injectable_generator auto_route_generator`. Read the resolved versions and tell the developer if any generator constraint forced a downgrade.
@@ -23,6 +23,10 @@ Use only for a new or empty project. For an existing project, run `flutter-proje
 6. **Wire the base**: `lib/app/injection.dart` (injectable `configureDependencies`), `lib/app/router.dart` (an `AppRouter` with one home route), `lib/main.dart` calling `configureDependencies()` then `runApp(MaterialApp.router(...))`.
 7. **Generate and verify:** `dart run build_runner build --delete-conflicting-outputs` (prefixed with `fvm`), then `flutter analyze` and a run on one device. Add generated files (`*.g.dart`, `*.freezed.dart`, `*.gr.dart`, `*.config.dart`) to `.gitignore` only if the team agreed; otherwise commit them.
 8. **Record the profile**: run `flutter-project-profile` so `AGENTS.md` describes the new project.
+
+## Riverpod variant
+
+Use `flutter pub add flutter_riverpod` (add `riverpod_annotation` and dev packages `riverpod_generator` and `build_runner` only if the developer wants generated providers). Wrap the app in `ProviderScope` in `main.dart` and skip `injectable`, `get_it` and the `RequestStatus`, `Result` and `emitIfOpen` core files: `AsyncValue` and `ref.mounted` cover them. Keep `form_input.dart`, `paging.dart`, `validators.dart` and `strings.dart` if the app needs them. Routing is a separate choice (`auto_route`, `go_router`); ask. Feature slices follow the `flutter-feature` Riverpod recipe.
 
 ## Rules
 
