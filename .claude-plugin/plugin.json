@@ -1,7 +1,7 @@
 {
   "name": "flutter-ai-kit",
   "displayName": "Flutter AI kit",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Agent-agnostic skills for building Flutter apps: project profile, feature recipe, feature notes, review, new-project setup and AI-assisted estimation.",
   "author": { "name": "Danish" },
   "homepage": "https://github.com/imdanishk/flutter-ai-kit",

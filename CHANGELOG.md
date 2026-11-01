@@ -4,6 +4,12 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-11-02
+
+### Changed
+- Second verification pass on 12 feature entries. Now verified: integrity attestation, consent (GDPR, UMP). Corrections: Supabase passkeys are labelled experimental (not beta); `banuba_sdk` is 3.1.7 from a verified publisher; the Android shortcuts library is `core-google-shortcuts`; the Android `assetlinks.json` relation is named.
+- 20 of 79 detailed entries remain partly verified (mostly because Apple, Amazon and vendor pricing pages return no readable text).
+
 ## [0.5.0] - 2026-11-01
 
 ### Added
