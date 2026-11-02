@@ -4,6 +4,12 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.5.4] - 2026-11-02
+
+### Changed
+- README: `npx skills add` needs `--yes` where it cannot ask questions (it otherwise installs nothing and still exits 0); note on using the kit next to the official Flutter and Dart skill sets.
+- `flutter-project-profile`: works without git, and handles a brand-new project with no feature to learn from (records the stack, asks which target stack, points to `flutter-new-project`).
+
 ## [0.5.3] - 2026-11-02
 
 ### Changed

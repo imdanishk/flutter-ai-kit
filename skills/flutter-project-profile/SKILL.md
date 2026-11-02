@@ -12,7 +12,8 @@ The profile tells every later task how this project does things, so work matches
 
 1. **Read the evidence, do not guess.** Open `pubspec.yaml`, `.fvmrc` (if present), `analysis_options.yaml`, the top two levels of `lib/`, `build.yaml`, and the flavor entry points (`lib/main*.dart`). Note which packages are used for:
    state management, dependency injection, routing, networking or GraphQL, local storage, localization, code generation, and error reporting.
-2. **Find the exemplar feature.** Pick the most complete, recently changed feature that has presentation, domain and data code (`git log --name-only -n 40 -- lib` helps). List its files. Later tasks copy this feature's shape.
+2. **Find the exemplar feature.** Pick the most complete, recently changed feature that has presentation, domain and data code (if the folder is a git repository, `git log --name-only -n 40 -- lib` helps; if it is not, judge by the folder structure). List its files. Later tasks copy this feature's shape.
+   **If there is no feature yet** (a project fresh from `flutter create`, or only the template counter app): do not invent conventions. Record the stack from `pubspec.yaml` only, write `Exemplar: none yet (new project)` under Unknown, and ask the developer which stack to use (offer: Cubit with Freezed, or Riverpod; or their own). Then point to `flutter-new-project`, and skip step 3.
 3. **Read the exemplar and write down how it does each of these**, citing the file:
    - state classes (Freezed, Equatable, plain) and how load or submit progress is represented
    - what repositories return (plain values, exceptions, a result or Either type)

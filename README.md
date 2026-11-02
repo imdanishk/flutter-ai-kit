@@ -21,11 +21,19 @@ The installer also writes a small managed block into `AGENTS.md` (about ten line
 
 Pick one. This repository is hosted at `imdanishk/flutter-ai-kit`.
 
-**1. Skills only, any agent** (needs Node.js 22.20 or later). Uses the community [`skills`](https://github.com/vercel-labs/skills) installer, which asks which agents to install for:
+**1. Skills only, any agent** (needs Node.js 22.20 or later). Uses the community [`skills`](https://github.com/vercel-labs/skills) installer. Run it in a normal terminal, in your project folder:
 
 ```
 npx skills add imdanishk/flutter-ai-kit
 ```
+
+It shows a list: choose the skills and agents, then confirm. If it is run where it cannot ask (inside an agent, a script, CI), it prints the prompt, installs nothing and still exits with code 0; add `--yes` to skip the questions:
+
+```
+npx skills add imdanishk/flutter-ai-kit --yes
+```
+
+(`--all` installs for every agent the tool knows, which is usually too many.) Check the result with `ls .agents/skills`.
 
 **2. Claude Code plugin**
 
@@ -50,6 +58,10 @@ dart tool/install.dart --target C:\path\to\your_flutter_app
 Skills always go to `.agents/skills/`, which OpenCode, Codex, Cursor, Gemini CLI and Antigravity read. Running the installer again updates the kit's own skill folders and the managed block only; your other files and your project profile are left alone.
 
 Then open the project in your agent and say: "Run the flutter-project-profile skill."
+
+## Using it with other skill sets
+
+The kit's skill names (`flutter-project-profile`, `flutter-feature`, `flutter-feature-notes`, `flutter-review`, `flutter-new-project`, `flutter-estimate`) did not collide with the official Flutter and Dart skill sets in a test project that had both installed. Those two official sets overlap each other (about 15 skills share names), so install them one at a time and check what remains.
 
 ## Updating
 
