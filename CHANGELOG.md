@@ -4,6 +4,11 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.5.3] - 2026-11-02
+
+### Changed
+- Picture-in-Picture, Spotlight, wallet passes and TV entries now cite Apple's documentation (Apple's own rule: iOS Picture-in-Picture must start only from a user action; wallet pass signing and update service confirmed). Amazon lists Android, HTML5 and React Native for Fire TV, not Flutter, and the two tvOS package sources disagree on the minimum tvOS version.
+
 ## [0.5.2] - 2026-11-02
 
 ### Changed
