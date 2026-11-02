@@ -11,6 +11,14 @@ The notes in `skills/flutter-feature-notes/references/` go stale: packages are u
 5. Add new features to `references/index.md` and, when researched, to the matching area file.
 6. Add a line to `CHANGELOG.md` under `Unreleased` (for example "Refreshed sign-in notes"). Releases that only refresh notes are patch versions.
 
+## Pages that return no text
+
+Some official pages are drawn by JavaScript, so a plain fetch returns only a title. A page that returns no article body counts as not opened.
+
+- **Apple developer documentation:** fetch the JSON behind the page. For `https://developer.apple.com/documentation/<framework>/<symbol>` fetch `https://developer.apple.com/tutorials/data/documentation/<framework>/<symbol>.json` (lower case). This returns the real text. Check the result names the page you wanted.
+- **Apple App Store Review Guidelines and support pages:** fetch the page directly; if it fails, search for the section text and open a result from developer.apple.com.
+- **Other sites:** try the same page under a different path (for example the English docs root), or the project's repository README on GitHub. If nothing loads, leave the claim marked Verify; never fill it in from memory.
+
 ## Prompt for an agent (any model with web access)
 
 > Refresh the entries in `skills/flutter-feature-notes/references/<file>.md` following `docs/REFRESH.md`. Open the source pages before changing any claim. Do not change field names. Report which entries changed, which could not be verified, and anything surprising.

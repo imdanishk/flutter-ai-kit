@@ -4,6 +4,12 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.5.2] - 2026-11-02
+
+### Changed
+- Passkeys, certificate pinning and iOS privacy manifest entries now cite Apple's own documentation (fetched through Apple's documentation JSON; see `docs/REFRESH.md`, "Pages that return no text"), with the Xcode steps, the pinning keys and the App Store upload rule.
+- `docs/REFRESH.md`: how to read pages that return no text.
+
 ## [0.5.1] - 2026-11-02
 
 ### Changed
