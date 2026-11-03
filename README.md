@@ -84,6 +84,14 @@ The kit's skill names (`flutter-project-profile`, `flutter-feature`, `flutter-fe
 
 Install the new release over the old one (option 3), run `npx skills update` (option 1), or `/plugin marketplace update flutter-ai-kit` (option 2). Versions follow [Semantic Versioning](https://semver.org/); see [CHANGELOG.md](CHANGELOG.md).
 
+## Remembering your preferences
+
+Tell the agent a standing preference ("from now on use single quotes", "always put widgets in their own files") and it adds one line to the `Developer preferences` list in `AGENTS.md`. Every later task, in any agent tool, reads that list first. The list is committed with the project, so teammates share it; keep personal habits in your own agent's settings. Running the installer again never touches the list. This relies on the agent following the instruction: check that the line appears.
+
+## Staying current
+
+Packages, store rules and OS versions change. Each feature note carries a date, and the skills tell an agent to open the current package or policy page, look for a newer or better-maintained alternative, and say if it would recommend something different. The recipes also tell the agent to check current major versions first. A scheduled GitHub workflow opens a "Refresh feature notes" issue on the 1st and 15th of each month listing old or unverified entries (see `docs/REFRESH.md`).
+
 ## Feature notes
 
 `flutter-feature-notes` holds research on how common app features are built in Flutter. Every entry ends with a dated status (verified, partly verified or unverified). Packages and store rules change quickly, so treat the notes as a starting point and let the agent re-check them. How to refresh them: `docs/REFRESH.md`.
@@ -100,4 +108,4 @@ Skills are instructions your agent will follow. Read them (they are short) befor
 
 ## Licence
 
-Apache-2.0, see `LICENSE`. Contributions are welcome, see [CONTRIBUTING.md](CONTRIBUTING.md).
+Apache-2.0, see `LICENSE` and `NOTICE`. Contributions are welcome, see [CONTRIBUTING.md](CONTRIBUTING.md).

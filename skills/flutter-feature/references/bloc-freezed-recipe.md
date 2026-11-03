@@ -1,5 +1,7 @@
 # Feature slice recipe: Cubit, Freezed, injectable, auto_route
 
+> Versions and APIs named here were current in late 2026. Before using this recipe, check the current major versions of the packages and their migration notes. If the project is on an older major, follow the project.
+
 Use only when the project profile says this is the stack. Match the project's own helper names (status type, result type, safe emit) if it has them. The names below are the defaults installed by the `flutter-new-project` skill.
 
 ## Files for a feature named `notes`

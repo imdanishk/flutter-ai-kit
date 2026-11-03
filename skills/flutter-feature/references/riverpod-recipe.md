@@ -1,5 +1,7 @@
 # Feature slice recipe: Riverpod 3
 
+> Versions and APIs named here were current in late 2026. Before using this recipe, check the current major versions of the packages and their migration notes. If the project is on an older major, follow the project.
+
 Use only when the project profile says Riverpod is the state management. Follow the project's own naming, folder layout and error handling first; this is the fallback when there is no suitable exemplar feature. Packages checked on 2026-10-31: `flutter_riverpod` 3.4.3, `riverpod_annotation` 4.0.7, `riverpod_generator` 4.0.9 (all from dash-overflow.net).
 
 ## Decide first: hand-written or generated providers

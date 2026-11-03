@@ -4,6 +4,17 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-11-03
+
+### Added
+- Standing developer preferences: the `AGENTS.md` block tells agents to read a `Developer preferences` list and to add a line when the developer states a standing preference. The installer creates the list and never overwrites it.
+- `refresh-reminder` workflow: opens a "Refresh feature notes" issue on the 1st and 15th of each month.
+- `NOTICE` file with the copyright line.
+
+### Changed
+- `flutter-feature-notes` and `flutter-estimate`: compare entry dates with today, check current package pages and look for newer or better-maintained alternatives; the entry is not binding.
+- Recipes: check current major versions before use.
+
 ## [0.7.0] - 2026-11-03
 
 ### Changed

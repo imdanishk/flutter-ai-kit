@@ -8,6 +8,11 @@
 import 'dart:convert';
 import 'dart:io';
 const startMarker = '<!-- flutter-ai-kit:start';
+const prefsStart = '<!-- flutter-ai-kit:preferences:start -->';
+const prefsBlock = '''$prefsStart
+## Developer preferences
+(Standing preferences are added here, one line each.)
+<!-- flutter-ai-kit:preferences:end -->''';
 const endMarker = '<!-- flutter-ai-kit:end -->';
 
 void main(List<String> args) {
@@ -82,7 +87,10 @@ void main(List<String> args) {
   final block = blockFile.readAsStringSync().replaceAll('__VERSION__', version).trimRight();
   final agents = File(_join(project.path, 'AGENTS.md'));
   final current = agents.existsSync() ? agents.readAsStringSync() : '';
-  final updated = _withBlock(current, block);
+  var updated = _withBlock(current, block);
+  if (!updated.contains(prefsStart)) {
+    updated = '${updated.trimRight()}\n\n$prefsBlock\n';
+  }
   _log(dryRun, 'file   AGENTS.md (${current.isEmpty ? 'create' : 'update managed block'})');
   if (!dryRun && updated != current) agents.writeAsStringSync(updated);
 

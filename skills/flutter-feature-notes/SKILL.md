@@ -17,7 +17,11 @@ Reference notes for planning and building common app features. They are research
    - `references/commerce-maps.md`: maps, delivery, booking, live tracking, commerce
    - `references/data-and-platform-surfaces.md`: networking, offline data, sync, home-screen widgets, Live Activities, links and other platform surfaces
    - `references/guides/`: step-by-step setup for data sharing and linking, payments, media and video, notifications, background work and location
-3. **Check the status line of the entry before relying on it.** Each entry ends with `Verified <date>`, `Partly verified` or `Unverified (Verify)`. Package versions, prices, store policies and OS rules change within weeks. If the entry is older than about a month, or any part says Verify, open the current package page or policy page and confirm before you recommend it. Say which claims you confirmed and which you did not.
+3. **Treat every entry as a dated starting point.** Each entry ends with `Verified <date>`, `Partly verified` or `Unverified (Verify)`. Compare that date with today's date: package versions, prices, store policies and OS rules change within weeks, so an entry older than about two months is probably stale, and anything marked Verify is unconfirmed. Before you recommend a package or service:
+   - open its current page (pub.dev, official docs, vendor docs) and confirm version, publish date, maintenance, platform support and licence;
+   - search for newer or better-maintained alternatives, and compare them on those same points;
+   - if you would recommend something different from the entry, say so and say why. The entry is not binding.
+   Say which claims you confirmed and which you could not.
 4. **Report to the requester** using the entry's fields: recommended approach, what depends on the backend or a vendor, native work, Android/iOS differences, custom work after the package, store-review risks and the effort range. Treat the effort range as a starting judgment (see the `flutter-estimate` skill), not a measurement.
 5. **If the feature is not covered,** say so, then research it from current official sources (pub.dev, docs.flutter.dev, platform and vendor documentation) and label what you could not verify.
 

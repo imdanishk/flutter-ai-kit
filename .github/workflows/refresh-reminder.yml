@@ -1,0 +1,41 @@
+name: refresh-reminder
+# Opens an issue on the 1st and 15th of each month (if none is open) listing
+# feature notes that are old or not fully verified. The refresh itself is done
+# by a developer or an agent following docs/REFRESH.md.
+on:
+  schedule:
+    - cron: '0 3 1,15 * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Open a refresh issue if none is open
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          open=$(gh issue list --label feature-notes-refresh --state open --json number -q '.[0].number')
+          if [ -n "$open" ]; then echo "Issue #$open is already open"; exit 0; fi
+          gh label create feature-notes-refresh --color BFD4F2 --description "Refresh the feature notes" 2>/dev/null || true
+          cutoff=$(date -u -d "30 days ago" +%F)
+          {
+            echo "The feature notes need a refresh. Follow \`docs/REFRESH.md\`."
+            echo
+            echo "Entries older than $cutoff or not fully verified:"
+            echo
+            for f in skills/flutter-feature-notes/references/*.md; do
+              awk -v cutoff="$cutoff" -v file="$(basename "$f")" '
+                /^### /{h=substr($0,5)}
+                /^- \*\*Status:\*\*/{
+                  d=""; if (match($0,/20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]/)) d=substr($0,RSTART,RLENGTH)
+                  if ($0 !~ /^- \*\*Status:\*\* Verified/ || d=="" || d<cutoff) print "- " file ": " h " (" (d==""?"no date":d) ")"
+                }' "$f"
+            done
+          } > body.md
+          gh issue create --title "Refresh feature notes ($(date -u +%F))" --label feature-notes-refresh --body-file body.md
