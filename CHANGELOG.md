@@ -4,6 +4,13 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-03
+
+### Changed
+- `flutter-feature` and `flutter-review` now read the project's own rules (`AGENTS.md`, `CLAUDE.md`, rules folders) first; the project rule wins over the kit. Review must name what it checked before saying "no findings", and recommends a second review when the author reviews its own code.
+- `flutter-feature`: when code generation or the full analyzer cannot run, analyze the changed files only and report what was not checked.
+- `flutter-project-profile`: adds a `Conflicts` line (docs versus code) and does not restate rules the project already documents.
+
 ## [0.5.4] - 2026-11-02
 
 ### Changed

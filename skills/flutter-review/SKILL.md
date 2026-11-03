@@ -10,7 +10,7 @@ Read-only. Never modify files while reviewing.
 
 ## Steps
 
-1. Get the change: `git diff` against the base branch (or the files named). Also read the project profile in `AGENTS.md` so findings are judged against this project's conventions, not general taste.
+1. Get the change: `git diff` against the base branch (or the files named). Read the project profile and every rule in `AGENTS.md` (and `CLAUDE.md` or a rules folder if present). List the rules that apply to this change. Findings are judged against these rules first and the checklist below second, not general taste.
 2. Read each changed file in full where it matters. Follow calls into the code the change depends on.
 3. Check the list below. Report only what you can point to in the code. If you suspect something you cannot confirm, say so and say what would confirm it.
 4. Report in this format, most important first:
@@ -21,7 +21,7 @@ Read-only. Never modify files while reviewing.
    Fix: <specific change>
 ```
 
-End with one line listing what you checked and found fine, and one line for anything you could not check.
+End with one line listing what you checked and found fine, and one line for anything you could not check. "No findings" is only acceptable with that list: name the project rules and checklist items you checked against the diff. If you wrote this code yourself in this session, say so: a review by the author misses what the author missed, so recommend a second review in a fresh session or by another agent.
 
 ## Checklist
 

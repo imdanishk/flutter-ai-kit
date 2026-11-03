@@ -32,6 +32,7 @@ The profile tells every later task how this project does things, so work matches
 - Exemplar feature: <path>
 - Conventions: <5 to 10 short lines, each naming the file that shows it>
 - Commands: <fvm prefix if any; codegen; analyze; run with flavor>
+- Conflicts: <where the docs and the code disagree, for example a README command that does not match the launch configuration; do not resolve them>
 - Unknown: <anything you could not determine>
 <!-- flutter-ai-kit:profile:end -->
 ```
@@ -42,4 +43,5 @@ The profile tells every later task how this project does things, so work matches
 
 - Keep the profile under 40 lines. It is loaded into every task, so every line must change what an agent would do.
 - Describe what the code does today, not what you would prefer.
+- If `AGENTS.md` or another file already contains detailed project rules, do not restate them. Keep the profile to what the rules do not say: the exemplar feature, verified commands, and conflicts between the rules and the code. Never edit the existing rules.
 - If the repository already has a profile block, update it in place and say what changed.
