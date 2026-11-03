@@ -4,6 +4,12 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-11-03
+
+### Changed
+- README: how it works, an example of the "Rule conflicts" line, what the kit will not do, and an honest status.
+- Confirmed in a rerun on a real app that the summary lists rule conflicts (a precedent that breaks a written rule, a data-layer type used in presentation).
+
 ## [0.6.1] - 2026-11-03
 
 ### Changed

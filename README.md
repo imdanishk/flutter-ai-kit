@@ -2,7 +2,24 @@
 
 Small, agent-agnostic instructions that help any AI coding agent build Flutter apps the way your project already does. It works with OpenCode, Claude Code, Codex, Cursor, Gemini CLI, Antigravity, VS Code Copilot, Grok Build and other tools that read the open [Agent Skills](https://agentskills.io) format or `AGENTS.md`.
 
-Status: v0.1, not benchmarked. Early: expect rough edges and please report them. The skills are short on purpose and contain only what an agent does not already know: how to read your project's conventions, complete feature recipes for two stacks (Cubit with Freezed, and Riverpod), a review checklist, and an estimation method.
+Status: early (0.x), not benchmarked. Tried so far on two real apps and two fresh projects, all on the Cubit/Freezed stack; the Riverpod recipe is untested. Expect rough edges and please report them. The skills are short on purpose and contain only what an agent does not already know: how to read your project's conventions, complete feature recipes for two stacks (Cubit with Freezed, and Riverpod), a review checklist, and an estimation method.
+
+## How it works
+
+1. **Learn the project.** `flutter-project-profile` reads your `pubspec.yaml`, your folders and one complete feature, and writes a short profile (stack, example feature, commands, conflicts between docs and code) into `AGENTS.md`. It never edits rules you already have.
+2. **Build the way the project builds.** `flutter-feature` reads the profile and your written rules, copies the shape of the example feature, runs code generation and the analyzer, and ends its summary with a **Rule conflicts** line.
+3. **Review honestly.** `flutter-review` checks a diff against your written rules first, and reports a broken rule even when the code copies an existing pattern.
+
+An illustrative summary line (invented names):
+
+> Rule conflicts: `ItemsListCubit` calls `.fold()` although the rules say not to, because it adapts the repository's `Either` to the shared paging cubit, following `ContactsListCubit`; the page imports `ItemModel` from the data layer, contrary to the layer rule, because the existing repository contract returns that type.
+
+## What it will not do
+
+- It does not make an agent follow rules perfectly: these are instructions, and a model can still miss one. Read the "Rule conflicts" line and the review.
+- It does not write tests unless you ask, and it does not run your app.
+- It does not replace your own rules. If your project has them, they win.
+- Its feature notes are research: each entry says whether it is verified, and some are not.
 
 ## What you get
 
