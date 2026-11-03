@@ -4,6 +4,12 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-11-03
+
+### Changed
+- `flutter-feature`: when a written rule and existing code disagree, follow the rule if possible; otherwise use the precedent and report it in a new "Rule conflicts" line of the summary.
+- `flutter-review`: a rule broken by the diff is reported even when the code copies an existing pattern, marked "follows existing precedent".
+
 ## [0.6.0] - 2026-11-03
 
 ### Changed

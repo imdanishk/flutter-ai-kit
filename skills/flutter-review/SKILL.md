@@ -12,7 +12,7 @@ Read-only. Never modify files while reviewing.
 
 1. Get the change: `git diff` against the base branch (or the files named). Read the project profile and every rule in `AGENTS.md` (and `CLAUDE.md` or a rules folder if present). List the rules that apply to this change. Findings are judged against these rules first and the checklist below second, not general taste.
 2. Read each changed file in full where it matters. Follow calls into the code the change depends on.
-3. Check the list below. Report only what you can point to in the code. If you suspect something you cannot confirm, say so and say what would confirm it.
+3. Check each applicable project rule against the diff, then the list below. A rule that existing code elsewhere already breaks is still a rule: if the diff breaks it, report it, and add "follows existing precedent in <file>" so the team can decide whether to fix the rule or the code. Do not excuse a violation because it was copied. Report only what you can point to in the code. If you suspect something you cannot confirm, say so and say what would confirm it.
 4. Report in this format, most important first:
 
 ```
