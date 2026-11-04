@@ -4,6 +4,12 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-11-04
+
+### Added
+- `flutter-service-setup`: backend hand-off for subscriptions - Google Play service account, permissions, Pub/Sub topic and push subscription, Apple In-App Purchase key, Issuer ID, App Store Connect API key, server notification URLs, per-environment separation and a confirm checklist. Permissions and notification requirements checked on Google's and Apple's pages; other steps marked as from a working team's guide.
+- A working per-environment file layout (per-flavor Firebase files, keystores, service accounts, env files).
+
 ## [0.9.0] - 2026-11-04
 
 ### Added
