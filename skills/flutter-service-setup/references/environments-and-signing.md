@@ -52,3 +52,10 @@ Verified 2026-11-04 on official pages unless a line says Unverified. Re-check pa
 - Name each file once. Gradle reads one properties file name; the pipeline must write exactly that name. Fastlane loads `.env.<FLUTTER_FLAVOR>`; the pipeline must write that name, not `.env`. When a document, a pipeline and a lane disagree, the lane or Gradle file that actually runs is the truth; fix the document.
 - Pin the Flutter version in one file (`.fvmrc`) and make every other place read it. Two or three version files that disagree (version manager config, tool-versions file, CI image path) make local and CI builds differ silently.
 - Build-time values go in with `--dart-define`; do not commit them.
+
+## A working per-environment layout (from a team's project; a pattern, not an official page)
+
+- Android: one `google-services.json` per flavor in `android/app/src/<flavor>/`; one keystore per environment referenced from `build.gradle.kts` signing configs; one Firebase-distribution service-account JSON and one Play-upload service-account JSON per environment next to the Fastfile; one `.env.<flavor>` per environment.
+- iOS: one `GoogleService-Info.plist` per flavor under `ios/config/<flavor>/`, copied into the build by a script selected by scheme; Fastlane also holds `Appfile`, `Gymfile`, `Matchfile`, `Pluginfile` and a `.env.<flavor>` per environment.
+- Check, for every environment, that each of these files exists on both platforms; a flavor present on Android but missing under `ios/config/` (or the reverse) is the commonest silent gap.
+- Keystores, service-account JSON and `.env.*` files need to be ignored by git or kept in a private location the team controls; the folder layout alone does not show whether they are. Check `.gitignore` before the first commit.
