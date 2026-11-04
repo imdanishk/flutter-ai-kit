@@ -59,3 +59,14 @@ Verified 2026-11-04 on official pages unless a line says Unverified. Re-check pa
 - iOS: one `GoogleService-Info.plist` per flavor under `ios/config/<flavor>/`, copied into the build by a script selected by scheme; Fastlane also holds `Appfile`, `Gymfile`, `Matchfile`, `Pluginfile` and a `.env.<flavor>` per environment.
 - Check, for every environment, that each of these files exists on both platforms; a flavor present on Android but missing under `ios/config/` (or the reverse) is the commonest silent gap.
 - Keystores, service-account JSON and `.env.*` files need to be ignored by git or kept in a private location the team controls; the folder layout alone does not show whether they are. Check `.gitignore` before the first commit.
+
+## A per-environment file layout seen working in a production project
+
+Not from official documentation; it shows the shape of a setup with four environments (development, staging, UAT, production). Copy the idea, not the names.
+
+- `android/app/src/<flavor>/google-services.json`: one Firebase file per Android flavor in the flavor's own source folder (this answers the placement question above for Android; the official page was still not read).
+- `android/app/`: one keystore per non-production environment, selected by that flavor's signing config. Check `.gitignore`: whether such files may be committed is a team decision, and a production or upload keystore is never committed.
+- `android/fastlane/` and `ios/fastlane/`: one `.env.<flavor>` per environment, one Firebase Distribution service-account JSON per environment, one Play upload service-account JSON per environment, a `Pluginfile`, an `Appfile`, a README for the lanes, and a `.gitignore` that keeps every credential out of git. The iOS folder also has a `Gymfile` and a `Matchfile` (the lane templates here keep those options inline; splitting them is a style choice).
+- `ios/config/<flavor>/GoogleService-Info.plist`: one plist per iOS flavor, and a shell script that picks the right one at build time (script content not seen: Unverified how it is wired into the Xcode build).
+- Credential files are per environment on purpose: a leaked development credential then cannot publish production.
+
