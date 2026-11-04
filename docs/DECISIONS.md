@@ -10,10 +10,12 @@
 8. **Licence:** Apache-2.0.
 9. **Lifecycle through skills, not agents.** Subagents differ by tool; skills work in all of them. Each phase is a skill any agent can run. A thin Claude-only subagent wrapper may come later.
 10. **Setup and release knowledge is dated and labelled.** `flutter-service-setup` and `flutter-release` cite official pages with a verified date and mark every line not read on an official page as Unverified. Fastlane lanes are templates to adapt, not a tested pipeline.
+11. **Testing is a skill that runs only on request.** `flutter-testing` exists so tests follow the project's setup when wanted; no other skill adds tests.
+12. **Official skills are checked, not installed.** The profile skill reports whether the Flutter and Dart team skill sets are present and prints the install commands; the developer chooses, because the sets overlap and install many skills.
 
 ## Known gaps
 
 - Recipes exist for Cubit with Freezed (injectable, auto_route) and for Riverpod 3. Plain BLoC, Provider and GetX projects work through the profile skill but have no recipe.
 - No skills yet for accessibility, performance profiling or platform channels.
-- Release lane templates have only been syntax-checked; no CI workflow files are provided; iOS flavor setup (schemes and configurations) is not covered; the Apple page on submitting a first subscription could not be read.
+- Release lane templates have only been syntax-checked (the version helper is tested); no CI workflow files are provided; iOS flavor setup (schemes and configurations) is not covered; the Apple page on submitting a first subscription could not be read.
 - Feature notes cover four areas in detail; the rest of the feature index has briefs only. About a quarter of the detailed entries (20 of 79) are still partly verified or unverified.

@@ -4,6 +4,20 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-11-04
+
+### Added
+- `flutter-testing`: writes and runs tests following the project's own test setup, only when the developer asks; patterns for cubit or bloc, repository, widget and integration tests.
+- `flutter-service-setup`: `backend-handoff.md` - what to give the backend per feature (Google web client ID, Firebase service account, push, Maps server key, app-link fingerprints, Sign in with Apple), per platform and environment, with a one-page sheet.
+- `flutter-release`: `ios-signing-and-match.md` - certificate and profile types, Xcode flavor configurations, match storage and `readonly`, first-time setup, a new teammate or CI machine, adding a device, expiry and revocation, and a troubleshooting table; guardrails for an agent that ships builds (inputs, preflight, order, final report).
+- Fastlane templates: build numbers derived from the target store (Firebase, all Play tracks, TestFlight) with optional `release:patch|minor|major`, a tested `versioning.rb`, a `Matchfile`, and iOS lanes `certs_get`, `certs_create` and `add_device`; env files loaded per flavor.
+- `flutter-project-profile` checks for the official Flutter and Dart skills and prints the install commands without installing.
+- `tool/test_versioning.rb` and a CI step that runs it.
+
+### Changed
+- The AGENTS block names `flutter-testing` and points tests to it.
+- iOS flavor setup is now verified from Flutter's iOS flavors page.
+
 ## [0.9.1] - 2026-11-04
 
 ### Added

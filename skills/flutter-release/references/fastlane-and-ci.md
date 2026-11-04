@@ -8,8 +8,8 @@ Verified 2026-11-04 against Flutter's CD page and the Fastlane action pages unle
 2. Pin the Flutter version in `.fvmrc`. Lanes call `fvm flutter` when that file exists.
 3. Release signing for Android is configured (`android/key.properties` read by Gradle; keystores outside the repo). iOS signing uses `match` with a private storage repo.
 4. Create `Gemfile` in both `android/` and `ios/` (template: `assets/fastlane/Gemfile`), run `bundle install` in each folder, and commit `Gemfile` and `Gemfile.lock`. Always run lanes as `bundle exec fastlane <lane>`.
-5. Copy the Fastfile templates to `android/fastlane/Fastfile` and `ios/fastlane/Fastfile`, create `Appfile` in each (package name or bundle ID, team IDs), and set `FLUTTER_ROOT` if the iOS scripts ask for it (Flutter's CD page says it is required for the iOS deploy scripts).
-6. Create one ignored env file per flavor (`.env.development`, `.env.staging`, `.env.production`) from `assets/fastlane/env.example`. Fastlane loads `.env.<FLUTTER_FLAVOR>` automatically when `FLUTTER_FLAVOR` is set (Unverified: Fastlane's `--env` behaviour; confirm with `bundle exec fastlane --help`). Never commit these files.
+5. Copy the Fastfile templates to `android/fastlane/Fastfile` and `ios/fastlane/Fastfile`, `versioning.rb` into both folders and `Matchfile` into `ios/fastlane/`, create `Appfile` in each (package name or bundle ID, team IDs), and set `FLUTTER_ROOT` if the iOS scripts ask for it (Flutter's CD page says it is required for the iOS deploy scripts).
+6. Create one ignored env file per flavor (`.env.development`, `.env.staging`, `.env.production`) from `assets/fastlane/env.example`. The lane templates load `.env.<FLUTTER_FLAVOR>` from the `fastlane/` folder in `before_all`, so `FLUTTER_FLAVOR` must be set on the command line. Never commit these files; the `.gitignore` in each `fastlane/` folder should ignore `.env*`, `*.json` credentials and `report.xml`.
 
 ## 1. Variables (names only; values live in env files or the CI secret store)
 
@@ -30,8 +30,11 @@ Verified 2026-11-04 against Flutter's CD page and the Fastlane action pages unle
 
 ## 2. Version and build number
 
-- `pubspec.yaml` holds `1.4.0+27` (version name, then build number). Lanes accept `build_name:` and `build_number:` and pass them to `flutter build`, so CI can supply its run number. Every upload needs a build number higher than the last one on that store.
-- Decide one rule and write it in the profile: the CI run number, a date-based number, or "latest from the store plus one" (Firebase's page shows `latest_release[:buildVersion].to_i + 1`, which assumes a numeric build version).
+- `pubspec.yaml` holds `1.4.0+27` (version name, then build number). Every upload needs a build number higher than the last one on that store.
+- The lane templates derive the next build number from the target (the latest Firebase release, the highest version code across all Play tracks, or the latest TestFlight build) and add one, so it is always above what the store has; nothing is edited in `pubspec.yaml`. `release:patch|minor|major` also bumps the version name from the store's latest. With no `release:` only the build number rises. An explicit `build_number:` (and optional `build_name:`) overrides all of this, for example a CI run number.
+- If the store has nothing yet, or the call fails, the lane falls back to the `pubspec.yaml` version and says so.
+- The helper `versioning.rb` is plain Ruby and is tested in the kit repository (`ruby tool/test_versioning.rb`). The Fastlane calls that read the stores were not run.
+- Write the chosen rule into the project profile so every developer and agent uses the same one.
 
 ## 3. Firebase App Distribution
 
@@ -61,7 +64,7 @@ cd ios           # macOS only
 FLUTTER_FLAVOR=production bundle exec fastlane testflight changelog:"What to test"
 ```
 
-Needs: app record in App Store Connect; API key; match storage with an App Store profile for the flavor's bundle ID; Xcode 26 or later. The lane builds, signs with the match profile and uploads without submitting for App Review. With `skip_waiting_for_build_processing: true` (the template default) the lane returns before Apple finishes processing, so external distribution must be done in App Store Connect or by a later lane.
+Needs: app record in App Store Connect; API key; match storage with an App Store profile for the flavor's bundle ID (see `ios-signing-and-match.md` for creating and fetching certificates); Xcode 26 or later. The lane builds, signs with the match profile and uploads without submitting for App Review. With `skip_waiting_for_build_processing: true` (the template default) the lane returns before Apple finishes processing, so external distribution must be done in App Store Connect or by a later lane.
 
 ## 6. CI/CD pipeline checklist
 

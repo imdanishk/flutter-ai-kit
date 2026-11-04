@@ -15,7 +15,7 @@ Verified 2026-11-04 on official pages unless a line says Unverified. Re-check pa
 - In Dart, `appFlavor` (from `package:flutter/services.dart`) holds the `--flavor` value and is `null` when no flavor is passed: handle that case.
 - App name per flavor: put `app_name` in `android/app/src/<flavor>/res/values/strings.xml` and reference `@string/app_name`. With AGP 9.0 or newer, setting `app_name` through `resValue()` fails the build ("contains custom resource values, but the feature is disabled"). Do not put `abiFilters` in a product flavor.
 - The default release template signs `release` with the debug key until you add your own signing config.
-- iOS needs a matching scheme and build configurations per flavor: see `https://docs.flutter.dev/deployment/flavors-ios` (not read when this was written; Unverified).
+- iOS: a flavor is a shared Xcode scheme plus build configurations named `<Mode>-<flavor>` in lower case (`Debug-staging`, `Release-staging`); the `--flavor` value must equal the scheme name. Set a different Product Bundle Identifier and `APP_DISPLAY_NAME` per configuration, and add each configuration to the Podfile's `project 'Runner'` block. Every bundle ID must be registered in the Apple Developer account. [Flutter flavors (iOS)](https://docs.flutter.dev/deployment/flavors-ios)
 - Keep one name per environment everywhere: Dart flavor, Gradle flavor, iOS scheme, env file, Firebase app, store record, Fastlane variable. Mismatched names are the commonest cause of "the pipeline ran but deployed nothing".
 
 ## FlutterFire files

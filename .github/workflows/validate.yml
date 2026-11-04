@@ -16,6 +16,8 @@ jobs:
         run: |
           pip install skills-ref
           for d in skills/*/; do agentskills validate "$d"; done
+      - name: Fastlane version helper tests
+        run: ruby tool/test_versioning.rb
       - name: Installer smoke test
         run: |
           mkdir -p /tmp/app && echo "name: app" > /tmp/app/pubspec.yaml

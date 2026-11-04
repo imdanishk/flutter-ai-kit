@@ -1,0 +1,10 @@
+# Starting point for ios/fastlane/Matchfile. Values come from the flavor's env file.
+# One private repository can serve every flavor: list each flavor's bundle ID in APP_IDENTIFIER
+# (comma-separated) or keep one value per env file.
+storage_mode("git")
+git_url(ENV["CERTIFICATE_GIT_URL"])
+git_branch(ENV["CERTIFICATE_GIT_BRANCH"] || "main")
+clone_branch_directly(true)
+team_id(ENV["APPSTORE_TEAM_ID"])
+app_identifier(ENV["APP_IDENTIFIER"].to_s.split(",").map(&:strip))
+platform("ios")

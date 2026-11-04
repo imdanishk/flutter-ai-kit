@@ -111,6 +111,7 @@ void main(List<String> args) {
       ? '\nDry run only. Nothing was written.'
       : '\nInstalled Flutter AI kit $version into ${project.path}');
   stdout.writeln('Next: open the project in your agent and ask it to "run the flutter-project-profile skill".');
+  stdout.writeln('Optional: the Flutter and Dart teams publish their own skill sets; the profile skill checks for them and prints the install commands (see README).');
 }
 
 /// The single source of truth for the version is .claude-plugin/plugin.json.

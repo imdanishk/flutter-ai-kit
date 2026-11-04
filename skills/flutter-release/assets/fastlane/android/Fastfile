@@ -1,6 +1,9 @@
-# Starting point for android/fastlane/Fastfile. Checked for Ruby syntax only;
-# not run against a real project. Adapt names and paths, then run the lane locally first.
+# Starting point for android/fastlane/Fastfile. Ruby syntax checked only (the version helpers in
+# versioning.rb are tested); the lanes have not been run against a real project.
+# Copy versioning.rb into android/fastlane next to this file. Run from android/:
+#   FLUTTER_FLAVOR=staging bundle exec fastlane firebase release:patch release_notes:"Fix login"
 require "shellwords"
+require File.join(FastlaneCore::FastlaneFolder.path, "versioning.rb")
 
 default_platform(:android)
 
@@ -17,18 +20,64 @@ def flutter_cmd
   File.exist?(File.join(project_root, ".fvmrc")) ? "fvm flutter" : "flutter"
 end
 
-def flutter_build(kind, options)
-  args = ["build", kind, "--release", "--flavor", flavor]
+# Version name and build number for this upload. An explicit build_number: wins.
+# Otherwise: latest known store values, bumped by release: (patch, minor, major) or build number only.
+def resolve_version(latest_name, latest_build, options)
+  pubspec_name, pubspec_build = KitVersioning.pubspec_version(File.read(File.join(project_root, "pubspec.yaml")))
+  return [options[:build_name] || pubspec_name, options[:build_number].to_i] if options[:build_number]
+
+  name, build = latest_name ? [latest_name, latest_build] : [pubspec_name, pubspec_build]
+  KitVersioning.next_version(name, build, options[:release])
+end
+
+def flutter_build(kind, name, number)
+  args = ["build", kind, "--release", "--flavor", flavor, "--build-name", name, "--build-number", number.to_s]
   args += ["--target", ENV["FLUTTER_TARGET"]] if ENV["FLUTTER_TARGET"]
-  args += ["--build-name", options[:build_name].to_s] if options[:build_name]
-  args += ["--build-number", options[:build_number].to_s] if options[:build_number]
   sh("cd #{Shellwords.escape(project_root)} && #{flutter_cmd} #{args.join(' ')}")
 end
 
+def firebase_latest
+  firebase_app_distribution_get_latest_release(
+    app: ENV.fetch("FIREBASE_APP_ID"),
+    service_credentials_file: ENV["FIREBASE_DISTRIBUTION_CREDENTIALS"]
+  )
+  release = lane_context[SharedValues::FIREBASE_APP_DISTRO_LATEST_RELEASE]
+  release ? [release[:displayVersion], release[:buildVersion].to_i] : [nil, nil]
+rescue StandardError => e
+  UI.important("Could not read the latest Firebase release (#{e.message}); using the pubspec version.")
+  [nil, nil]
+end
+
+# Highest version code across all tracks (a new upload must beat every track), and the
+# version name of the track being released to.
+def play_latest(track)
+  common = { package_name: ENV.fetch("PACKAGE_NAME"), json_key: ENV["GOOGLE_PLAY_JSON_KEY_FILE"] }
+  codes = %w[internal alpha beta production].flat_map do |t|
+    begin
+      google_play_track_version_codes(track: t, **common)
+    rescue StandardError
+      [] # track has no release or no access
+    end
+  end
+  names = begin
+    google_play_track_release_names(track: track, **common)
+  rescue StandardError
+    []
+  end
+  name, = KitVersioning.parse_release_name(names.last)
+  [name, KitVersioning.highest(codes)]
+end
+
 platform :android do
+  before_all do
+    # One env file per flavor in this folder (.env.staging). It is never committed.
+    Dotenv.load(File.join(FastlaneCore::FastlaneFolder.path, ".env.#{flavor}"))
+  end
+
   desc "Build an APK for FLUTTER_FLAVOR and upload it to Firebase App Distribution"
   lane :firebase do |options|
-    flutter_build("apk", options)
+    name, number = resolve_version(*firebase_latest, options)
+    flutter_build("apk", name, number)
     firebase_app_distribution(
       app: ENV.fetch("FIREBASE_APP_ID"),
       groups: ENV["FIREBASE_TESTERS_GROUPS"],
@@ -38,19 +87,22 @@ platform :android do
       android_artifact_path: File.join(project_root, "build", "app", "outputs", "flutter-apk", "app-#{flavor}-release.apk"),
       service_credentials_file: ENV["FIREBASE_DISTRIBUTION_CREDENTIALS"]
     )
+    UI.success("Firebase: #{flavor} #{name}+#{number}")
   end
 
   desc "Build an App Bundle and upload it to a Play track (internal, alpha, beta, production)"
   lane :playstore do |options|
     track = options[:track] || "internal"
     UI.user_error!("Unknown track #{track}") unless %w[internal alpha beta production].include?(track)
-    flutter_build("appbundle", options)
+    name, number = resolve_version(*play_latest(track), options)
+    flutter_build("appbundle", name, number)
     upload_to_play_store(
       track: track,
       package_name: ENV.fetch("PACKAGE_NAME"),
       json_key: ENV["GOOGLE_PLAY_JSON_KEY_FILE"],
       # Check the path printed by `flutter build appbundle`.
       aab: File.join(project_root, "build", "app", "outputs", "bundle", "#{flavor}Release", "app-#{flavor}-release.aab"),
+      # Fastlane's default is "completed", which releases to everyone on that track at once.
       # Production stays a draft until a person publishes it in Play Console.
       release_status: options[:release_status] || (track == "production" ? "draft" : "completed"),
       skip_upload_metadata: true,
@@ -58,5 +110,6 @@ platform :android do
       skip_upload_images: true,
       skip_upload_screenshots: true
     )
+    UI.success("Play #{track}: #{flavor} #{name}+#{number}")
   end
 end

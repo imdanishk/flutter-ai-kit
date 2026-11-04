@@ -37,7 +37,11 @@ The profile tells every later task how this project does things, so work matches
 <!-- flutter-ai-kit:profile:end -->
 ```
 
-6. **Ask at most five questions** about anything ambiguous or contradictory (for example two state management styles in one repo: which one is the target?). Do not fill gaps with assumptions; list them under `Unknown`.
+6. **Check for the official Flutter and Dart skills.** Look in `.agents/skills/`, `.claude/skills/`, `.github/skills/`, `.grok/skills/` and the agent's plugin list for the skill sets from the Flutter team (`flutter/agent-plugins`) and the Dart team (`dart-lang/skills`); their skill names are listed in those repositories. Do not install anything. If they are missing, tell the developer once, with the commands below, and let them choose, because the two sets overlap each other and installing every skill is a lot of instructions to add to a repository. Record `Official skills: installed | not installed | not checked` under Unknown or Commands.
+   - Any agent (installs into `.agents/skills`), from the project root: `npx skills add flutter/agent-plugins --skill '*' --agent universal --yes` and `npx skills add dart-lang/skills --skill '*' --agent universal --yes` (drop `--skill '*'` to choose skills). Claude Code: `claude plugin marketplace add flutter/agent-plugins`, then `claude plugin install dart-flutter@dart-flutter`. Other clients: https://docs.flutter.dev/ai/agent-skills
+   - Skills bundled by the project's own dependencies: `dart run skills@ get` lists and installs them (https://dart.dev/blog/skills-cli-1-0-bundle-and-distribute-ai-agent-skills-for-your-packages).
+   - Checked 2026-11-04. The install page did not list skill names or an update command; re-running the install command is the likely update, not confirmed.
+7. **Ask at most five questions** about anything ambiguous or contradictory (for example two state management styles in one repo: which one is the target?). Do not fill gaps with assumptions; list them under `Unknown`.
 
 ## Rules
 

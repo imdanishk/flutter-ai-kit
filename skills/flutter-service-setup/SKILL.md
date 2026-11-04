@@ -1,6 +1,6 @@
 ---
 name: flutter-service-setup
-description: Lists what must exist in consoles and accounts before a Flutter feature can work - per-environment Firebase projects and flavors, SHA fingerprints and signing keys, Google Maps and Places keys and billing, social login, push, and in-app subscriptions on Google Play and the App Store. Use before building or debugging a feature that needs a store, Firebase or Google Cloud setup, or when something works for one developer or build but not another.
+description: Lists what must exist in consoles and accounts before a Flutter feature can work, and what to share with the backend - per-environment Firebase projects and flavors, SHA fingerprints and signing keys, Google Maps and Places keys and billing, social login, push, and in-app subscriptions on Google Play and the App Store. Use before building or debugging a feature that needs a store, Firebase or Google Cloud setup, or when something works for one developer or build but not another.
 license: Apache-2.0
 ---
 
@@ -16,6 +16,7 @@ Agents write code well and cannot click in consoles. Most lost hours are setup t
    - Maps, Places, API keys and billing: `references/maps-and-places.md`
    - Google sign-in, Sign in with Apple, account deletion: `references/social-login.md`
    - Subscriptions and purchases on Google Play and the App Store: `references/subscriptions-and-iap.md`
+   - What to hand to the backend (client IDs, service accounts, push, app-link fingerprints) per feature, platform and environment: `references/backend-handoff.md`
    - Store accounts, test tracks, TestFlight and delivery: use the `flutter-release` skill.
 3. **Check freshness.** Every reference carries a verified date and source links. If the date is more than about two months before today, open the linked pages, look for changes, and say what changed or that you could not check. Lines marked `Unverified` were not read on an official page: confirm them before telling the developer they are true.
 4. **Read the project.** Find the flavors, package names, bundle IDs, existing Firebase files and key handling already in use. Report mismatches instead of fixing them silently (for example a package name that differs between Gradle and Firebase).
@@ -27,6 +28,7 @@ Who: you (developer) / store owner (account holder) / agent (in the repo)
 1. [store owner] <step>, why it is needed, how to confirm it is done
 2. [you] ...
 Per environment: <what must exist once for each of dev, staging, production>
+Hand to the backend: <ids, keys and URLs per environment, from references/backend-handoff.md>
 Elapsed-time blockers: <steps that take days, such as identity verification or a review>
 Not verified: <items you could not confirm>
 ```
