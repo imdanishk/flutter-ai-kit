@@ -2,7 +2,7 @@
 
 Small, agent-agnostic instructions that help any AI coding agent build Flutter apps the way your project already does. It works with OpenCode, Claude Code, Codex, Cursor, Gemini CLI, Antigravity, VS Code Copilot, Grok Build and other tools that read the open [Agent Skills](https://agentskills.io) format or `AGENTS.md`.
 
-Status: early (0.x), not benchmarked. Tried so far on two real apps and two fresh projects, all on the Cubit/Freezed stack; the Riverpod recipe is untested. Expect rough edges and please report them. The skills are short on purpose and contain only what an agent does not already know: how to read your project's conventions, complete feature recipes for two stacks (Cubit with Freezed, and Riverpod), a review checklist, and an estimation method.
+Status: early (0.x), not benchmarked. Tried so far on two real apps and two fresh projects, all on the Cubit/Freezed stack; the Riverpod recipe is untested. The release lane templates were checked for Ruby syntax only and have not been run; the setup and release references were read from official pages in November 2026 and mark every line they could not confirm. Expect rough edges and please report them. The skills are short on purpose and contain only what an agent does not already know: how to read your project's conventions, complete feature recipes for two stacks (Cubit with Freezed, and Riverpod), a review checklist, and an estimation method.
 
 ## How it works
 
@@ -31,8 +31,28 @@ An illustrative summary line (invented names):
 | `flutter-review` | Read-only review of a diff with file and line findings |
 | `flutter-new-project` | Create the base architecture (Cubit, Freezed, injectable, auto_route) with shared core types |
 | `flutter-estimate` | AI-assisted effort ranges with approach class, backend dependency and Android/iOS differences |
+| `flutter-service-setup` | The setup that must exist before a feature works: per-environment Firebase projects, SHA fingerprints and signing keys, Maps and Places billing and keys, social login rules, subscriptions on Google Play and the App Store |
+| `flutter-release` | Fastlane lanes and CI checklist from the command line to Firebase App Distribution, Google Play and TestFlight, plus store account, test track and review requirements |
+| `flutter-git` | Branch, commit and pull request conventions with safe defaults (no commit, push or force-push unless asked; never commit keys) |
 
 The installer also writes a small managed block into `AGENTS.md` (about ten lines) with the always-on rules.
+
+## Where each skill fits in the lifecycle
+
+The kit uses skills, not a fixed chain of agents, because skills are the one format every agent tool reads. Any agent can pick up a phase.
+
+| Phase | Skill |
+|---|---|
+| Plan and estimate | `flutter-estimate`, `flutter-feature-notes` |
+| Set up accounts, consoles and keys | `flutter-service-setup` |
+| Start a project | `flutter-new-project`, `flutter-project-profile` |
+| Build | `flutter-feature` |
+| Review | `flutter-review` |
+| Version control | `flutter-git` |
+| Ship and distribute | `flutter-release` |
+| Maintain | the dated notes and references, refreshed as in `docs/REFRESH.md` |
+
+Testing is not a phase here: it happens only when you ask.
 
 ## Install
 
@@ -78,7 +98,7 @@ Then open the project in your agent and say: "Run the flutter-project-profile sk
 
 ## Using it with other skill sets
 
-The kit's skill names (`flutter-project-profile`, `flutter-feature`, `flutter-feature-notes`, `flutter-review`, `flutter-new-project`, `flutter-estimate`) did not collide with the official Flutter and Dart skill sets in a test project that had both installed. Those two official sets overlap each other (about 15 skills share names), so install them one at a time and check what remains.
+The kit's skill names (`flutter-project-profile`, `flutter-feature`, `flutter-feature-notes`, `flutter-review`, `flutter-new-project`, `flutter-estimate`, `flutter-service-setup`, `flutter-release`, `flutter-git`) did not collide with the official Flutter and Dart skill sets in a test project that had both installed. Those two official sets overlap each other (about 15 skills share names), so install them one at a time and check what remains.
 
 ## Updating
 

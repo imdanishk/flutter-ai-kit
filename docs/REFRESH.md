@@ -11,6 +11,10 @@ The notes in `skills/flutter-feature-notes/references/` go stale: packages are u
 5. Add new features to `references/index.md` and, when researched, to the matching area file.
 6. Add a line to `CHANGELOG.md` under `Unreleased` (for example "Refreshed sign-in notes"). Releases that only refresh notes are patch versions.
 
+## Setup and release references
+
+`skills/flutter-service-setup/references/` and `skills/flutter-release/references/` carry a verified date at the top and source links on each topic. Refresh them before a release and whenever a store or Google Cloud rule changes (billing, target API levels, Xcode requirements, testing requirements). Lines marked `Unverified` are the first to confirm. Deadlines in these files (target API, Billing Library, Xcode) go stale fastest.
+
 ## Pages that return no text
 
 Some official pages are drawn by JavaScript, so a plain fetch returns only a title. A page that returns no article body counts as not opened.

@@ -4,6 +4,17 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-11-04
+
+### Added
+- `flutter-service-setup`: what must exist before a feature works - one Firebase project per environment, flavors, SHA fingerprints (debug, upload and Play app signing keys), keystore handling, Maps and Places billing and key restrictions, Google sign-in setup, Apple's login and account-deletion rules, and subscriptions on Google Play and the App Store with sandbox and licence testing. Each reference carries a verified date and marks unverified lines.
+- `flutter-release`: runbook from the command line to Firebase App Distribution, Google Play and TestFlight, store account and test track requirements, a CI/CD checklist with a drift check, and Fastlane Gemfile, Fastfile and env templates (Ruby syntax checked only).
+- `flutter-git`: safe git defaults, never-commit list, branch, commit and pull request conventions.
+- README: lifecycle table showing which skill covers which phase.
+
+### Changed
+- `flutter-feature` runs `flutter-service-setup` first when a feature needs consoles, keys or store products; `flutter-estimate` lists such waits as elapsed-time blockers.
+
 ## [0.8.0] - 2026-11-03
 
 ### Added

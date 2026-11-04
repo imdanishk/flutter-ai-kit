@@ -19,9 +19,10 @@ An estimate for AI-assisted work measures the developer's attention time, not th
    - Native code required (say Android, iOS or both)
    - Limited or not realistic on Flutter (say what can be achieved instead)
 3. **Check the facts that decide it.** Before recommending a package, check its current version, maintenance, platform support and licence on pub.dev, and look for a newer or better-maintained alternative; do not rely on memory. If you cannot check, label the claim unverified. Use the `flutter-feature-notes` skill for the feature, and report the verified date of the entry you used.
-4. **Name the Android and iOS differences** that change the work (permissions, background limits, store review, entitlements, extensions) as none, minor or significant.
-5. **Estimate with the drivers in `references/estimation.md`.** Give a low to high range of attention time per part and in total. Show the assumptions that would move the range.
-6. **Report** in this shape: summary line; table (part, approach class, custom work after the package, backend dependency, Android/iOS difference, range); assumptions; risks and unknowns; questions still open; what you would build first to cut the biggest uncertainty.
+4. **Name waits that are not coding time.** If the feature needs store, Firebase or Cloud setup (agreements, billing, identity verification, a closed test, App Review), list each as an elapsed-time blocker, separate from the attention-time range; see `flutter-service-setup` and `flutter-release`.
+5. **Name the Android and iOS differences** that change the work (permissions, background limits, store review, entitlements, extensions) as none, minor or significant.
+6. **Estimate with the drivers in `references/estimation.md`.** Give a low to high range of attention time per part and in total. Show the assumptions that would move the range.
+7. **Report** in this shape: summary line; table (part, approach class, custom work after the package, backend dependency, Android/iOS difference, range); assumptions; risks and unknowns; questions still open; what you would build first to cut the biggest uncertainty.
 
 ## Rules
 

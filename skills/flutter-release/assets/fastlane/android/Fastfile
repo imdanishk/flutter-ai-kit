@@ -1,0 +1,62 @@
+# Starting point for android/fastlane/Fastfile. Checked for Ruby syntax only;
+# not run against a real project. Adapt names and paths, then run the lane locally first.
+require "shellwords"
+
+default_platform(:android)
+
+# Project root is two levels above android/fastlane.
+def project_root
+  File.expand_path("../..", FastlaneCore::FastlaneFolder.path)
+end
+
+def flavor
+  ENV["FLUTTER_FLAVOR"] || UI.user_error!("Set FLUTTER_FLAVOR, for example: FLUTTER_FLAVOR=staging bundle exec fastlane firebase")
+end
+
+def flutter_cmd
+  File.exist?(File.join(project_root, ".fvmrc")) ? "fvm flutter" : "flutter"
+end
+
+def flutter_build(kind, options)
+  args = ["build", kind, "--release", "--flavor", flavor]
+  args += ["--target", ENV["FLUTTER_TARGET"]] if ENV["FLUTTER_TARGET"]
+  args += ["--build-name", options[:build_name].to_s] if options[:build_name]
+  args += ["--build-number", options[:build_number].to_s] if options[:build_number]
+  sh("cd #{Shellwords.escape(project_root)} && #{flutter_cmd} #{args.join(' ')}")
+end
+
+platform :android do
+  desc "Build an APK for FLUTTER_FLAVOR and upload it to Firebase App Distribution"
+  lane :firebase do |options|
+    flutter_build("apk", options)
+    firebase_app_distribution(
+      app: ENV.fetch("FIREBASE_APP_ID"),
+      groups: ENV["FIREBASE_TESTERS_GROUPS"],
+      release_notes: options[:release_notes] || "",
+      android_artifact_type: "APK",
+      # Check the path printed by `flutter build apk`; flavor builds are named app-<flavor>-release.apk.
+      android_artifact_path: File.join(project_root, "build", "app", "outputs", "flutter-apk", "app-#{flavor}-release.apk"),
+      service_credentials_file: ENV["FIREBASE_DISTRIBUTION_CREDENTIALS"]
+    )
+  end
+
+  desc "Build an App Bundle and upload it to a Play track (internal, alpha, beta, production)"
+  lane :playstore do |options|
+    track = options[:track] || "internal"
+    UI.user_error!("Unknown track #{track}") unless %w[internal alpha beta production].include?(track)
+    flutter_build("appbundle", options)
+    upload_to_play_store(
+      track: track,
+      package_name: ENV.fetch("PACKAGE_NAME"),
+      json_key: ENV["GOOGLE_PLAY_JSON_KEY_FILE"],
+      # Check the path printed by `flutter build appbundle`.
+      aab: File.join(project_root, "build", "app", "outputs", "bundle", "#{flavor}Release", "app-#{flavor}-release.aab"),
+      # Production stays a draft until a person publishes it in Play Console.
+      release_status: options[:release_status] || (track == "production" ? "draft" : "completed"),
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+end
