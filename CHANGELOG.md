@@ -4,6 +4,11 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.11.1] - 2026-11-05
+
+### Fixed
+- `api-auth-paging-pitfalls.md`: the advice to replay the last sign-out event to late listeners could sign out the next session; it now says to read session state at start-up or clear the held event on sign-in.
+
 ## [0.11.0] - 2026-11-05
 
 ### Added

@@ -19,7 +19,7 @@ Status: found by reading the source of a small shared base package for Flutter a
 
 - **One refresh at a time.** Parallel requests that find an expired token must wait for one refresh (a lock or a queued interceptor), and the refresh call must use a client without the auth interceptor, or it waits for itself. The pattern is in `flutter-feature-notes` ("Token refresh and sessions").
 - **Sign-out signal sent many times.** Five requests failing at once emit five events and five navigation resets. Emit once (ignore events while already signing out) and reset the flag after the next sign-in.
-- **Events with no listener are lost.** A plain broadcast subject (rxdart `PublishSubject`) drops events that arrive before anyone listens, for example a 401 during start-up before the listener exists (Unverified: rxdart's docs were not re-read). Keep the last event (`ReplaySubject` with a size of 1, or a state check at start-up), and do not close a singleton bus.
+- **Events with no listener are lost.** A plain broadcast subject (rxdart `PublishSubject`) drops events that arrive before anyone listens, for example a 401 during start-up before the listener exists (Unverified: rxdart's docs were not re-read). Either read the session state when the listener starts, or hold the pending event until the first listener takes it; clear it on every sign-in, because a replayed old event would sign out the next session. Do not close a singleton bus.
 - **Caches outlive the account.** A static in-memory cache is not cleared when the user signs out, so the next account can see the previous account's lists. Clear every cache, store and cubit that holds user data on sign-out.
 
 ## Cubits and base classes
