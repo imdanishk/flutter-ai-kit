@@ -80,7 +80,7 @@ Shared assumptions: one mid/senior Flutter developer, design and backend APIs re
 - **Depends on:** Backend refresh endpoint with rotation.
 - **Android/iOS differences:** None in Dart. Android backups can break stored keys (`Failed to unwrap key`); the package advises `android:allowBackup="false"`. Keychain data surviving uninstall on iOS: the package page does not say (Verify). The package page also says to exclude the plugin's SharedPreferences from auto backup.
 - **Custom work after the package:** Everything: queueing, retry policy, forced-logout events, token expiry on app resume.
-- **Pitfalls and store review:** Concurrent refreshes invalidating rotated tokens is the classic bug.
+- **Pitfalls and store review:** Concurrent refreshes invalidating rotated tokens is the classic bug. Also: sign-out signalled once per failed request instead of once, events lost when the listener starts late, and caches not cleared on sign-out (read in a reference package on 2026-11-05, not official; see `flutter-review/references/api-auth-paging-pitfalls.md`).
 - **What to tell the requester:** Achievable; quality depends on backend token design.
 - **Status:** Partly verified 2026-11-02 from pub.dev/packages/dio and pub.dev/packages/flutter_secure_storage (versions, dates, storage, backup advice, accessibility default and minimum SDK reconfirmed; the `dio` page describes `QueuedInterceptor` with a CSRF-token example and does not mention refresh tokens). Verify: iOS Keychain survival after uninstall; the refresh pattern itself is design advice, not documented by either page.
 

@@ -60,5 +60,12 @@ End with one line listing what you checked and found fine, and one line for anyt
 - Cubit or bloc: a cubit created inside `build` or a `BlocProvider` that recreates it on every rebuild; `context.watch` used in a callback or `context.read` used to render; a `BlocListener` that does what a `BlocBuilder` should draw (or the reverse); state classes without equality; the same cubit instance shared by routes that should not share it.
 - Riverpod: `ref.read` inside `build` for values the widget must react to, and `ref.watch` inside callbacks; writing to `state` after an `await` without checking `ref.mounted`; notifier methods called from `build`; one `AsyncValue` shared by operations that run side by side; providers that read `BuildContext`; missing `ProviderScope`; legacy providers (`StateProvider`, `StateNotifierProvider`) in new code; automatic retry left on for calls that must not repeat (payments, one-time actions).
 
+**Network, sessions, paging and caches** (when the change touches them; details in `references/api-auth-paging-pitfalls.md`)
+- success treated as `== 200` only; a catch-all that hides the specific error or a parsing bug; error bodies assumed to be maps
+- 401, 403 and expired session mapped to one error; sign-out decided by message text; auth failures handled for one client type only
+- a refresh that can run twice at once; sign-out events sent per failed request; caches not cleared on sign-out
+- a paged list that cannot load after cache hydration; cache keys shared between screens or users; search events that wipe filters
+- the same checks for a shared base package: unused or exactly pinned dependencies, app-specific values inside it, no tests, machine files committed
+
 **Generated code**
 - generated files edited by hand, or annotated files changed without regenerating

@@ -18,7 +18,7 @@ license: Apache-2.0
 
 ## Never commit
 
-Android keystores (`*.jks`, `*.keystore`) and `key.properties`; Apple `.p8` API keys, `.p12` certificates and provisioning profiles; Play service-account JSON; `.env*` files other than an `.env.example` with empty values; any API key or token in source (use build-time defines or a secrets mechanism; see the `flutter-service-setup` skill). `google-services.json` and `GoogleService-Info.plist` hold identifiers, not secrets, and many teams do commit them; ask what the project does, and keep one per environment.
+Android keystores (`*.jks`, `*.keystore`) and `key.properties`; Apple `.p8` API keys, `.p12` certificates and provisioning profiles; Play service-account JSON; `.env*` files other than an `.env.example` with empty values; any API key or token in source (use build-time defines or a secrets mechanism; see the `flutter-service-setup` skill). Machine-local and generated files: `android/local.properties` (SDK paths and the user's name), `android/.gradle/`, `ios/Pods/`, `xcuserdata/`, `ios/Flutter/Generated.xcconfig`, `ios/Flutter/ephemeral/`, `GeneratedPluginRegistrant.*`. Flutter's own project template ignores all of these (checked in the `flutter/flutter` repository on 2026-11-05); if a project tracks them, say so and stop. `google-services.json` and `GoogleService-Info.plist` hold identifiers, not secrets, and many teams do commit them; ask what the project does, and keep one per environment.
 
 ## Defaults (when the project has none)
 

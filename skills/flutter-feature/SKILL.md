@@ -25,6 +25,7 @@ license: Apache-2.0
 - User-visible text outside the project's string table or localization.
 - A new package added without asking, or a new feature that needs Android or iOS configuration (permissions, manifest, `Info.plist`, entitlements) and does not say so.
 - Business logic or data access called straight from a widget.
+- A feature that adds API calls, token handling, paging, search or caches without reading the `flutter-review` list `references/api-auth-paging-pitfalls.md` first (success codes, error mapping, one refresh at a time, caches cleared on sign-out, paging after cache hydration).
 
 ## References
 

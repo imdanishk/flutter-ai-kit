@@ -4,6 +4,16 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-11-05
+
+### Added
+- `flutter-review`: `references/api-auth-paging-pitfalls.md`, a checklist of network, session, cubit, paging and cache bugs found by reading a small shared base package (200-only success checks, catch-alls that hide errors, 401/403 treated alike, parallel sign-out events, caches that outlive the account, a cache that stops a paged list from loading, search events that wipe filters), plus a short section in the review checklist. Read, not run: no Flutter SDK here and pub.dev was unreachable.
+- `flutter-git`: machine-local and generated files that must not be committed, checked against Flutter's own project template `.gitignore` files (`flutter/flutter`, 2026-11-05).
+- `flutter-feature`: a pointer to the pitfalls list for features that add API calls, tokens, paging, search or caches.
+
+### Changed
+- `data-and-platform-surfaces.md` and `auth-security.md`: the base-class note now states what was read and which bugs a copy would inherit.
+
 ## [0.10.5] - 2026-11-05
 
 ### Added
