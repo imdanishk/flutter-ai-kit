@@ -41,6 +41,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # A reported simpler option, not confirmed here: subosito/flutter-action's
+      # `flutter-version-file: .fvmrc`. Check its README before replacing this step.
       - name: Read Flutter version from .fvmrc
         id: fvm
         working-directory: .

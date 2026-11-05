@@ -4,6 +4,15 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.10.2] - 2026-11-05
+
+### Added
+- `social-login.md`: Facebook login setup (Android, iOS, web, code) and Sign in with Apple server-side steps. Both are second-hand and marked Unverified because Meta's, pub.dev's and Apple's pages could not be opened; items missing from the source (Android key hash, Live mode and App Review, deletion callback, Limited Login) are listed as unverified checks.
+- `backend-handoff.md`: separate Sign in with Apple and Facebook rows, and a Facebook line on the per-environment sheet.
+
+### Changed
+- CI templates note the reported `flutter-version-file: .fvmrc` option for `subosito/flutter-action` as unconfirmed; the `jq` step stays.
+
 ## [0.10.1] - 2026-11-05
 
 ### Added
