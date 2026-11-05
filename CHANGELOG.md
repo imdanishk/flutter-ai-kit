@@ -4,6 +4,9 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+### Changed
+- Repo workflows use `actions/checkout@v7` (the v4 runs triggered GitHub's Node 20 deprecation warning).
+
 ## [0.10.4] - 2026-11-05
 
 ### Changed

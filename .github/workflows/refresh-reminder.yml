@@ -15,7 +15,7 @@ jobs:
   remind:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Open a refresh issue if none is open
         env:
           GH_TOKEN: ${{ github.token }}
