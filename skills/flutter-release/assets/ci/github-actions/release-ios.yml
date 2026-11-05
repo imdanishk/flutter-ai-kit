@@ -1,0 +1,88 @@
+# Starting point for .github/workflows/release-ios.yml. NOT RUN against a real repository.
+# Action versions, the macOS runner label and the Xcode path were not re-checked when this was written:
+# confirm that the runner image has Xcode 26 or later (the App Store requires it) and pick it explicitly.
+# Secrets live in GitHub "Environments" named like your flavors; see release-android.yml.
+name: Release iOS
+
+on:
+  workflow_dispatch:
+    inputs:
+      flavor:
+        description: Flutter flavor (must match an environment name)
+        required: true
+        type: choice
+        options: [development, staging, production]
+      destination:
+        description: Where to upload
+        required: true
+        type: choice
+        options: [firebase, testflight]
+      release:
+        description: Version bump (empty = build number only)
+        required: false
+        type: choice
+        options: ["", patch, minor, major]
+      notes:
+        description: Release notes or TestFlight changelog
+        required: false
+
+jobs:
+  release:
+    runs-on: macos-latest
+    environment: ${{ inputs.flavor }}
+    defaults:
+      run:
+        working-directory: ios
+    env:
+      FLUTTER_FLAVOR: ${{ inputs.flavor }}
+      # Inputs go through env vars, never straight into the shell command (script injection).
+      BUMP: ${{ inputs.release }}
+      NOTES: ${{ inputs.notes }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read Flutter version from .fvmrc
+        id: fvm
+        working-directory: .
+        run: echo "version=$(jq -r .flutter .fvmrc)" >> "$GITHUB_OUTPUT"
+
+      # Select the Xcode your project needs (path varies by runner image).
+      # - run: sudo xcode-select -s /Applications/Xcode_26.0.app
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ steps.fvm.outputs.version }}
+          cache: true
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+          working-directory: ios
+
+      # The env file carries the ASC key values, certificate storage URL and MATCH_PASSWORD.
+      - name: Write credential files
+        env:
+          ENV_FILE: ${{ secrets.FASTLANE_ENV_FILE }}
+          FIREBASE_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          printf '%s' "$ENV_FILE" > "fastlane/.env.${FLUTTER_FLAVOR}"
+          printf '%s' "$FIREBASE_JSON" > fastlane/firebase-service-account.json
+
+      # The match certificate repository needs read access for this job (for example a deploy key or token
+      # stored as a secret and configured for git); see references/ios-signing-and-match.md.
+
+      - name: Dependencies
+        working-directory: .
+        run: |
+          flutter pub get
+          cd ios && pod install
+
+      - name: Firebase App Distribution
+        if: ${{ inputs.destination == 'firebase' }}
+        run: bundle exec fastlane firebase release:"$BUMP" release_notes:"$NOTES"
+
+      - name: TestFlight
+        if: ${{ inputs.destination == 'testflight' }}
+        run: bundle exec fastlane testflight release:"$BUMP" changelog:"$NOTES"

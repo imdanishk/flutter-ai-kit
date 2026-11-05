@@ -16,7 +16,8 @@ Verified 2026-11-04 on official pages unless a line says Unverified. Re-check pa
 
 - **Sign in with Apple or an equivalent (guideline 4.8).** An app that uses a third-party or social login (Facebook, Google, X, LinkedIn, Amazon, WeChat) to set up or authenticate the user's primary account must also offer another login option that limits data collection to name and email, lets the user keep the email private, and does not collect app interactions for advertising without consent. The excerpt read did not name Sign in with Apple, which is the usual way to meet it. [App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/)
 - **Account deletion (5.1.1(v)).** If the app supports account creation it must offer account deletion within the app. The same page says apps without significant account-based features should work without a login.
-- Both are review risks the developer should hear about before the login screen is built, not after a rejection.
+- **Google Play has its own deletion rule:** an in-app deletion path plus a web link entered in Play Console, and the Data deletion answers in the Data safety form (see `flutter-release/references/store-accounts-and-tracks.md`).
+- These are review risks the developer should hear about before the login screen is built, not after a rejection.
 
 ## Setup checklist to output
 

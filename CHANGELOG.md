@@ -4,6 +4,15 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.10.1] - 2026-11-05
+
+### Added
+- `flutter-release`: GitHub Actions workflow templates for Android and iOS (manual trigger, per-flavor environments, Flutter version from `.fvmrc`, inputs passed through environment variables). Not run; action versions not re-checked.
+- Google Play pre-release requirements from official pages: App content declarations, the Data safety form (per package name) and the account-deletion rule.
+
+### Changed
+- Apple's rule that the first In-App Purchase of each type must be submitted with a new app version, the subscription statuses, and the "Missing Metadata" wording are now verified or corrected from Apple's pages.
+
 ## [0.10.0] - 2026-11-04
 
 ### Added

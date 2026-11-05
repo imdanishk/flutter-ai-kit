@@ -1,0 +1,111 @@
+# Starting point for .github/workflows/release-android.yml. NOT RUN against a real repository.
+# Action versions (checkout, setup-java, setup-ruby, flutter-action) and the macOS/Ubuntu runner labels were
+# not re-checked when this was written: confirm the current major versions before using it.
+# Secrets live in GitHub "Environments" named like your flavors (development, staging, production), each
+# with the same secret names; required reviewers on the production environment gate production runs
+# (environment protection rules: confirm in GitHub's docs). Production is manual-only: this workflow
+# runs only when someone starts it.
+name: Release Android
+
+on:
+  workflow_dispatch:
+    inputs:
+      flavor:
+        description: Flutter flavor (must match an environment name)
+        required: true
+        type: choice
+        options: [development, staging, production]
+      destination:
+        description: Where to upload
+        required: true
+        type: choice
+        options: [firebase, playstore]
+      track:
+        description: Play track (playstore only)
+        required: false
+        default: internal
+        type: choice
+        options: [internal, alpha, beta, production]
+      release:
+        description: Version bump (empty = build number only)
+        required: false
+        type: choice
+        options: ["", patch, minor, major]
+      notes:
+        description: Release notes
+        required: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.flavor }}
+    defaults:
+      run:
+        working-directory: android
+    env:
+      FLUTTER_FLAVOR: ${{ inputs.flavor }}
+      # Inputs go through env vars, never straight into the shell command (script injection).
+      BUMP: ${{ inputs.release }}
+      NOTES: ${{ inputs.notes }}
+      TRACK: ${{ inputs.track }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # One version source: .fvmrc ({"flutter": "x.y.z"}).
+      - name: Read Flutter version from .fvmrc
+        id: fvm
+        working-directory: .
+        run: echo "version=$(jq -r .flutter .fvmrc)" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"   # match your Gradle and AGP requirements
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ steps.fvm.outputs.version }}
+          cache: true
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+          working-directory: android
+
+      # Secrets are written to files only for this run. Names and paths must match what your Gradle
+      # signing config and Fastfile read (see references/environments-and-signing.md).
+      - name: Write signing and credential files
+        env:
+          ENV_FILE: ${{ secrets.FASTLANE_ENV_FILE }}
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEY_PROPERTIES: ${{ secrets.ANDROID_KEY_PROPERTIES }}
+          PLAY_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          FIREBASE_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          printf '%s' "$ENV_FILE" > "fastlane/.env.${FLUTTER_FLAVOR}"
+          printf '%s' "$KEY_PROPERTIES" > key.properties
+          printf '%s' "$KEYSTORE_BASE64" | base64 -d > "app/${FLUTTER_FLAVOR}-keystore.jks"
+          printf '%s' "$PLAY_JSON" > fastlane/play-service-account.json
+          printf '%s' "$FIREBASE_JSON" > fastlane/firebase-service-account.json
+          # The env file must point GOOGLE_PLAY_JSON_KEY_FILE and FIREBASE_DISTRIBUTION_CREDENTIALS at these paths.
+
+      - name: Dependencies and generated code
+        working-directory: .
+        run: |
+          flutter pub get
+          # Only if the project does not commit generated files:
+          # dart run build_runner build --delete-conflicting-outputs
+
+      - name: Analyze
+        working-directory: .
+        run: flutter analyze
+
+      - name: Firebase App Distribution
+        if: ${{ inputs.destination == 'firebase' }}
+        run: bundle exec fastlane firebase release:"$BUMP" release_notes:"$NOTES"
+
+      - name: Google Play
+        if: ${{ inputs.destination == 'playstore' }}
+        run: bundle exec fastlane playstore track:"$TRACK" release:"$BUMP" release_notes:"$NOTES"
