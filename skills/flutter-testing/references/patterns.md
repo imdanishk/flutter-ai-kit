@@ -54,6 +54,8 @@ void main() {
 
 Use the project's own state and result types (for example its `Result` or `Either`) in `thenAnswer`. Compare states by value: Freezed and Equatable states compare by value; plain classes need `isA` with `having`.
 
+Seen in a real-project run (not from an official page): a cubit's failure path built a localized message, and the first test run failed until localization was initialized in the test's setup. If a failure test crashes on a missing `AppLocalizations` or similar, set that up in `setUp` before changing the code under test. When the project has no mocking package, a small hand-written fake repository is fine; do not add a package just for the test.
+
 ## Repository test
 
 Mock the data source (API client, local store), stub one success and one failure, and assert what the repository returns or throws and that it maps data to domain types. Do not mock the repository's own collaborators more than needed.

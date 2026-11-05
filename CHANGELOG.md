@@ -4,6 +4,11 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.10.4] - 2026-11-05
+
+### Changed
+- `flutter-testing`: pattern note from a real-project run (initialize localization when a failure path builds a localized message; a hand-written fake is fine when no mocking package exists).
+
 ## [0.10.3] - 2026-11-05
 
 ### Changed

@@ -1,7 +1,7 @@
 {
   "name": "flutter-ai-kit",
   "displayName": "Flutter AI kit",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "Agent-agnostic skills for building Flutter apps: project profile, feature recipe, feature notes, review, new-project setup, AI-assisted estimation, service setup and backend hand-off, release (Fastlane, iOS signing, CI, stores), git and on-request testing.",
   "author": { "name": "Danish" },
   "homepage": "https://github.com/imdanishk/flutter-ai-kit",
