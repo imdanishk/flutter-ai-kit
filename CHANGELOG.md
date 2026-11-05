@@ -4,6 +4,12 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.10.5] - 2026-11-05
+
+### Added
+- `data-and-platform-surfaces.md`: the Result pattern read in full from Flutter's architecture docs (sealed `Ok`/`Error`, repositories return it, view models switch on it), and a short list of project-owned base-class ideas marked Unverified, taken from the README of a small public reference package.
+- `index.md`: `fl_chart` and `chewie` rows with version, licence and date from a package index (pub.dev pages not opened).
+
 ### Changed
 - Repo workflows use `actions/checkout@v7` (the v4 runs triggered GitHub's Node 20 deprecation warning).
 

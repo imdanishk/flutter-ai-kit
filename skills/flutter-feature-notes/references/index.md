@@ -92,7 +92,7 @@ Size: small is under 2 days, medium is 2 to 10 days, large is over 10 days (one 
 | Skeleton/shimmer loaders | Loading placeholders | skeletonizer | small | none |
 | Pagination and pull-to-refresh | Infinite lists | infinite_scroll_pagination, `RefreshIndicator` | medium | none |
 | Dialogs, sheets, toasts, pickers | Overlay UI | built-ins, toastification (unverified) | small | none |
-| Charts and graphs | Data visualisation | fl_chart (unverified) | medium | none |
+| Charts and graphs | Data visualisation | fl_chart (1.2.0, 2026-03-13, MIT; line, bar, pie, scatter, radar; verified 2026-11-05 on a package index, not pub.dev) | medium | none |
 | Animations and gestures | Implicit/explicit, swipe, drag | built-in | medium | none |
 | Context menus and text selection | Selection, copy menus | `SelectionArea` | small | minor |
 | App lifecycle | Foreground/background hooks | `AppLifecycleListener` | small | none |
@@ -233,7 +233,7 @@ Size: small is under 2 days, medium is 2 to 10 days, large is over 10 days (one 
 ## H. Media playback and streaming
 | Feature | Brief | Flutter | Size | Android/iOS difference |
 |---|---|---|---|---|
-| Video playback | Basic player | video_player | medium | minor |
+| Video playback | Basic player; ready-made controls | video_player; chewie adds controls (1.13.0, MIT, about 7 months before 2026-11-05 per a package index) | medium | minor |
 | HLS/DASH, DRM, subtitles, PiP | Streaming player | better_player_plus | large | significant (Widevine vs FairPlay) |
 | Music/podcast playback | Playlists, gapless | just_audio, audio_session | medium | minor |
 | Background audio and lock screen | Media controls | audio_service | large | significant |
