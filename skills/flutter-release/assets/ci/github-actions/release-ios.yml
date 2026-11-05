@@ -39,14 +39,7 @@ jobs:
       BUMP: ${{ inputs.release }}
       NOTES: ${{ inputs.notes }}
     steps:
-      - uses: actions/checkout@v4
-
-      # A reported simpler option, not confirmed here: subosito/flutter-action's
-      # `flutter-version-file: .fvmrc`. Check its README before replacing this step.
-      - name: Read Flutter version from .fvmrc
-        id: fvm
-        working-directory: .
-        run: echo "version=$(jq -r .flutter .fvmrc)" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v7
 
       # Select the Xcode your project needs (path varies by runner image).
       # - run: sudo xcode-select -s /Applications/Xcode_26.0.app
@@ -54,7 +47,9 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: ${{ steps.fvm.outputs.version }}
+          # One version source: .fvmrc must hold an exact version, e.g. {"flutter": "3.35.0"},
+          # not a channel name or a range.
+          flutter-version-file: .fvmrc
           cache: true
 
       - uses: ruby/setup-ruby@v1

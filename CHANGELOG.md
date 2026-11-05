@@ -4,6 +4,12 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.10.3] - 2026-11-05
+
+### Changed
+- CI templates now use `flutter-version-file: .fvmrc` and the `jq` step is gone. Confirmed by reading `subosito/flutter-action`'s README, `action.yaml` and `setup.sh` (commit 4cab68c, 30 Apr 2026): `.fvmrc` is read with `jq -r .flutter`, and the file must hold an exact version, not a channel or range.
+- Action majors raised to tags that exist: `actions/checkout@v7`, `actions/setup-java@v6`. Tag existence was checked; the workflows were still not run.
+
 ## [0.10.2] - 2026-11-05
 
 ### Added

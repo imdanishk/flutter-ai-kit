@@ -68,7 +68,7 @@ Needs: app record in App Store Connect; API key; match storage with an App Store
 
 ## 6. CI/CD pipeline checklist
 
-Templates for GitHub Actions (manual trigger only, secrets in per-flavor GitHub Environments, Flutter version read from `.fvmrc`) are in `assets/ci/github-actions/`; they were not run, and their action versions were not re-checked. For Bitbucket Pipelines, Codemagic or others, follow the checklist below in that service's syntax.
+Templates for GitHub Actions (manual trigger only, secrets in per-flavor GitHub Environments, Flutter version read from `.fvmrc`) are in `assets/ci/github-actions/`; they were not run; action tags were checked to exist on 2026-11-05, behavior was not. For Bitbucket Pipelines, Codemagic or others, follow the checklist below in that service's syntax.
 
 A pipeline should, in order: check out; install the pinned Flutter (read `.fvmrc`); install Ruby gems with Bundler in the platform folder; write secrets and signing inputs from the secret store (keystore decoded from base64, service-account JSON, `.env.<flavor>`, ASC key); run `flutter pub get`, localization and code generation; run analysis; call the lane. Production publishing should be a manual trigger. [Flutter CD](https://docs.flutter.dev/deployment/cd)
 
