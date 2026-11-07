@@ -103,8 +103,8 @@ def build_ipa(match_type, export_method, name, number)
       workspace: File.join(project_root, "ios", "Runner.xcworkspace"),
       scheme: ENV.fetch("BUILD_SCHEME"),
       configuration: configuration,
-      # Newer Xcode names these app-store-connect and release-testing; the old names were still accepted
-      # when this was written (Unverified, check gym's page).
+      # gym's option text lists app-store and ad-hoc as valid (Fastlane source, read 2026-11-05); Xcode's
+      # newer names (app-store-connect, release-testing) are not in that list.
       export_method: export_method,
       output_directory: File.join(project_root, "build", "ios", "ipa"),
       export_options: { provisioningProfiles: { bundle_id => profile } }

@@ -4,6 +4,12 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.11.3] - 2026-11-07
+
+### Changed
+- Fastlane templates: every action and option the Android and iOS lanes use (`upload_to_play_store`, `google_play_track_version_codes`, `app_store_connect_api_key`, `gym`, `match`, `register_device`, `latest_testflight_build_number`, `upload_to_testflight`, `update_code_signing_settings`) was checked against Fastlane's source (2026-11-05) and exists with those names; the match profile-name variable and gym's `app-store` and `ad-hoc` export methods are confirmed too. The `firebase_app_distribution` plugin actions are not in that source and stay unconfirmed.
+- `docs/PUBLISHING.md` rewritten as the current release process (one-time setup is done).
+
 ## [0.11.2] - 2026-11-06
 
 Changes from an independent read-only audit; each finding was checked against the files first, and the Fastlane parts against Fastlane's own source (2026-11-05).

@@ -1,9 +1,11 @@
 # Publishing checklist (for the maintainer)
 
-1. Set the repository owner and author/owner display name in `README.md` and `.claude-plugin/*.json`. Optionally add your name or organisation to the copyright line at the end of `LICENSE`.
-2. Create an empty public repository named `flutter-ai-kit` on GitHub (no README, no licence; they already exist here).
-3. In this folder: `git init -b main`, `git add .`, `git commit -m "Initial release"`, then `git remote add origin ...` and `git push -u origin main`.
-4. On GitHub: add the description, and topics `flutter`, `dart`, `ai-agents`, `agent-skills`, `claude-code`, `opencode`, `codex`, `cursor`. Turn on private vulnerability reporting (Settings, Security).
-5. Check the `validate` workflow turns green on the first push.
-6. Release: bump `version` in `.claude-plugin/plugin.json` and merge to `main`; the `release` workflow tags and publishes automatically.
-7. Test each install route from a clean folder before announcing it.
+One-time setup (done for this repository; repeat only for a fork): create the public GitHub repository, set the owner and author fields in `README.md` and `.claude-plugin/*.json`, add the description and topics (`flutter`, `dart`, `ai-agents`, `agent-skills`, `claude-code`, `opencode`, `codex`, `cursor`), and turn on private vulnerability reporting (Settings, Security).
+
+Each release:
+
+1. Change the skills, references or templates. Add a line under `## [Unreleased]` in `CHANGELOG.md`.
+2. Bump `version` in `.claude-plugin/plugin.json` (the only place the version lives) and rename the changelog heading to `## [x.y.z] - date`.
+3. Run `dart tool/check.dart` and `ruby tool/test_versioning.rb`; run `agentskills validate skills/<name>` for each skill you changed (`pip install skills-ref`).
+4. Merge to `main`. The `validate` workflow must be green; the `release` workflow then creates the tag and the release zip by itself. Do not tag by hand.
+5. Before announcing a new install route, test it from a clean folder.
