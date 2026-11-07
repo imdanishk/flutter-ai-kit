@@ -35,6 +35,8 @@ An illustrative summary line (invented names):
 | `flutter-release` | Fastlane lanes with store-derived build numbers, iOS certificates and match, CI checklist, and the path from the command line to Firebase App Distribution, Google Play and TestFlight, plus store account, test track and review requirements |
 | `flutter-testing` | Writes and runs tests following the project's own setup. Does nothing unless you ask for tests |
 | `flutter-git` | Branch, commit and pull request conventions with safe defaults (no commit, push or force-push unless asked; never commit keys) |
+| `flutter-design` | On request only: build screens from a provided design and list deviations, apply a design change, design a new feature in the existing look, or propose a direction, theme and key screens when there is no design; states and accessibility checklist |
+| `flutter-store-assets` | On request only: app icon and launcher icons, Google Play and App Store screenshots and graphics at the required sizes (with sources and dates), and a check of existing files against those rules |
 
 The installer also writes a small managed block into `AGENTS.md` (about ten lines) with the always-on rules.
 
@@ -49,8 +51,10 @@ The kit uses skills, not a fixed chain of agents, because skills are the one for
 | Start a project | `flutter-new-project`, `flutter-project-profile` |
 | Build | `flutter-feature` |
 | Review | `flutter-review` |
+| Design (on request) | `flutter-design` |
 | Test (on request) | `flutter-testing` |
 | Version control | `flutter-git` |
+| Store listing images (on request) | `flutter-store-assets` |
 | Ship and distribute | `flutter-release` |
 | Maintain | the dated notes and references, refreshed as in `docs/REFRESH.md` |
 
@@ -100,7 +104,7 @@ Then open the project in your agent and say: "Run the flutter-project-profile sk
 
 ## Using it with other skill sets
 
-The kit's skill names (`flutter-project-profile`, `flutter-feature`, `flutter-feature-notes`, `flutter-review`, `flutter-new-project`, `flutter-estimate`, `flutter-service-setup`, `flutter-release`, `flutter-git`, `flutter-testing`) did not collide with the official Flutter and Dart skill sets in a test project that had both installed. Those two official sets overlap each other (about 15 skills share names), so install them one at a time and check what remains. The profile skill checks whether the official Flutter and Dart skills are installed and, if not, tells you the install commands without installing anything (Flutter team: `npx skills add flutter/agent-plugins --skill '*' --agent universal --yes`; Dart team: `npx skills add dart-lang/skills --skill '*' --agent universal --yes`; Claude Code and other clients: https://docs.flutter.dev/ai/agent-skills).
+The kit's skill names (`flutter-project-profile`, `flutter-feature`, `flutter-feature-notes`, `flutter-review`, `flutter-new-project`, `flutter-estimate`, `flutter-service-setup`, `flutter-release`, `flutter-git`, `flutter-testing`) did not collide with the official Flutter and Dart skill sets in a test project that had both installed. (`flutter-design` and `flutter-store-assets` came later and were not part of that test; neither name is among the ten skills listed in the Flutter team's `flutter/skills` README on 2026-11-08.) Those two official sets overlap each other (about 15 skills share names), so install them one at a time and check what remains. The profile skill checks whether the official Flutter and Dart skills are installed and, if not, tells you the install commands without installing anything (Flutter team: `npx skills add flutter/agent-plugins --skill '*' --agent universal --yes`; Dart team: `npx skills add dart-lang/skills --skill '*' --agent universal --yes`; Claude Code and other clients: https://docs.flutter.dev/ai/agent-skills).
 
 ## Updating
 

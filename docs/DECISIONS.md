@@ -12,10 +12,12 @@
 10. **Setup and release knowledge is dated and labelled.** `flutter-service-setup` and `flutter-release` cite official pages with a verified date and mark every line not read on an official page as Unverified. Fastlane lanes are templates to adapt, not a tested pipeline.
 11. **Testing is a skill that runs only on request.** `flutter-testing` exists so tests follow the project's setup when wanted; no other skill adds tests.
 12. **Official skills are checked, not installed.** The profile skill reports whether the Flutter and Dart team skill sets are present and prints the install commands; the developer chooses, because the sets overlap and install many skills.
+13. **Design and store assets are optional, on-request skills.** `flutter-design` and `flutter-store-assets` run only when the developer asks. Design values live in the project's Dart theme layer, not in a separate token file. Store sizes are copied from the stores' own pages with a date and source, and every unverified line is marked. Third-party design skills are not bundled: the Taste skill targets websites, UI UX Pro Max needs Python, and a design skill whose licence is unknown is not copied.
+14. **Scripts only when a check is mechanical, and only in Dart.** Every Flutter developer has Dart; Node or Python runtimes would exclude some. Agent hooks are not used, because they differ per tool. No script ships untested.
 
 ## Known gaps
 
 - Recipes exist for Cubit with Freezed (injectable, auto_route) and for Riverpod 3. Plain BLoC, Provider and GetX projects work through the profile skill but have no recipe.
-- No skills yet for accessibility, performance profiling or platform channels.
+- Accessibility is covered only as a checklist inside `flutter-design`; no skills yet for performance profiling or platform channels. No script yet checks store images against the size tables (the checks are done by hand with `sips` or `file`). User flows and build plans have no skill yet.
 - Release lane templates and the two GitHub Actions workflows have only been syntax-checked (the version helper is tested); none has been run against a real project, so the Fastlane action names and parameters are unconfirmed. CI templates exist for GitHub Actions only. Sign in with Apple server details and Facebook login are second-hand and unverified.
 - Feature notes cover four areas in detail; the rest of the feature index has briefs only. About a quarter of the detailed entries (20 of 79) are still partly verified or unverified.

@@ -4,6 +4,16 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-11-08
+
+### Added
+- `flutter-design` (on request only): four cases (design provided, design changed, new feature in the existing look, no design), where design values live in a Flutter theme, how to bring a design in (Figma MCP, images, running app), states and accessibility checklist. Flutter facts were read from docs.flutter.dev and api.flutter.dev on 2026-11-08; the Figma and Dart MCP pages do not mention Flutter output or screenshot tools, and the skill says so.
+- `flutter-store-assets` (on request only): Google Play and App Store graphic sizes with sources and dates, Android adaptive icon and iOS icon rules, `flutter_launcher_icons` option names, screenshot capture and framing guidance, Fastlane `supply` and `deliver` folder layouts. Apple's screenshot page was truncated in the Watch section and Google's icon-design page was not read; both are marked.
+- Decisions 13 and 14 in `docs/DECISIONS.md`.
+
+### Changed
+- The `AGENTS.md` block lists the two new skills as on-request only. README lists them in the skill table and lifecycle.
+
 ## [0.11.3] - 2026-11-07
 
 ### Changed
