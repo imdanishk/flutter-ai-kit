@@ -18,13 +18,17 @@ on:
         type: choice
         options: [firebase, testflight]
       release:
-        description: Version bump (empty = build number only)
+        description: Version bump (none = build number only)
         required: false
+        default: none
         type: choice
-        options: ["", patch, minor, major]
+        options: [none, patch, minor, major]
       notes:
         description: Release notes or TestFlight changelog
         required: false
+
+permissions:
+  contents: read
 
 jobs:
   release:

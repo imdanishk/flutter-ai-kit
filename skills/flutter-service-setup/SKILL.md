@@ -1,6 +1,6 @@
 ---
 name: flutter-service-setup
-description: Lists what must exist in consoles and accounts before a Flutter feature can work, and what to share with the backend - per-environment Firebase projects and flavors, SHA fingerprints and signing keys, Google Maps and Places keys and billing, social login, push, and in-app subscriptions on Google Play and the App Store. Use before building or debugging a feature that needs a store, Firebase or Google Cloud setup, or when something works for one developer or build but not another.
+description: Lists what must exist in consoles and accounts before a Flutter feature can work, and what to share with the backend - per-environment Firebase projects and flavors, SHA fingerprints and signing keys, Google Maps and Places keys and billing, social login, push, and in-app subscriptions on Google Play and the App Store. Use before building or debugging a feature that needs a store, Firebase or Google Cloud setup, or when sign-in, Maps, push or billing works for one developer or build but not another.
 license: Apache-2.0
 ---
 

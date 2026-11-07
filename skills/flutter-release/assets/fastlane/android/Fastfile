@@ -16,17 +16,22 @@ def flavor
   ENV["FLUTTER_FLAVOR"] || UI.user_error!("Set FLUTTER_FLAVOR, for example: FLUTTER_FLAVOR=staging bundle exec fastlane firebase")
 end
 
+# FLUTTER_CMD overrides. Locally, `fvm flutter` when .fvmrc exists. On CI (the CI variable is set) plain
+# `flutter`, because the workflow installs the pinned version itself and FVM is not on the runner.
 def flutter_cmd
+  return ENV["FLUTTER_CMD"] if ENV["FLUTTER_CMD"]
+  return "flutter" if ENV["CI"]
   File.exist?(File.join(project_root, ".fvmrc")) ? "fvm flutter" : "flutter"
 end
 
 # Version name and build number for this upload. An explicit build_number: wins.
-# Otherwise: latest known store values, bumped by release: (patch, minor, major) or build number only.
+# Otherwise: the store's latest values (never below the pubspec build), bumped by release: (patch,
+# minor, major) or build number only.
 def resolve_version(latest_name, latest_build, options)
   pubspec_name, pubspec_build = KitVersioning.pubspec_version(File.read(File.join(project_root, "pubspec.yaml")))
   return [options[:build_name] || pubspec_name, options[:build_number].to_i] if options[:build_number]
 
-  name, build = latest_name ? [latest_name, latest_build] : [pubspec_name, pubspec_build]
+  name, build = KitVersioning.base_version(latest_name, latest_build, pubspec_name, pubspec_build)
   KitVersioning.next_version(name, build, options[:release])
 end
 
@@ -37,12 +42,14 @@ def flutter_build(kind, name, number)
 end
 
 def firebase_latest
-  firebase_app_distribution_get_latest_release(
+  # The action returns the latest release (a hash) or nil when there is none (check the plugin's README).
+  release = firebase_app_distribution_get_latest_release(
     app: ENV.fetch("FIREBASE_APP_ID"),
     service_credentials_file: ENV["FIREBASE_DISTRIBUTION_CREDENTIALS"]
   )
-  release = lane_context[SharedValues::FIREBASE_APP_DISTRO_LATEST_RELEASE]
   release ? [release[:displayVersion], release[:buildVersion].to_i] : [nil, nil]
+rescue NoMethodError => e
+  UI.user_error!("The firebase_app_distribution plugin looks missing. Run `bundle exec fastlane add_plugin firebase_app_distribution` in this folder, then retry (#{e.message})")
 rescue StandardError => e
   UI.important("Could not read the latest Firebase release (#{e.message}); using the pubspec version.")
   [nil, nil]
@@ -52,12 +59,18 @@ end
 # version name of the track being released to.
 def play_latest(track)
   common = { package_name: ENV.fetch("PACKAGE_NAME"), json_key: ENV["GOOGLE_PLAY_JSON_KEY_FILE"] }
+  errors = []
   codes = %w[internal alpha beta production].flat_map do |t|
     begin
       google_play_track_version_codes(track: t, **common)
-    rescue StandardError
-      [] # track has no release or no access
+    rescue StandardError => e
+      errors << e.message # an empty track and a missing permission both land here
+      []
     end
+  end
+  if codes.empty? && errors.size == 4
+    UI.important("Could not read any Play track (#{errors.first}). Falling back to the pubspec build number. " \
+                 "If the app already has uploads, pass build_number: higher than the highest version code.")
   end
   names = begin
     google_play_track_release_names(track: track, **common)
@@ -93,6 +106,7 @@ platform :android do
   desc "Build an App Bundle and upload it to a Play track (internal, alpha, beta, production)"
   lane :playstore do |options|
     track = options[:track] || "internal"
+    # A closed-test track with a custom name is not listed here: add its name to this list and to play_latest.
     UI.user_error!("Unknown track #{track}") unless %w[internal alpha beta production].include?(track)
     name, number = resolve_version(*play_latest(track), options)
     flutter_build("appbundle", name, number)
@@ -102,9 +116,10 @@ platform :android do
       json_key: ENV["GOOGLE_PLAY_JSON_KEY_FILE"],
       # Check the path printed by `flutter build appbundle`.
       aab: File.join(project_root, "build", "app", "outputs", "bundle", "#{flavor}Release", "app-#{flavor}-release.aab"),
-      # Fastlane's default is "completed", which releases to everyone on that track at once.
-      # Production stays a draft until a person publishes it in Play Console.
-      release_status: options[:release_status] || (track == "production" ? "draft" : "completed"),
+      # Fastlane's default is "completed", which rolls the release out to everyone on that track at once.
+      # Only the internal track defaults to that. Alpha, beta and production stay drafts until a person
+      # publishes them in Play Console; pass release_status:completed to publish from the lane.
+      release_status: options[:release_status] || (track == "internal" ? "completed" : "draft"),
       skip_upload_metadata: true,
       skip_upload_changelogs: true,
       skip_upload_images: true,

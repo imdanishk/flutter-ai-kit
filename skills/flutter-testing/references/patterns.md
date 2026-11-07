@@ -62,7 +62,11 @@ Mock the data source (API client, local store), stub one success and one failure
 
 ## Widget test
 
+This uses `MockCubit` from `bloc_test` (a stand-in that needs no stream setup for a fixed state). If the project does not use `bloc_test`, build the real cubit with a fake repository instead.
+
 ```dart
+class MockItemsCubit extends MockCubit<ItemsState> implements ItemsCubit {}
+
 testWidgets('shows the error message and a retry button on failure', (tester) async {
   final cubit = MockItemsCubit();
   when(() => cubit.state).thenReturn(const ItemsState.failure('offline'));

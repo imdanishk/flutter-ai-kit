@@ -17,5 +17,5 @@
 
 - Recipes exist for Cubit with Freezed (injectable, auto_route) and for Riverpod 3. Plain BLoC, Provider and GetX projects work through the profile skill but have no recipe.
 - No skills yet for accessibility, performance profiling or platform channels.
-- Release lane templates have only been syntax-checked (the version helper is tested); no CI workflow files are provided; iOS flavor setup (schemes and configurations) is not covered; the Apple page on submitting a first subscription could not be read.
+- Release lane templates and the two GitHub Actions workflows have only been syntax-checked (the version helper is tested); none has been run against a real project, so the Fastlane action names and parameters are unconfirmed. CI templates exist for GitHub Actions only. Sign in with Apple server details and Facebook login are second-hand and unverified.
 - Feature notes cover four areas in detail; the rest of the feature index has briefs only. About a quarter of the detailed entries (20 of 79) are still partly verified or unverified.

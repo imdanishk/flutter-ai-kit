@@ -12,7 +12,7 @@ Verified 2026-11-04 on official pages unless a line says Unverified. Re-check pa
 
 **Before production, personal accounts.** Accounts created after 13 November 2023 need a closed test with at least 12 testers opted in continuously for 14 days, then "Apply for production" in the Dashboard; review usually takes up to seven days. [Testing requirements](https://support.google.com/googleplay/android-developer/answer/14151465)
 
-**Target API.** New apps and updates must target Android 16 (API 36) from 31 August 2026 (extension to 1 November 2026 was offered); existing apps must target API 35 or higher to stay available to new users. Check the page for the current number when you start. [Target API](https://support.google.com/googleplay/android-developer/answer/11926878)
+**Target API.** New apps and updates must target Android 16 (API 36) from 31 August 2026 (an extension to 1 November 2026 was offered, and that date has now passed); existing apps must target API 35 or higher to stay available to new users. Check the page for the current number when you start. [Target API](https://support.google.com/googleplay/android-developer/answer/11926878)
 
 **Signing.** Use Play App Signing; sign uploads with an upload key. See `flutter-service-setup/references/environments-and-signing.md` for the three fingerprints and what to register where.
 
@@ -46,7 +46,7 @@ Verified 2026-11-04 on official pages unless a line says Unverified. Re-check pa
 - A build is testable for 90 days. Provide beta app description, features to test and a feedback email before testing starts.
 - Builds must include application identifiers within the provisioning profiles to be eligible.
 - Export compliance: set `ITSAppUsesNonExemptEncryption` in `Info.plist`, or Fastlane's `uses_non_exempt_encryption` supplies the answer when the key is missing (default `false`: answer honestly for your app).
-- `skip_waiting_for_build_processing: true` saves CI minutes but means no external distribution and no tester updates from that run.
+- `skip_waiting_for_build_processing: true` saves CI minutes but means no external distribution from that run; with a changelog, Fastlane still waits until the build appears so the text can be set (Fastlane source, read 2026-11-05).
 - Passwords with special characters can produce a misleading "Apple ID or password was entered incorrectly" error; prefer the API key.
 - Apps from TestFlight always run in the sandbox for purchases (see `flutter-service-setup/references/subscriptions-and-iap.md`).
 

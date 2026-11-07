@@ -1,10 +1,14 @@
 # Starting point for ios/fastlane/Matchfile. Values come from the flavor's env file.
-# One private repository can serve every flavor: list each flavor's bundle ID in APP_IDENTIFIER
-# (comma-separated) or keep one value per env file.
+# One private repository can serve every flavor. Each flavor's env file holds one APP_IDENTIFIER (the lanes
+# use it as a single bundle ID). To create or fetch profiles for several flavors in one run, set
+# MATCH_APP_IDENTIFIERS to a comma-separated list instead.
+# Create the certificate repository and its branch (with an initial commit) before the first run. Do not add
+# clone_branch_directly: match's option text says it needs the branch to exist already (confirmed in match's source, 2026-11-05).
+# On CI the repository needs credentials; match reads MATCH_GIT_BASIC_AUTHORIZATION (base64 of user:token),
+# MATCH_GIT_BEARER_AUTHORIZATION or MATCH_GIT_PRIVATE_KEY (option names confirmed in match's source, 2026-11-05).
 storage_mode("git")
 git_url(ENV["CERTIFICATE_GIT_URL"])
 git_branch(ENV["CERTIFICATE_GIT_BRANCH"] || "main")
-clone_branch_directly(true)
 team_id(ENV["APPSTORE_TEAM_ID"])
-app_identifier(ENV["APP_IDENTIFIER"].to_s.split(",").map(&:strip))
+app_identifier((ENV["MATCH_APP_IDENTIFIERS"] || ENV["APP_IDENTIFIER"]).to_s.split(",").map(&:strip))
 platform("ios")

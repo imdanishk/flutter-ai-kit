@@ -37,7 +37,7 @@ Verified 2026-11-04 on official pages unless a line says Unverified. Re-check pa
 - Two fixes; pick one and write it in the project rules:
   1. Register every developer's debug SHA-1 in the environment's Firebase app (and in any API key restriction). Simple; breaks again for each new developer or new machine. (That Firebase accepts several fingerprints per app is Unverified.)
   2. Use one shared debug keystore for the team (a debug key only signs test builds; Google's pages say to use debug certificates only for testing and never to publish an app signed with one), point `signingConfigs.debug` at it, and register its SHA-1 once. New developers copy the file. Keep release and upload keystores out of the repo.
-- Add SHA-1 and SHA-256 for: debug, the upload key, and the Play app signing key (next section). The Cloud console expects colon-separated values; `gcloud` expects hex without separators.
+- Add SHA-1 and SHA-256 for: debug, the upload key, and the Play app signing key (next section). The Cloud console expects colon-separated values; `gcloud` may expect hex without separators (Unverified: check `gcloud` help for the command you use).
 
 ## Play App Signing: three keys, three fingerprints
 

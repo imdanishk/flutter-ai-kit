@@ -1,9 +1,10 @@
 # Starting point for .github/workflows/release-android.yml. NOT RUN against a real repository.
-# Action versions (checkout, setup-java, setup-ruby, flutter-action) and the macOS/Ubuntu runner labels were
-# not re-checked when this was written: confirm the current major versions before using it.
+# Action tags (checkout v7, setup-java v6, flutter-action v2) were checked to exist on 2026-11-05; ruby/setup-ruby and the
+# macOS/Ubuntu runner labels were not re-checked, and none of it was run: confirm current versions before using it.
 # Secrets live in GitHub "Environments" named like your flavors (development, staging, production), each
-# with the same secret names; required reviewers on the production environment gate production runs
-# (environment protection rules: confirm in GitHub's docs). Production is manual-only: this workflow
+# with the same secret names; required reviewers on the production environment gate production runs, and a
+# deployment-branch rule limiting it to main stops a modified workflow on another branch from reading those
+# secrets (environment protection rules: confirm in GitHub's docs). Production is manual-only: this workflow
 # runs only when someone starts it.
 name: Release Android
 
@@ -27,13 +28,17 @@ on:
         type: choice
         options: [internal, alpha, beta, production]
       release:
-        description: Version bump (empty = build number only)
+        description: Version bump (none = build number only)
         required: false
+        default: none
         type: choice
-        options: ["", patch, minor, major]
+        options: [none, patch, minor, major]
       notes:
         description: Release notes
         required: false
+
+permissions:
+  contents: read
 
 jobs:
   release:

@@ -24,10 +24,10 @@ A Fastfile is not a pipeline, and a pipeline file does not prove deployment work
 ## Run a release (when asked to ship a build)
 
 - **Inputs.** Ask only for what the request did not give: flavor; platform; destination (Firebase, a Play track, TestFlight); version bump (`none` is the safe default and raises only the build number); optional release notes. Do not guess a production track.
-- **Preflight, before any upload:** the flavor's entry point and Fastlane lane exist; the env and credential files exist (check that they exist, never read or print them); the working tree has no unexpected changes; enough free disk space for a build. If space is short, remove only generated output inside the project (`build/`) and ask before touching any shared cache or tool folder; never run broad deletes.
+- **Preflight, before any upload:** the flavor's entry point and Fastlane lane exist; the env and credential files exist (check that they exist, never read or print them); the working tree has no unexpected changes; enough free disk space for a build. If space is short, report it and ask before deleting anything, including `build/`; never run broad deletes.
 - **Order.** Android, then iOS. If Android fails, do not start iOS. If one platform succeeds and the other fails, report both and do not repeat the successful upload.
-- **Do not change Fastfiles, version files, signing files or credentials** to make a deployment pass; report what is wrong instead. Do not stage, commit or amend anything.
-- **Final report:** flavor and destination, the version name and build number each lane used, the artifact and upload result, warnings separate from failures, and anything the developer must do by hand.
+- **Do not change Fastfiles, version files, signing files or credentials** to make a deployment pass; report what is wrong instead. Do not stage, commit or amend anything. Never pass `confirm:yes`, run `match nuke`, or use `force` or `force_for_new_devices` unless the developer approved that exact action in this conversation; those lanes write to shared certificate storage and the Apple account.
+- **Final report:** flavor and destination, the version name and build number each lane used, the artifact and upload result, warnings separate from failures, and anything the developer must do by hand. The iOS lane edits `ios/Runner.xcodeproj/project.pbxproj` for signing and puts it back afterwards; if a run was killed, check `git diff ios/Runner.xcodeproj` and say so.
 
 ## Rules
 
@@ -35,4 +35,4 @@ A Fastfile is not a pipeline, and a pipeline file does not prove deployment work
 - Never print, log, commit or paste secrets: keystores, `key.properties`, `.p8` keys, service-account JSON, match passwords, env files. Examples use variable names only. Do not echo secret variables in scripts.
 - One Flutter version in one file (`.fvmrc`); CI reads it. One name per environment everywhere.
 - Every store upload needs a build number higher than the last one. Decide where the number comes from (CI run number, or the store's latest plus one) and write it down.
-- Say plainly when a template or command was not run. The lane templates were checked for Ruby syntax only.
+- Say plainly when a template or command was not run. The lane templates were checked for Ruby syntax only (the version helper is unit-tested).

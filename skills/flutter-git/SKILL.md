@@ -29,4 +29,4 @@ Android keystores (`*.jks`, `*.keystore`) and `key.properties`; Apple `.p8` API 
 
 ## Before opening a pull request
 
-Run the project's analyzer and formatter (with the `fvm` prefix when `.fvmrc` exists), read your own diff once, and list anything you did not check. If a `flutter-review` pass was not done by someone other than the author of the change, say that in the description.
+Run the project's analyzer, and the formatter on the files you changed only (with the `fvm` prefix when `.fvmrc` exists), read your own diff once, and list anything you did not check. If a `flutter-review` pass was not done by someone other than the author of the change, say that in the description.

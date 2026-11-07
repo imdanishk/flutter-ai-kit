@@ -17,7 +17,11 @@ def flavor
   ENV["FLUTTER_FLAVOR"] || UI.user_error!("Set FLUTTER_FLAVOR, for example: FLUTTER_FLAVOR=staging bundle exec fastlane testflight")
 end
 
+# FLUTTER_CMD overrides. Locally, `fvm flutter` when .fvmrc exists. On CI (the CI variable is set) plain
+# `flutter`, because the workflow installs the pinned version itself and FVM is not on the runner.
 def flutter_cmd
+  return ENV["FLUTTER_CMD"] if ENV["FLUTTER_CMD"]
+  return "flutter" if ENV["CI"]
   File.exist?(File.join(project_root, ".fvmrc")) ? "fvm flutter" : "flutter"
 end
 
@@ -35,17 +39,19 @@ def resolve_version(latest_name, latest_build, options)
   pubspec_name, pubspec_build = KitVersioning.pubspec_version(File.read(File.join(project_root, "pubspec.yaml")))
   return [options[:build_name] || pubspec_name, options[:build_number].to_i] if options[:build_number]
 
-  name, build = latest_name ? [latest_name, latest_build] : [pubspec_name, pubspec_build]
+  name, build = KitVersioning.base_version(latest_name, latest_build, pubspec_name, pubspec_build)
   KitVersioning.next_version(name, build, options[:release])
 end
 
 def firebase_latest
-  firebase_app_distribution_get_latest_release(
+  # The action returns the latest release (a hash) or nil when there is none (check the plugin's README).
+  release = firebase_app_distribution_get_latest_release(
     app: ENV.fetch("FIREBASE_APP_ID"),
     service_credentials_file: ENV["FIREBASE_DISTRIBUTION_CREDENTIALS"]
   )
-  release = lane_context[SharedValues::FIREBASE_APP_DISTRO_LATEST_RELEASE]
   release ? [release[:displayVersion], release[:buildVersion].to_i] : [nil, nil]
+rescue NoMethodError => e
+  UI.user_error!("The firebase_app_distribution plugin looks missing. Run `bundle exec fastlane add_plugin firebase_app_distribution` in this folder, then retry (#{e.message})")
 rescue StandardError => e
   UI.important("Could not read the latest Firebase release (#{e.message}); using the pubspec version.")
   [nil, nil]
@@ -68,27 +74,44 @@ def build_ipa(match_type, export_method, name, number)
   args += ["--target", ENV["FLUTTER_TARGET"]] if ENV["FLUTTER_TARGET"]
   sh("cd #{Shellwords.escape(project_root)} && #{flutter_cmd} #{args.join(' ')}")
 
+  # On CI, use a temporary keychain so match can import certificates without a prompt (Fastlane's CI
+  # guidance; a no-op elsewhere).
+  setup_ci if ENV["CI"]
+
   # CI and everyone without write access to the certificate storage fetch only (readonly).
   match(type: match_type, api_key: asc_api_key, readonly: true)
 
   profile = ENV["sigh_#{bundle_id}_#{match_type}_profile-name"]
-  update_code_signing_settings(
-    use_automatic_signing: false,
-    path: File.join(project_root, "ios", "Runner.xcodeproj"),
-    team_id: ENV.fetch("APPSTORE_TEAM_ID"),
-    profile_name: profile,
-    code_sign_identity: "Apple Distribution",
-    targets: ["Runner"]
-  )
+  configuration = ENV["BUILD_CONFIGURATION"] || "Release-#{flavor}"
+  pbxproj = File.join(project_root, "ios", "Runner.xcodeproj", "project.pbxproj")
+  original_pbxproj = File.read(pbxproj)
+  begin
+    # This edits ios/Runner.xcodeproj/project.pbxproj (manual signing for one configuration). The original is
+    # put back in the ensure below, so the working tree is clean after the run. build_configurations is a
+    # parameter of the action (confirmed in Fastlane's source on 2026-11-05).
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: File.join(project_root, "ios", "Runner.xcodeproj"),
+      team_id: ENV.fetch("APPSTORE_TEAM_ID"),
+      profile_name: profile,
+      code_sign_identity: "Apple Distribution",
+      targets: ["Runner"],
+      build_configurations: [configuration]
+    )
 
-  gym(
-    workspace: File.join(project_root, "ios", "Runner.xcworkspace"),
-    scheme: ENV.fetch("BUILD_SCHEME"),
-    configuration: ENV["BUILD_CONFIGURATION"] || "Release-#{flavor}",
-    export_method: export_method,
-    output_directory: File.join(project_root, "build", "ios", "ipa"),
-    export_options: { provisioningProfiles: { bundle_id => profile } }
-  )
+    gym(
+      workspace: File.join(project_root, "ios", "Runner.xcworkspace"),
+      scheme: ENV.fetch("BUILD_SCHEME"),
+      configuration: configuration,
+      # Newer Xcode names these app-store-connect and release-testing; the old names were still accepted
+      # when this was written (Unverified, check gym's page).
+      export_method: export_method,
+      output_directory: File.join(project_root, "build", "ios", "ipa"),
+      export_options: { provisioningProfiles: { bundle_id => profile } }
+    )
+  ensure
+    File.write(pbxproj, original_pbxproj)
+  end
 end
 
 platform :ios do
@@ -135,9 +158,10 @@ platform :ios do
     %w[development adhoc appstore].each { |type| match(type: type, api_key: asc_api_key, readonly: false) }
   end
 
-  desc "Register a tester device (name:, udid:), then refresh the ad hoc profile"
+  desc "Register a tester device (name:, udid:, confirm:yes), then refresh the ad hoc profile. Writes to the Apple account and the certificate storage."
   lane :add_device do |options|
     UI.user_error!("Pass name: and udid:") unless options[:name] && options[:udid]
+    UI.user_error!("This registers a device in the Apple account and pushes a new profile to the certificate storage. Re-run with confirm:yes after the account holder agrees.") unless options[:confirm] == "yes"
     register_device(name: options[:name], udid: options[:udid], api_key: asc_api_key)
     match(type: "adhoc", api_key: asc_api_key, force_for_new_devices: true)
   end

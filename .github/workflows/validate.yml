@@ -14,10 +14,12 @@ jobs:
         run: dart tool/check.dart
       - name: Validate skills against the Agent Skills spec
         run: |
-          pip install skills-ref
+          pip install skills-ref==0.1.1
           for d in skills/*/; do agentskills validate "$d"; done
       - name: Fastlane version helper tests
         run: ruby tool/test_versioning.rb
+      - name: Fastlane templates parse
+        run: ruby -c skills/flutter-release/assets/fastlane/versioning.rb skills/flutter-release/assets/fastlane/android/Fastfile skills/flutter-release/assets/fastlane/ios/Fastfile
       - name: Installer smoke test
         run: |
           mkdir -p /tmp/app && echo "name: app" > /tmp/app/pubspec.yaml

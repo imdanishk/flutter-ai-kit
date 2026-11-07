@@ -2,7 +2,7 @@
 
 Small, agent-agnostic instructions that help any AI coding agent build Flutter apps the way your project already does. It works with OpenCode, Claude Code, Codex, Cursor, Gemini CLI, Antigravity, VS Code Copilot, Grok Build and other tools that read the open [Agent Skills](https://agentskills.io) format or `AGENTS.md`.
 
-Status: early (0.x), not benchmarked. Tried so far on two real apps and two fresh projects, all on the Cubit/Freezed stack; the Riverpod recipe is untested. The release lane templates were checked for Ruby syntax only and have not been run; the setup and release references were read from official pages in November 2026 and mark every line they could not confirm. Expect rough edges and please report them. The skills are short on purpose and contain only what an agent does not already know: how to read your project's conventions, complete feature recipes for two stacks (Cubit with Freezed, and Riverpod), a review checklist, and an estimation method.
+Status: early (0.x), not benchmarked. Tried so far on two real apps and two fresh projects, all on the Cubit/Freezed stack; the Riverpod recipe is untested. The release lane templates were checked for Ruby syntax only (the version helper is unit-tested) and have not been run; the setup and release references were read from official pages in November 2026 and mark every line they could not confirm. Expect rough edges and please report them. The skills are short on purpose and contain only what an agent does not already know: how to read your project's conventions, complete feature recipes for two stacks (Cubit with Freezed, and Riverpod), a review checklist, an estimation method, store and console setup lists, a release runbook with Fastlane and CI templates, safe git rules, and an on-request testing skill.
 
 ## How it works
 
@@ -17,7 +17,7 @@ An illustrative summary line (invented names):
 ## What it will not do
 
 - It does not make an agent follow rules perfectly: these are instructions, and a model can still miss one. Read the "Rule conflicts" line and the review.
-- It does not write tests unless you ask, and it does not run your app.
+- It does not write or run tests unless you ask, and it does not start your app unless you ask.
 - It does not replace your own rules. If your project has them, they win.
 - Its feature notes are research: each entry says whether it is verified, and some are not.
 
@@ -126,7 +126,7 @@ Packages, store rules and OS versions change. Each feature note carries a date, 
 
 ## Check what you install
 
-Skills are instructions your agent will follow. Read them (they are short) before using them on a work project. They contain no scripts that run on their own.
+Skills are instructions your agent will follow. Read them (they are short) before using them on a work project. They contain no hooks or scripts that run on their own; the Fastlane and CI templates under `skills/flutter-release/assets/` run only when you copy them into a project and start them.
 
 ## Licence
 

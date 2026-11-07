@@ -7,7 +7,7 @@ module KitVersioning
   # Returns [version_name, build_number] for the next upload.
   # latest_name: "1.4.2", or nil/"" when the store has nothing yet (fallback_name is used)
   # latest_build: the highest build number the store knows, or nil
-  # release: nil/"" keeps the name; "patch", "minor" or "major" bumps it
+  # release: nil, "" or "none" keeps the name; "patch", "minor" or "major" bumps it
   def self.next_version(latest_name, latest_build, release = nil, fallback_name: "1.0.0")
     name = latest_name.to_s.strip
     name = fallback_name if name.empty?
@@ -16,7 +16,7 @@ module KitVersioning
 
     major, minor, patch = match.captures.map(&:to_i)
     case release.to_s
-    when ""
+    when "", "none"
       # keep the version name
     when "major"
       major += 1
@@ -28,9 +28,31 @@ module KitVersioning
     when "patch"
       patch += 1
     else
-      raise ArgumentError, "release must be patch, minor or major, got #{release.inspect}"
+      raise ArgumentError, "release must be none, patch, minor or major, got #{release.inspect}"
     end
     ["#{major}.#{minor}.#{patch}", latest_build.to_i + 1]
+  end
+
+  # The [name, build] to bump from. The name is the higher of the store's and pubspec's, so a developer
+  # who raises the version in pubspec.yaml gets that version; on a tie, or when either name does not look
+  # like 1.2.3, the store's name is kept. The build is the higher of the store's and pubspec's, so the
+  # next upload is never below either one.
+  def self.base_version(store_name, store_build, pubspec_name, pubspec_build)
+    store = store_name.to_s.strip
+    pub = pubspec_name.to_s.strip
+    name = if store.empty? then pub
+           elsif pub.empty? then store
+           else higher_name(store, pub)
+           end
+    [name, [store_build.to_i, pubspec_build.to_i].max]
+  end
+
+  # The higher of two version names; the first one when they tie or either is not 1.2.3-shaped.
+  def self.higher_name(first, second)
+    a = VERSION_NAME.match(first)
+    b = VERSION_NAME.match(second)
+    return first unless a && b
+    (b.captures.map(&:to_i) <=> a.captures.map(&:to_i)) > 0 ? second : first
   end
 
   # Highest build number in any number of lists (nil-safe). nil when there are none.

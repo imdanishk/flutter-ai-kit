@@ -38,7 +38,7 @@ Status: found by reading the source of a small shared base package for Flutter a
 
 ## If the code under review is a shared package
 
-- Dependencies that nothing imports (nine of the 24 declared packages had no import in the package or its example), exact version pins (`pkg: 3.4.1`, no caret) that clash in consumer apps, and a pre-release generator in `dev_dependencies`.
+- Dependencies that nothing imports, exact version pins (`pkg: 3.4.1`, no caret) that clash in consumer apps, and a pre-release generator in `dev_dependencies`.
 - App-specific values (sign-in client IDs, backend keys) inside a general base package.
-- No tests, a changelog that stops two versions before the package version, and a `homepage` that names another repo.
+- No tests, a changelog that stops before the package version, and a `homepage` that names another repo.
 - Machine files committed: `local.properties` with SDK paths and a user name, `.gradle/`, `Pods/`, `xcuserdata/`. See `flutter-git`.

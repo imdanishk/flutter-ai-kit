@@ -43,6 +43,24 @@ void main(List<String> args) {
     }
   }
 
+  // Files that skills name in backticks (references/..., guides/..., assets/...) must exist.
+  final linkPattern = RegExp(r'`((?:references|guides|assets)/[A-Za-z0-9_./-]+\.(?:md|rb|yml|example))`');
+  for (final dir in skillsDir.listSync().whereType<Directory>()) {
+    for (final f in dir.listSync(recursive: true).whereType<File>().where((f) => f.path.endsWith('.md'))) {
+      for (final m in linkPattern.allMatches(f.readAsStringSync())) {
+        final rel = m.group(1)!;
+        final candidates = [
+          '${dir.path}${Platform.pathSeparator}$rel',
+          '${dir.path}${Platform.pathSeparator}references${Platform.pathSeparator}$rel',
+          '${f.parent.path}${Platform.pathSeparator}$rel',
+        ].map((s) => s.replaceAll('/', Platform.pathSeparator));
+        if (!candidates.any((s) => File(s).existsSync())) {
+          errors.add('${f.path.substring(root.path.length + 1)} names $rel, which does not exist');
+        }
+      }
+    }
+  }
+
   // The always-on block must stay tiny.
   final block = File(p('templates/AGENTS.block.md')).readAsLinesSync();
   if (block.length > 20) errors.add('templates/AGENTS.block.md is ${block.length} lines (limit 20)');

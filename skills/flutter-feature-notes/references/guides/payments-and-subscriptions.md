@@ -12,7 +12,7 @@ What you sell decides the payment path: digital goods unlocked in the app go thr
 
 - Apple guideline 3.1.1 requires In-App Purchase for subscriptions, in-game currencies, premium content and full-version unlocks; guideline 3.1.3(e) covers the opposite case, where physical goods and services used outside the app must use another method ([summary, Oct 2026](https://newly.app/how-to/add-in-app-purchases)).
 - Outside the United States, external purchase links for digital goods stay prohibited unless a regional entitlement applies. In the US storefront, links to your own website are allowed after a 2025 court ruling ([flutter_stripe README](https://pub.dev/packages/flutter_stripe), [summary, Oct 2026](https://newly.app/how-to/app-store-external-purchase-link)). Read Apple's current guideline text before shipping, as these rules keep changing.
-- Google Play requires Billing Library 8.0.0 or later for new apps and updates since 31 August 2026; developers could request an extension to 1 November 2026. Secondary sources report that Google recommends version 9 ([Android Developers reminder](https://developer.android.com/google/play/billing/additional-resources?hl=hi)). Check which Billing Library version your plugin bundles in its changelog.
+- Google Play requires Billing Library 8.0.0 or later for new apps and updates since 31 August 2026; developers could request an extension to 1 November 2026, which has now passed. Secondary sources report that Google recommends version 9 ([Android Developers reminder](https://developer.android.com/google/play/billing/additional-resources?hl=hi)). Check which Billing Library version your plugin bundles in its changelog.
 
 ### Android vs iOS differences in in_app_purchase
 

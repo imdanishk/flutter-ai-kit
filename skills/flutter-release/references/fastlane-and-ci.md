@@ -1,13 +1,13 @@
 # Runbook: from the command line to Firebase, Play and TestFlight
 
-Verified 2026-11-04 against Flutter's CD page and the Fastlane action pages unless a line says Unverified. The lane files in `assets/fastlane/` were checked for Ruby syntax only; they have not been run against a real project. Re-check pages older than about two months.
+Verified 2026-11-04 against Flutter's CD page and the Fastlane action pages (and, for option names, Fastlane's source on 2026-11-05) unless a line says Unverified. The lane files in `assets/fastlane/` were checked for Ruby syntax only; they have not been run against a real project. Re-check pages older than about two months.
 
 ## 0. Once per project
 
 1. Flavors exist and names match everywhere (Dart `--flavor`, Gradle flavor, iOS scheme, env file, Firebase app, store record). See `flutter-service-setup/references/environments-and-signing.md`.
 2. Pin the Flutter version in `.fvmrc`. Lanes call `fvm flutter` when that file exists.
 3. Release signing for Android is configured (`android/key.properties` read by Gradle; keystores outside the repo). iOS signing uses `match` with a private storage repo.
-4. Create `Gemfile` in both `android/` and `ios/` (template: `assets/fastlane/Gemfile`), run `bundle install` in each folder, and commit `Gemfile` and `Gemfile.lock`. Always run lanes as `bundle exec fastlane <lane>`.
+4. Create `Gemfile` in both `android/` and `ios/` (template: `assets/fastlane/Gemfile`), run `bundle install` in each folder, and commit `Gemfile` and `Gemfile.lock`. Always run lanes as `bundle exec fastlane <lane>`. If you use the Firebase lanes, run `bundle exec fastlane add_plugin firebase_app_distribution` once in each folder and commit the `fastlane/Pluginfile` it creates; without it the lane stops with a plugin message.
 5. Copy the Fastfile templates to `android/fastlane/Fastfile` and `ios/fastlane/Fastfile`, `versioning.rb` into both folders and `Matchfile` into `ios/fastlane/`, create `Appfile` in each (package name or bundle ID, team IDs), and set `FLUTTER_ROOT` if the iOS scripts ask for it (Flutter's CD page says it is required for the iOS deploy scripts).
 6. Create one ignored env file per flavor (`.env.development`, `.env.staging`, `.env.production`) from `assets/fastlane/env.example`. The lane templates load `.env.<FLUTTER_FLAVOR>` from the `fastlane/` folder in `before_all`, so `FLUTTER_FLAVOR` must be set on the command line. Never commit these files; the `.gitignore` in each `fastlane/` folder should ignore `.env*`, `*.json` credentials and `report.xml`.
 
@@ -64,6 +64,8 @@ cd ios           # macOS only
 FLUTTER_FLAVOR=production bundle exec fastlane testflight changelog:"What to test"
 ```
 
+The lane passes `skip_waiting_for_build_processing: true`. Per the option text in Fastlane's source (read 2026-11-05), with a changelog Fastlane still waits until the build appears in App Store Connect so the text can be set, then skips the rest of processing; no external tester gets the build. The next build number comes from TestFlight, so after an upload wait until the build shows in App Store Connect before starting another run, or two runs may get the same number (Unverified).
+
 Needs: app record in App Store Connect; API key; match storage with an App Store profile for the flavor's bundle ID (see `ios-signing-and-match.md` for creating and fetching certificates); Xcode 26 or later. The lane builds, signs with the match profile and uploads without submitting for App Review. With `skip_waiting_for_build_processing: true` (the template default) the lane returns before Apple finishes processing, so external distribution must be done in App Store Connect or by a later lane.
 
 ## 6. CI/CD pipeline checklist
@@ -73,7 +75,7 @@ Templates for GitHub Actions (manual trigger only, secrets in per-flavor GitHub 
 A pipeline should, in order: check out; install the pinned Flutter (read `.fvmrc`); install Ruby gems with Bundler in the platform folder; write secrets and signing inputs from the secret store (keystore decoded from base64, service-account JSON, `.env.<flavor>`, ASC key); run `flutter pub get`, localization and code generation; run analysis; call the lane. Production publishing should be a manual trigger. [Flutter CD](https://docs.flutter.dev/deployment/cd)
 
 - Android CI also needs the Android SDK and `ANDROID_SDK_ROOT`; iOS CI pins Xcode and, for the build step, Flutter's page uses `flutter build ios --release --no-codesign --config-only` before the lane builds and signs.
-- Secured variables are not available to pull-request builds until merged; do not print secrets; review any PR that touches secrets or pipeline files.
+- Whether pull-request builds can read secrets depends on the CI service and its settings (on GitHub Actions, pull requests from the same repository can read repository secrets and fork pull requests cannot; Unverified, check GitHub's docs). Do not print secrets; limit environments with secrets to the main branch; review any PR that touches secrets or pipeline files.
 - Pass build-time values with `--dart-define`.
 - Xcode Cloud is an alternative: it needs `ios/ci_scripts/ci_post_clone.sh` (made executable with `git add --chmod=+x`) that installs Flutter, runs `flutter precache --ios`, `flutter pub get` and `pod install`, and a Next Build Number set above the existing one for an existing app.
 - **Drift check before trusting a pipeline.** Compare, by reading: lane names the pipeline calls vs lanes in the Fastfiles; env file name written vs name Fastlane loads; keystore properties file name written vs the one Gradle reads; Flutter version in the pipeline vs `.fvmrc`; flavors in the README vs flavors in the build files; the option names in README examples vs those the lanes read (for example `release_notes`, not `notes`). Report every mismatch.

@@ -6,8 +6,8 @@ Thanks for helping. The kit stays small on purpose: a skill is accepted only if 
 
 1. Keep `SKILL.md` under 500 lines; put detail in `references/` one level deep.
 2. Write a `description` that says what the skill does and when to use it.
-3. Do not add scripts that run on their own. Skills are instructions.
-4. Run `dart tool/check.dart`, and `skills-ref validate skills/<name>` if you have it (`pip install skills-ref`).
+3. Do not add hooks or scripts that run on their own. Skills are instructions; templates under `assets/` are copied and run by the developer, not by the kit.
+4. Run `dart tool/check.dart`, and `agentskills validate skills/<name>` if you have it (`pip install skills-ref`; the same command CI runs).
 5. Add a line under `## [Unreleased]` in `CHANGELOG.md`.
 6. Say which agent and model you tried the change with, and what you saw. Nothing here is benchmarked, so real reports are the evidence.
 

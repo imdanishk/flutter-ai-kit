@@ -4,6 +4,24 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.11.2] - 2026-11-06
+
+Changes from an independent read-only audit; each finding was checked against the files first, and the Fastlane parts against Fastlane's own source (2026-11-05).
+
+### Fixed
+- `versioning.rb`: `release:none` (the documented safe default) crashed the lane; it is now accepted, and the workflows' version input offers `none` instead of an empty string. A higher version in `pubspec.yaml` now wins over the store's (before, it was silently ignored); the tests cover both.
+- iOS lane: the signing edit to `project.pbxproj` is undone after the build, so the working tree is clean afterwards.
+- Both lanes: a missing `firebase_app_distribution` plugin now stops with a clear message instead of falling back and failing after a full build; the plugin step is in the setup list.
+- `flutter-release`: agents are told never to pass `confirm:yes`, run `match nuke` or use `force` without approval in the conversation; low disk space is reported, not fixed by deleting `build/`; the final report covers the signing edit.
+- CI: release workflows get `permissions: contents: read` and a note to limit secret-holding environments to main; the repo's release workflow passes the version through `env:`, checks its shape and runs only on main; `skills-ref` is pinned; Fastlane templates get a `ruby -c` step.
+- Statements corrected: pull-request secret access depends on the CI service; the Play target-API extension date has passed; the Apple certificate-count claim and a `gcloud` format claim are marked unverified; the TestFlight changelog behaviour is stated from Fastlane's source.
+- Cross-references in the feature notes pointed at files that do not exist; they now name `guides/...`.
+- Matchfile (no `clone_branch_directly`, optional `MATCH_APP_IDENTIFIERS`, CI credential variables), `env.example`, `SECURITY.md`, `CONTRIBUTING.md`, `DECISIONS.md` and the marketplace description now match what the kit ships.
+- Smaller: `flutter-git` formats only changed files; `flutter-service-setup` triggers on sign-in, Maps, push and billing problems only; the widget-test example defines its mock; README lists all skills.
+
+### Added
+- `tool/check.dart` fails when a skill names a `references/`, `guides/` or `assets/` file that does not exist.
+
 ## [0.11.1] - 2026-11-05
 
 ### Fixed

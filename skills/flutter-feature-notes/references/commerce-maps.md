@@ -1,6 +1,6 @@
 # Commerce, delivery, booking and maps
 
-Shared assumptions: one mid/senior Flutter developer, finished designs and backend APIs, excluding QA and store review. Almost every commerce feature here is backend work with a Flutter front end, so the estimates cover the app side only. Biggest decisions: use google_maps_flutter as the default map (Mapbox only when you need custom styling or turn-by-turn navigation, flutter_map when you want no vendor key); never ship Directions or Routes keys inside the app, call routing from your backend; and treat live tracking as a backend and realtime problem first. Payment details live in `02-payments-and-subscriptions.md`; permissions and background location in `04-notifications-background-location.md`. Rate limits cut the research short, so several entries are only partly verified; each says which parts.
+Shared assumptions: one mid/senior Flutter developer, finished designs and backend APIs, excluding QA and store review. Almost every commerce feature here is backend work with a Flutter front end, so the estimates cover the app side only. Biggest decisions: use google_maps_flutter as the default map (Mapbox only when you need custom styling or turn-by-turn navigation, flutter_map when you want no vendor key); never ship Directions or Routes keys inside the app, call routing from your backend; and treat live tracking as a backend and realtime problem first. Payment details live in `guides/payments-and-subscriptions.md`; permissions and background location in `guides/notifications-background-location.md`. Rate limits cut the research short, so several entries are only partly verified; each says which parts.
 
 ## Search, catalog and shopping flow
 
@@ -21,7 +21,7 @@ Shared assumptions: one mid/senior Flutter developer, finished designs and backe
 <!-- meta: size=L; days=10-20; deps=flutter-only, backend, third-party-sdk, paid-service; platform-difference=minor -->
 - **Brief:** Cart with quantities and promo codes, saved items, address and delivery slot selection, payment, order confirmation.
 - **Seen in:** Amazon, Shopify-based stores, Zalando, Instacart.
-- **Recommended approach:** Server-owned cart (the backend calculates totals, tax, shipping and discounts) and a thin Flutter state layer; payment through flutter_stripe 14.2.0 (flutterstripe.io, published 2026-10-14; its page recommends PaymentSheet and supports Apple Pay and Google Pay) and, for wallet buttons, pay 3.3.0 (google.dev, 2025-11-21), as in `02-payments-and-subscriptions.md`. Rejected: client-side totals (tamperable) and the store billing API for physical goods.
+- **Recommended approach:** Server-owned cart (the backend calculates totals, tax, shipping and discounts) and a thin Flutter state layer; payment through flutter_stripe 14.2.0 (flutterstripe.io, published 2026-10-14; its page recommends PaymentSheet and supports Apple Pay and Google Pay) and, for wallet buttons, pay 3.3.0 (google.dev, 2025-11-21), as in `guides/payments-and-subscriptions.md`. Rejected: client-side totals (tamperable) and the store billing API for physical goods.
 - **Effort:** L, 10-20 days. Drives the range: guest carts and merging on login, address book, promo rules, payment edge cases, order idempotency.
 - **Depends on:** Backend (mostly), paid payment processor, Apple Pay merchant setup and Google Pay Business Console.
 - **Android/iOS differences:** Minor. iOS: Apple Pay merchant identifier and payment processing certificate; flutter_stripe needs iOS 13.0. Android: Google Pay Business Console account; flutter_stripe needs API level 21+, Kotlin 1.8.0+, an AppCompat-based activity theme and `FlutterFragmentActivity`.
@@ -62,9 +62,9 @@ Shared assumptions: one mid/senior Flutter developer, finished designs and backe
 - **Seen in:** OpenTable, Airbnb, Booking.com, Calendly-style apps.
 - **Recommended approach:** table_calendar 3.3.0 for the date picker (events via `eventLoader`, range selection; page shows a release 28 days before capture; listed as an unverified uploader, so review the code before adopting). Slots come from the backend with a short hold. Rejected: computing availability on the client.
 - **Effort:** M, 5-10 days. Drives the range: time zones, recurring rules, hold and expiry, rescheduling.
-- **Depends on:** Backend availability and double-booking prevention; payment per `02-payments-and-subscriptions.md` if a deposit is taken.
+- **Depends on:** Backend availability and double-booking prevention; payment per `guides/payments-and-subscriptions.md` if a deposit is taken.
 - **Android/iOS differences:** None.
-- **Custom work after the package:** Slot grid, time zone display, countdown for held slots, add-to-calendar and reminders (see 04 for local notifications).
+- **Custom work after the package:** Slot grid, time zone display, countdown for held slots, add-to-calendar and reminders (see guides/notifications-background-location.md for local notifications).
 - **Pitfalls and store review:** Show times in the venue's time zone. Verify cancellation-fee wording with the store rules for services.
 - **What to tell the requester:** Easy front end; the hard part is the availability engine. Ask about overbooking policy and time zones.
 - **Status:** Verified 2026-10-30 from https://pub.dev/packages/table_calendar. Rest is judgment.
@@ -127,7 +127,7 @@ Shared assumptions: one mid/senior Flutter developer, finished designs and backe
 <!-- meta: size=L; days=10-18; deps=flutter-only, backend, third-party-sdk, paid-service; platform-difference=minor -->
 - **Brief:** Status timeline (placed, preparing, on the way) and a live map with the courier's position and ETA.
 - **Seen in:** Uber Eats, DoorDash, Instacart, Amazon.
-- **Recommended approach:** Push status changes with the transport your backend already has (GraphQL subscriptions or WebSocket; web_socket_channel 3.0.3 was published 2025-04-17 and its page does not mention auto-reconnect, so add your own backoff). Use FCM for background updates (see 04). Show the courier on google_maps_flutter with an animated marker. Rejected: polling every few seconds.
+- **Recommended approach:** Push status changes with the transport your backend already has (GraphQL subscriptions or WebSocket; web_socket_channel 3.0.3 was published 2025-04-17 and its page does not mention auto-reconnect, so add your own backoff). Use FCM for background updates (see guides/notifications-background-location.md). Show the courier on google_maps_flutter with an animated marker. Rejected: polling every few seconds.
 - **Effort:** L, 10-18 days. Drives the range: reconnect and resume, marker interpolation, ETA updates.
 - **Depends on:** Backend realtime layer, courier app sending location, maps key.
 - **Android/iOS differences:** Minor. iOS: Firebase's Flutter page requires push notifications plus the Background fetch and Remote notifications modes, and an APNs authentication key uploaded to Firebase. Android: Android 7.0 or higher with Google Play services.
@@ -143,9 +143,9 @@ Shared assumptions: one mid/senior Flutter developer, finished designs and backe
 - **Recommended approach:** Driver app: geolocator with a foreground service on Android and the location background mode on iOS (setup in 04). Rider app: realtime channel plus map marker interpolation. Matching and dispatch are backend. Rejected: building matching in the app.
 - **Effort:** L, 15-30 days for rider plus driver apps. Drives the range: dispatch states, reconnects, battery tuning, turn-by-turn (not included).
 - **Depends on:** Backend dispatch and realtime, routing and maps services, native background configuration, App Review justification for background location.
-- **Android/iOS differences:** Significant: `ACCESS_BACKGROUND_LOCATION` and foreground service on Android; Always authorization and background mode on iOS (see 04).
+- **Android/iOS differences:** Significant: `ACCESS_BACKGROUND_LOCATION` and foreground service on Android; Always authorization and background mode on iOS (see guides/notifications-background-location.md).
 - **Custom work after the package:** Trip state machine, offline queue of location points, throttling by distance, in-app navigation hand-off.
-- **Pitfalls and store review:** Apple may reject unjustified background location (see 04). In-app turn-by-turn: `google_navigation_flutter` 0.11.2 (Google, Apache-2.0, beta until 1.0) needs Android API 24 or later, iOS 16 or later with Swift Package Manager (CocoaPods unsupported), the background location mode and a Google Cloud API key restricted to the Navigation SDK and Maps SDKs; the user must accept Google's navigation terms in the app, and Mobility Services need a conversation with Google sales. The alternative is a hand-off to the maps app. A Mapbox navigation option: Verify.
+- **Pitfalls and store review:** Apple may reject unjustified background location (see guides/notifications-background-location.md). In-app turn-by-turn: `google_navigation_flutter` 0.11.2 (Google, Apache-2.0, beta until 1.0) needs Android API 24 or later, iOS 16 or later with Swift Package Manager (CocoaPods unsupported), the background location mode and a Google Cloud API key restricted to the Navigation SDK and Maps SDKs; the user must accept Google's navigation terms in the app, and Mobility Services need a conversation with Google sales. The alternative is a hand-off to the maps app. A Mapbox navigation option: Verify.
 - **What to tell the requester:** Core tracking is feasible; a full Uber clone is a product, not a feature. Ask whether navigation, pooling and payments are in scope.
 - **Status:** Partly verified 2026-11-01 for Google navigation from https://pub.dev/packages/google_navigation_flutter; tracking parts reuse 04. Verify: Mapbox navigation, Google Mobility Services pricing, matching and dispatch design (judgment).
 
@@ -155,12 +155,12 @@ Shared assumptions: one mid/senior Flutter developer, finished designs and backe
 <!-- meta: size=M; days=4-10; deps=flutter-only, third-party-sdk, paid-service, native-android, native-ios, store-approval; platform-difference=significant -->
 - **Brief:** Continuous location while the app is not visible, plus region enter/exit triggers.
 - **Seen in:** Uber (driver), Life360, Strava, Starbucks (arrival triggers, unverified).
-- **Recommended approach:** geolocator for ordinary tracking, as set out in `04-notifications-background-location.md`. For battery-aware motion detection and managed geofences, flutter_background_geolocation 5.9.0 (transistorsoft.com, published 2026-10-09). Its page says a paid licence is required for release builds on both iOS and Android (free in debug, 30-day trial). Rejected: early community geofencing packages (see 04).
+- **Recommended approach:** geolocator for ordinary tracking, as set out in `guides/notifications-background-location.md`. For battery-aware motion detection and managed geofences, flutter_background_geolocation 5.9.0 (transistorsoft.com, published 2026-10-09). Its page says a paid licence is required for release builds on both Android and iOS (free in debug, 30-day trial). Rejected: early community geofencing packages (see guides/notifications-background-location.md).
 - **Effort:** M, 4-10 days. Drives the range: battery testing on real devices.
 - **Depends on:** Native permission setup, paid licence for the commercial SDK, store justification.
 - **Android/iOS differences:** Significant: about 100 regions on Android, 20 on iOS (from 04).
 - **Custom work after the package:** Upload batching, privacy controls, permission education screens.
-- **Pitfalls and store review:** Do not declare background location you do not need (see 04).
+- **Pitfalls and store review:** Do not declare background location you do not need (see guides/notifications-background-location.md).
 - **What to tell the requester:** Feasible; iOS limits on regions and background time are firm.
 - **Status:** Verified 2026-10-30 from https://pub.dev/packages/flutter_background_geolocation; the rest follows 04.
 
@@ -171,7 +171,7 @@ Shared assumptions: one mid/senior Flutter developer, finished designs and backe
 - **Recommended approach:** Combine the background tracking entry above, a local database with a sync queue, signature and barcode packages from the utilities inventory, and a dispatcher web dashboard. For managed background tracking use `flutter_background_geolocation` (paid licence for release builds, see the entry above). Maps via google_maps_flutter.
 - **Effort:** L, 15-30 days. Drives the range: offline sync and conflict handling.
 - **Depends on:** Backend with job assignment, background location, store justification.
-- **Android/iOS differences:** Significant background rules (see 04).
+- **Android/iOS differences:** Significant background rules (see guides/notifications-background-location.md).
 - **Custom work after the package:** Offline sync, proof-of-delivery flow, route ordering (backend), battery policy.
 - **Pitfalls and store review:** Employee tracking needs clear consent and privacy wording (Verify).
 - **What to tell the requester:** Feasible; scope offline behaviour and OS background limits before promising continuous tracking.
