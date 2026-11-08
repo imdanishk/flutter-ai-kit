@@ -11,6 +11,7 @@
 
 - A headline above the screen plus a plain or branded background is allowed (Apple 2.3.3 allows text and image overlays). Keep the headline short, in the app's language, and readable at thumbnail size. Do not claim features the app does not have.
 - Fastlane `frameit` adds device frames and titles with a `Framefile.json` and needs ImageMagick for text. Its frames come from a separate frame set, its docs do not say how current the newest iPhone frames are, and its docs say output without titles is full resolution and cannot be uploaded to the App Store directly: check the device list on the frameit page before relying on it. Source: https://docs.fastlane.tools/actions/frameit/.
+- **ASO Shots** (`ceorkm/aso-shots`, MIT, last commit 2026-10-26) is an optional skill that writes the headlines, offers three of 18 styles, builds the set in HTML and exports PNGs. Its export presets match Apple's page (1206 x 2622 and 1320 x 2868 iPhone, 2064 x 2752 iPad) and Google's phone and tablet minimums. It generates artwork through an image API key or a Codex plugin and runs Node scripts. It was read, not run, and this kit does not install it: if the developer wants it, they read its scripts first and give its keys only to tools they trust.
 - Other routes: a design tool the developer already uses, or an HTML page rendered at the exact pixel size. Pick what is installed; do not install tools without asking.
 - Android and iOS may share artwork but not files: sizes and ratios differ.
 

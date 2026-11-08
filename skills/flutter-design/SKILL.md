@@ -19,7 +19,7 @@ Do not use this skill unless the request is about how the app looks: a design to
 3. **Get the design source** with `references/design-sources.md` (Figma through its MCP server, images, what to do when a value cannot be read). Say which values were measured and which were estimated by eye.
 4. **Put values in the theme, not in screens.** New colours, text styles, spacing and radii go to the theme layer first; screens only use them. Do not add a second theme system next to an existing one.
 5. **Design every state, not only the happy path:** use `references/states-and-accessibility.md` (loading, empty, error, offline, long text, large text, dark theme, tap targets, labels).
-6. **Check, then report.** Compare what you built with the design. If the app can be run (emulator, simulator or device, and the developer allows it), take screenshots and compare them side by side; if not, say the result was not visually checked. Finish with: screens built, deviations from the design (value, place, reason), assumptions, assets the developer must supply (fonts, icons, images, with their licence), and anything that needs a decision.
+6. **Check, then report.** Compare what you built with the design. If the app can be run (emulator, simulator or device, and the developer allows it), take screenshots and compare them side by side; if not, say the result was not visually checked. Finish with: screens built, deviations from the design (value, place, reason), assumptions, assets the developer must supply (fonts, icons, images, with their licence), and anything that needs a decision. Offer to add one line to the project profile in `AGENTS.md` saying where the theme and tokens live, so later sessions find them.
 
 ## Rules
 

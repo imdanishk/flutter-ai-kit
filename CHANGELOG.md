@@ -4,6 +4,17 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-11-08
+
+### Added
+- `flutter-plan`: screens, user flows and journeys as Mermaid diagrams (the three example diagrams were rendered with `mmdc` to check the syntax), an ordered build plan of small slices for a whole app or one feature, a plan template with acceptance checks and a blockers table, and slicing and ordering rules.
+- `flutter-fix`: three modes (bug or crash by root cause, behaviour-preserving refactor, upgrade). The debugging playbook carries the official common-errors list and the DevTools tool list; the upgrade checklist carries `dart pub outdated` columns, `dart pub upgrade` flags, FVM commands and the Flutter breaking-changes index, all read on 2026-11-08. Native toolchain advice is marked unverified.
+- Decision 15 in `docs/DECISIONS.md`.
+
+### Changed
+- Design references: Mobbin, ASO Shots and four third-party design skill sets were reviewed (read, not run); verdicts and licences are in `design-sources.md`, an optional ASO Shots route is in `screenshots.md`, and a short list of mobile patterns was added to `states-and-accessibility.md` in the kit's own words. Nothing was copied or installed.
+- The `AGENTS.md` block lists `flutter-plan` and `flutter-fix`. README table, lifecycle and the name-collision note are updated.
+
 ## [0.12.0] - 2026-11-08
 
 ### Added

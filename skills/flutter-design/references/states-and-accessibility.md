@@ -18,3 +18,13 @@ Errors: say what happened in plain words, not a code; put the message where the 
 ## Motion and feedback
 
 Keep animation short and purposeful; respect the platform's reduce-motion setting; give every tap visible feedback; never hide the only path to an action behind a gesture without an alternative.
+
+## Mobile patterns worth checking (design judgement, not verified rules)
+
+- Put the main action where a thumb reaches without stretching, usually the bottom of the screen; keep destructive actions away from it.
+- Never show a blank search: offer recent searches or suggestions first.
+- Prefer tappable choices (chips, lists, pickers) over typing for common options, with an "Other" field as the fallback.
+- Use a timeline for statuses (orders, requests, uploads) instead of a list of dates.
+- Make the empty state useful: say what belongs here and offer the next step.
+- One font family (two at most), few sizes and weights; show hierarchy with size, weight and colour, not by making everything bold.
+
