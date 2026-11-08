@@ -1,6 +1,6 @@
 ---
 name: flutter-project-profile
-description: Detects a Flutter project's stack, folder layout, conventions and commands, and records a short profile in AGENTS.md. Use when starting work in a Flutter repository that has no project profile, after the stack changes, or when asked to document the project's conventions.
+description: Detects a Flutter project's stack, folder layout, conventions and commands, and records a short profile in AGENTS.md. Use when asked to document a project's conventions, after the stack changes, or before a new feature, review or new project in a repository that has no profile. Not needed for a small bug fix or a question.
 license: Apache-2.0
 ---
 
@@ -22,7 +22,7 @@ The profile tells every later task how this project does things, so work matches
    - how dependencies are registered and how routes are declared
    - import style (package or relative) and naming
 4. **Find the commands.** Is the Flutter version pinned with FVM? What is the code generation command? Are there flavors or `--dart-define` files? Is there a format or lint step beyond `flutter analyze`?
-5. **Write the profile** between these markers in the project's `AGENTS.md` (create the file if needed, never edit outside the markers):
+5. **Write the profile** between these markers in the project's `AGENTS.md` (create the file if needed, never edit outside the markers). If the developer did not ask for the profile itself, show it first and write it once they agree:
 
 ```
 <!-- flutter-ai-kit:profile:start -->

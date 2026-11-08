@@ -4,12 +4,16 @@ The notes in `skills/flutter-feature-notes/references/` go stale: packages are u
 
 ## Procedure
 
-1. List entries to refresh, oldest first: `grep -rn "Status:" skills/flutter-feature-notes/references/*.md`. Start with `Unverified` and `Partly verified`, then anything with a date older than a month.
+1. List entries to refresh, oldest first: `grep -rn "Status:" skills/flutter-feature-notes/references/`. Start with `Unverified` and `Partly verified`, then anything with a date older than a month.
 2. For each entry, open the sources it names (pub.dev package pages, official docs, store policy pages). Check: current version and publish date, maintenance (active, slow, stale, discontinued), platform support, licence, and any changed Android/iOS setup or store rule.
 3. Edit the entry in place. Keep the field names. Update the `Status` line with the new date and the pages you actually opened. Mark what you could not confirm as `Verify`.
 4. Do not copy facts from memory or search snippets into a `Verified` status. If a package is discontinued, change the recommended approach and say why.
 5. Add new features to `references/index.md` and, when researched, to the matching area file.
 6. Add a line to `CHANGELOG.md` under `Unreleased` (for example "Refreshed sign-in notes"). Releases that only refresh notes are patch versions.
+
+## Guides
+
+The files in `references/guides/` pin package versions and store rules. Each starts with an `As of <date>` line; change it when you re-check the file. The reminder workflow lists guides older than 30 days.
 
 ## Setup and release references
 

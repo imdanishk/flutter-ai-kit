@@ -4,6 +4,26 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.13.1] - 2026-11-08
+
+Changes from a final review of the new skills and an independent read-only audit of the whole kit. Each finding was checked against the files first; one audit doubt (Apple's iPhone screenshot sizes) was re-read on Apple's page and the kit's numbers were correct.
+
+### Fixed
+- Installer: an `AGENTS.md` with a start marker but no end marker (or the markers in the wrong order) made the next run delete text between them. It now stops before writing anything and says what to fix; CI tests this.
+- `slicePage` in the shared core threw for a negative limit; it now returns an empty page (test added).
+- `flutter-release`: one line told the agent to run lanes whenever credentials exist, against its own rule to upload only when asked to ship; it now says to check without uploading and run an uploading lane only on request.
+- Android release workflow template no longer passes release notes the Play lane ignores; both workflow templates gained a `concurrency` group so two runs cannot pick the same build number.
+- The release workflow now runs the whole `validate` workflow first and publishes only if it passes.
+- The feature-notes reminder now also checks `references/guides/` (each guide carries an `As of` date); stale limit is 30 days in the workflow, `docs/REFRESH.md` and the skill.
+- Contradictions: README no longer says the kit never runs your app (new-project asks first); `.fvmrc` advice no longer says "commit" for the agent; `--grok` listed in decision 1; decision on Fastlane names matches the 0.11.3 check; README names the skills not yet tried on a real project.
+
+### Changed
+- The `AGENTS.md` block is shorter (the long skill list is gone, since agents pick skills by their descriptions) and says that a small fix or question does not need the profile skill and that nothing is uploaded, published or pushed unless asked. The profile skill shows its result and writes `AGENTS.md` after the developer agrees, unless they asked for the profile.
+- Trigger wording: `flutter-fix` (no "clean up" or "migrate"), `flutter-feature-notes` (no everyday words like sign-in or maps; read one section, not a whole file; at most about five pages), `flutter-feature` hands visual work to `flutter-design`, `flutter-estimate` and `flutter-plan` no longer hand work back and forth, `flutter-fix` points to `flutter-release` and `flutter-service-setup`.
+- `tool/check.dart` also checks that README mentions every skill, that files under `references/` and `assets/` are used, that more kinds of referenced files exist, an exact changelog heading and a size cap on the `AGENTS.md` block.
+- `docs/PUBLISHING.md` was a second copy of `CONTRIBUTING.md` "Releasing" and was removed.
+- `flutter-design` asks whether the app uses one look on both platforms or platform-adaptive widgets.
+
 ## [0.13.0] - 2026-11-08
 
 ### Added

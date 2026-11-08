@@ -8,6 +8,7 @@ Follow the project's own theme layer if it has one. This is the default for proj
 - **Text:** a `TextTheme` (or the project's text-style class), with the design's families, sizes, weights, line heights and letter spacing. Screens use `Theme.of(context).textTheme.<role>` and change only with `copyWith`.
 - **Spacing, radii, sizes:** small `const` values in one file (for example a 4-based scale), referenced by name. A sizing package such as `flutter_screenutil` is a project choice: follow it if present, do not add it.
 - **Component looks:** the component themes inside `ThemeData` (buttons, inputs, cards, dialogs, app bar) so every instance shares one style. Avoid styling each widget on its own.
+- **One look or platform-adaptive:** ask which. The default is one Material look on both platforms; adaptive (Cupertino widgets on iOS) is a deliberate choice that doubles the review work. Do not mix the two by accident.
 - **Dark theme:** a second `ColorScheme` and `ThemeData`, set with `MaterialApp.darkTheme` and `themeMode`. Design it, do not invert it: raised surfaces get lighter, accent colours may need a lighter tone for contrast.
 
 ## Facts (verified 2026-11-08 from Flutter's docs)

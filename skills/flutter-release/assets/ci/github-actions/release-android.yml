@@ -40,6 +40,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: release-android-${{ inputs.flavor }}
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -109,4 +113,5 @@ jobs:
 
       - name: Google Play
         if: ${{ inputs.destination == 'playstore' }}
-        run: bundle exec fastlane playstore track:"$TRACK" release:"$BUMP" release_notes:"$NOTES"
+        # The Play lane does not upload release notes (skip_upload_changelogs is on): write them in Play Console.
+        run: bundle exec fastlane playstore track:"$TRACK" release:"$BUMP"

@@ -19,7 +19,9 @@ MAJOR.MINOR.PATCH. The version lives in `.claude-plugin/plugin.json` only. Patch
 
 1. Move the `Unreleased` notes under a new `## [x.y.z] - date` heading in `CHANGELOG.md`.
 2. Set `version` in `.claude-plugin/plugin.json`.
-3. Merge to `main`. The `release` workflow notices the new version, runs `dart tool/check.dart`, builds the zip and publishes the GitHub release and its tag. No manual tagging.
+3. Run `dart tool/check.dart` and `ruby tool/test_versioning.rb`.
+4. Merge to `main`. The `release` workflow first runs the whole `validate` workflow; only if that passes does it build the zip and publish the GitHub release and its tag. No manual tagging.
+5. Before announcing a new install route, test it from a clean folder.
 
 ## Conduct
 

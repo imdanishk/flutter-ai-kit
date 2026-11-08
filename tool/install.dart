@@ -67,6 +67,14 @@ void main(List<String> args) {
       .toList()
     ..sort((a, b) => a.path.compareTo(b.path));
 
+  // AGENTS.md managed block.
+  final block = blockFile.readAsStringSync().replaceAll('__VERSION__', version).trimRight();
+  final agents = File(_join(project.path, 'AGENTS.md'));
+  final current = agents.existsSync() ? agents.readAsStringSync() : '';
+  var updated = _withBlock(current, block);
+  if (!updated.contains(prefsStart)) {
+    updated = '${updated.trimRight()}\n\n$prefsBlock\n';
+  }
   final destinations = <String>['.agents/skills'];
   if (claude) destinations.add('.claude/skills');
   if (copilot) destinations.add('.github/skills');
@@ -83,14 +91,6 @@ void main(List<String> args) {
     }
   }
 
-  // AGENTS.md managed block.
-  final block = blockFile.readAsStringSync().replaceAll('__VERSION__', version).trimRight();
-  final agents = File(_join(project.path, 'AGENTS.md'));
-  final current = agents.existsSync() ? agents.readAsStringSync() : '';
-  var updated = _withBlock(current, block);
-  if (!updated.contains(prefsStart)) {
-    updated = '${updated.trimRight()}\n\n$prefsBlock\n';
-  }
   _log(dryRun, 'file   AGENTS.md (${current.isEmpty ? 'create' : 'update managed block'})');
   if (!dryRun && updated != current) agents.writeAsStringSync(updated);
 
@@ -124,12 +124,16 @@ String _kitVersion(Directory kit) {
 
 String _withBlock(String current, String block) {
   final start = current.indexOf(startMarker);
-  final end = current.indexOf(endMarker);
-  if (start >= 0 && end > start) {
-    return '${current.substring(0, start)}$block${current.substring(end + endMarker.length)}';
+  final hasEnd = current.contains(endMarker);
+  if (start < 0 && !hasEnd) {
+    if (current.trim().isEmpty) return '$block\n';
+    return '${current.trimRight()}\n\n$block\n';
   }
-  if (current.trim().isEmpty) return '$block\n';
-  return '${current.trimRight()}\n\n$block\n';
+  final end = start < 0 ? -1 : current.indexOf(endMarker, start);
+  if (end < 0) {
+    _fail('AGENTS.md has a flutter-ai-kit marker without its partner, or in the wrong order. Fix it by hand; nothing was changed.');
+  }
+  return '${current.substring(0, start)}$block${current.substring(end + endMarker.length)}';
 }
 
 void _copyDir(Directory from, Directory to) {

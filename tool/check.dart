@@ -18,7 +18,7 @@ void main(List<String> args) {
     if (entry.containsKey('version')) errors.add('Set the version in plugin.json only, not in marketplace.json');
   }
   final changelog = File(p('CHANGELOG.md')).readAsStringSync();
-  if (!changelog.contains('## [$version]')) errors.add('CHANGELOG.md has no "## [$version]" section');
+  if (!RegExp('^## \\[${RegExp.escape(version)}\\]', multiLine: true).hasMatch(changelog)) errors.add('CHANGELOG.md has no "## [$version]" section');
   final tagIndex = args.indexOf('--tag');
   if (tagIndex >= 0 && tagIndex + 1 < args.length) {
     final tag = args[tagIndex + 1];
@@ -26,6 +26,7 @@ void main(List<String> args) {
   }
 
   // Skills.
+  final readme = File(p('README.md')).readAsStringSync();
   final skillsDir = Directory(p('skills'));
   for (final dir in skillsDir.listSync().whereType<Directory>()) {
     final name = dir.uri.pathSegments.where((s) => s.isNotEmpty).last;
@@ -41,10 +42,12 @@ void main(List<String> args) {
     if (!file.readAsStringSync().contains(RegExp(r'^description:\s*\S', multiLine: true))) {
       errors.add('skills/$name/SKILL.md has no description');
     }
+    if (!readme.contains('`$name`')) errors.add('README.md does not mention skill $name');
   }
 
   // Files that skills name in backticks (references/..., guides/..., assets/...) must exist.
-  final linkPattern = RegExp(r'`((?:references|guides|assets)/[A-Za-z0-9_./-]+\.(?:md|rb|yml|example))`');
+  final linkPattern = RegExp(
+      r'`((?:(?:references|guides|assets)/[A-Za-z0-9_./-]+\.(?:md|rb|yml|yaml|dart|json|example))|(?:(?:references|guides|assets)/[A-Za-z0-9_./-]*(?:Fastfile|Matchfile|Gemfile)))`');
   for (final dir in skillsDir.listSync().whereType<Directory>()) {
     for (final f in dir.listSync(recursive: true).whereType<File>().where((f) => f.path.endsWith('.md'))) {
       for (final m in linkPattern.allMatches(f.readAsStringSync())) {
@@ -61,9 +64,27 @@ void main(List<String> args) {
     }
   }
 
+  // Every file under references/ or assets/ must be named, or its folder named, by a Markdown file of the same skill.
+  for (final dir in skillsDir.listSync().whereType<Directory>()) {
+    final sep = Platform.pathSeparator;
+    final docs = dir.listSync(recursive: true).whereType<File>().where((f) => f.path.endsWith('.md')).toList();
+    final texts = {for (final f in docs) f.path: f.readAsStringSync()};
+    for (final f in dir.listSync(recursive: true).whereType<File>()) {
+      final rel = f.path.substring(dir.path.length + 1).replaceAll(sep, '/');
+      if (!(rel.startsWith('references/') || rel.startsWith('assets/'))) continue;
+      final base = rel.split('/').last;
+      final parts = rel.split('/');
+      final folder = parts.length > 2 ? parts.sublist(0, parts.length - 1).join('/') : '';
+      final used = texts.entries.any((e) => e.key != f.path && (e.value.contains(base) || (folder.isNotEmpty && e.value.contains(folder))));
+      if (!used) errors.add('${dir.uri.pathSegments.where((s) => s.isNotEmpty).last}/$rel is not referenced by any Markdown file of its skill');
+    }
+  }
+
   // The always-on block must stay tiny.
   final block = File(p('templates/AGENTS.block.md')).readAsLinesSync();
   if (block.length > 20) errors.add('templates/AGENTS.block.md is ${block.length} lines (limit 20)');
+  final blockChars = block.join('\n').length;
+  if (blockChars > 2500) errors.add('templates/AGENTS.block.md is $blockChars characters (limit 2500): it is read on every task');
 
   if (errors.isEmpty) {
     stdout.writeln('OK: version $version, ${skillsDir.listSync().whereType<Directory>().length} skills');

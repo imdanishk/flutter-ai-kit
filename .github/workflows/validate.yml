@@ -3,6 +3,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_call:
 
 jobs:
   check:
@@ -16,6 +17,19 @@ jobs:
         run: |
           pip install skills-ref==0.1.1
           for d in skills/*/; do agentskills validate "$d"; done
+      - name: Shared core files analyze and test
+        run: |
+          d="$(mktemp -d)"
+          mkdir "$d/lib" "$d/test"
+          cp skills/flutter-new-project/assets/core/*.dart "$d/lib/"
+          sed -i 's#package:flutter_bloc/flutter_bloc.dart#package:bloc/bloc.dart#' "$d/lib/cubit_ext.dart"
+          cp tool/core_test/core_test.dart "$d/test/"
+          printf '%s\n' 'name: core_check' 'environment:' "  sdk: '>=3.0.0'" 'dependencies:' '  bloc: any' 'dev_dependencies:' '  test: any' '  lints: any' > "$d/pubspec.yaml"
+          printf '%s\n' 'include: package:lints/recommended.yaml' > "$d/analysis_options.yaml"
+          cd "$d"
+          dart pub get
+          dart analyze --fatal-infos
+          dart test
       - name: Fastlane version helper tests
         run: ruby tool/test_versioning.rb
       - name: Fastlane templates parse
@@ -28,3 +42,11 @@ jobs:
           test -f /tmp/app/AGENTS.md
           dart tool/install.dart --target /tmp/app --claude --copilot
           test "$(grep -c 'flutter-ai-kit:start' /tmp/app/AGENTS.md)" = "1"
+      - name: Installer refuses a broken marker and writes nothing
+        run: |
+          mkdir -p /tmp/bad && echo "name: bad" > /tmp/bad/pubspec.yaml
+          printf '%s\n' 'my rules' '<!-- flutter-ai-kit:start v0 -->' 'half a block' > /tmp/bad/AGENTS.md
+          cp /tmp/bad/AGENTS.md /tmp/bad.before
+          if dart tool/install.dart --target /tmp/bad; then echo "installer should have failed"; exit 1; fi
+          cmp /tmp/bad/AGENTS.md /tmp/bad.before
+          test ! -d /tmp/bad/.agents

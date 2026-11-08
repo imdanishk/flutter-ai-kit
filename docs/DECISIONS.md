@@ -1,6 +1,6 @@
 # Decisions
 
-1. **Agent-agnostic.** Skills use the open Agent Skills format. `AGENTS.md` carries only a few always-on rules. Per-agent copies are optional (`--claude`, `--copilot`).
+1. **Agent-agnostic.** Skills use the open Agent Skills format. `AGENTS.md` carries only a few always-on rules. Per-agent copies are optional (`--claude`, `--copilot`, `--grok`).
 2. **Few skills.** A skill is added only if it carries knowledge an agent would not guess (project conventions, a stack recipe, a review checklist, an estimation method). Skills that restate general Flutter knowledge were left out.
 3. **Project conventions win.** The profile is read from the project; the Cubit and Freezed recipe is a fallback for that stack.
 4. **FVM** for Flutter version management. Commands use the `fvm` prefix when `.fvmrc` exists.
@@ -18,7 +18,9 @@
 
 ## Known gaps
 
+Found by the 0.13.1 audit and not done yet, most valuable first: verified native upgrade facts (Gradle, AGP, Kotlin, Xcode, 16 KB page size, edge-to-edge); release-build symbols and crash-report uploads (R8, `--obfuscate`); a pull-request CI workflow (analyze, format, test); a networking and data-layer recipe, including GraphQL (Ferry); localization; performance and app size. The Android internal lane's `release_status: completed` may fail for an app that has never had a published release (not verified).
+
 - Recipes exist for Cubit with Freezed (injectable, auto_route) and for Riverpod 3. Plain BLoC, Provider and GetX projects work through the profile skill but have no recipe.
 - Accessibility is covered only as a checklist inside `flutter-design`; Android and iOS native toolchain upgrades (Gradle, Kotlin, Xcode, pods) in `flutter-fix` are not verified against official pages; the plan and fix skills have not been tried on a real project; no skills yet for performance profiling or platform channels. No script yet checks store images against the size tables (the checks are done by hand with `sips` or `file`).
-- Release lane templates and the two GitHub Actions workflows have only been syntax-checked (the version helper is tested); none has been run against a real project, so the Fastlane action names and parameters are unconfirmed. CI templates exist for GitHub Actions only. Sign in with Apple server details and Facebook login are second-hand and unverified.
+- Release lane templates and the two GitHub Actions workflows have only been syntax-checked (the version helper is tested); none has been run against a real project. The Fastlane action and option names the lanes use were checked against Fastlane's source on 2026-11-05, except the `firebase_app_distribution` plugin actions, which stay unconfirmed. CI templates exist for GitHub Actions only. Sign in with Apple server details and Facebook login are second-hand and unverified.
 - Feature notes cover four areas in detail; the rest of the feature index has briefs only. About a quarter of the detailed entries (20 of 79) are still partly verified or unverified.

@@ -1,5 +1,7 @@
 # 1. Data sharing and linking
 
+As of 2026-10-14: package versions and store rules below were checked on that date. Re-check them before relying on them.
+
 Android handles incoming shares and links with manifest intent filters; iOS needs a separate Share Extension target, App Groups and an associated-domains file. The Flutter side is usually one package per job.
 
 | Goal | Android | iOS | Flutter package |

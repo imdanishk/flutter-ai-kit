@@ -1,6 +1,6 @@
 ---
 name: flutter-fix
-description: Finds the root cause of a bug or crash in a Flutter app and fixes it, refactors code without changing behaviour, or upgrades packages, Dart and Flutter (with FVM) one step at a time. Use when asked to debug, fix, investigate an error, refactor, clean up, migrate, upgrade or bump versions; for new functionality use flutter-feature.
+description: Finds the root cause of a bug or crash in a Flutter app and fixes it, refactors code without changing behaviour, or upgrades packages, Dart and Flutter (with FVM) one step at a time. Use when asked to debug, fix or investigate an error or crash, refactor existing code, or upgrade packages, Dart or Flutter versions; for new functionality use flutter-feature.
 license: Apache-2.0
 ---
 
@@ -10,12 +10,13 @@ Three kinds of work that change existing code without adding a feature. Pick one
 
 ## Steps
 
-1. **Load the project profile and rules** (`AGENTS.md`, project rules folders); project rules win over this skill. If there is no profile, run `flutter-project-profile`.
+1. **Load the project rules** (`AGENTS.md`, project rules folders); project rules win over this skill. If there is no profile, read the files around the problem and go on; do not run `flutter-project-profile` for a small fix.
 2. **Pick the mode and open its reference:**
    - **Bug or crash:** `references/debugging-playbook.md`.
    - **Refactor:** the rules below. No reference needed.
    - **Upgrade** (packages, Dart, Flutter, FVM pin): `references/upgrade-checklist.md`.
-3. **Bug: reproduce, find the cause, then fix.** Get the exact error text, the steps, the platform, the build mode and the versions. Read the whole error and stack trace, not the last line. State the cause with the evidence (file, line, log) before editing. If you cannot find the cause, say what you ruled out and what you need (a log, a device, a build mode); do not patch around it.
+   - Failures that appear only in a store build or in CI, or come from keys, consoles or fingerprints, start in `flutter-release` or `flutter-service-setup`.
+3. **Bug: reproduce, find the cause, then fix.** Get the exact error text, the steps, the platform, the build mode and the versions; if the report is vague, ask for those (at most three questions) before searching the code. Read the whole error and stack trace, not the last line. State the cause with the evidence (file, line, log) before editing. If you cannot find the cause, say what you ruled out and what you need (a log, a device, a build mode); do not patch around it.
 4. **Make the smallest change that removes the cause.** Do not fix neighbouring things in the same change; list them instead. Never edit generated files; change the source and run code generation.
 5. **Check.** Run `flutter analyze` (with `fvm` when `.fvmrc` exists). Re-run the reproduction steps if the app can be run, and say if it could not be. Tests only if the developer asks (`flutter-testing`); then a regression test for the bug is the natural one.
 6. **Report:** cause (one or two lines with evidence), change (files), how it was checked and what was not, what else you noticed but left alone, and the risk to other places that use the same code.
@@ -31,6 +32,7 @@ Three kinds of work that change existing code without adding a feature. Pick one
 ## Rules
 
 - Never claim a bug is fixed without saying how you checked. "Analyzer is clean" is not "bug fixed".
+- Logs and crash reports can hold tokens, keys and personal data: redact them before quoting them in a report, a commit message or a file.
 - Do not run destructive clean-ups (`flutter clean`, deleting `pubspec.lock`, `.dart_tool` or `Pods`) as a first guess; say what you are clearing and why.
 - Do not upgrade anything during a bug fix or refactor, and do not fix bugs during an upgrade, unless the upgrade itself causes them.
 - Ask before major-version upgrades, new packages, or changes to native files (`android/`, `ios/`); name what changes.

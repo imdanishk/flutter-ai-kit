@@ -5,7 +5,7 @@ extension EmitIfOpen<S> on BlocBase<S> {
   /// emit that happens after an await.
   void emitIfOpen(S state) {
     if (!isClosed) {
-      // ignore: invalid_use_of_protected_member
+      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
       emit(state);
     }
   }

@@ -19,7 +19,7 @@ PageResult<T> slicePage<T>(
   required int limit,
 }) {
   final start = _bound(offset, all.length);
-  final end = _bound(offset + limit, all.length);
+  final end = _bound(offset + (limit < 0 ? 0 : limit), all.length);
   return PageResult<T>(
     items: all.sublist(start, end),
     hasMore: end < all.length,

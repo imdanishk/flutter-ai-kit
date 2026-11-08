@@ -30,6 +30,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: release-ios-${{ inputs.flavor }}
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: macos-latest

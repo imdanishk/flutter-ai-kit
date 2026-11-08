@@ -16,12 +16,12 @@ Use only for a new or empty project. For an existing project, run `flutter-proje
    - Flutter version pinned with FVM (default yes; ask which version, or use the current stable)
    - stack: Cubit with Freezed, injectable with get_it, auto_route (default), or Riverpod 3 (see the Riverpod variant below). For any other stack, build it from the developer's choice and skip the assets that do not apply.
    - flavors (dev, staging, prod) now or later (default later)
-2. **Create the app** with `flutter create` (prefix `fvm` when pinned: `fvm use <version>` first, then `fvm flutter create .`). Commit `.fvmrc`; ignore `.fvm/` in git.
+2. **Create the app** with `flutter create` (prefix `fvm` when pinned: `fvm use <version>` first, then `fvm flutter create .`). Tell the developer `.fvmrc` is the file to commit so the team shares the pin, and add `.fvm/` to `.gitignore` (do not commit for them).
 3. **Add packages with the package manager**, not by hand-editing versions: `flutter pub add flutter_bloc bloc freezed_annotation injectable get_it auto_route` and `flutter pub add --dev build_runner freezed injectable_generator auto_route_generator`. Read the resolved versions and tell the developer if any generator constraint forced a downgrade.
 4. **Create the layout** described in `references/layout.md`.
 5. **Copy the shared core** from `assets/core/` into `lib/core/` and fix nothing else in it. These files are small, dependency-free apart from `flutter_bloc`, and are what the `flutter-feature` recipe expects.
 6. **Wire the base**: `lib/app/injection.dart` (injectable `configureDependencies`), `lib/app/router.dart` (an `AppRouter` with one home route), `lib/main.dart` calling `configureDependencies()` then `runApp(MaterialApp.router(...))`.
-7. **Generate and verify:** `dart run build_runner build --delete-conflicting-outputs` (prefixed with `fvm`), then `flutter analyze` and a run on one device. Add generated files (`*.g.dart`, `*.freezed.dart`, `*.gr.dart`, `*.config.dart`) to `.gitignore` only if the team agreed; otherwise commit them.
+7. **Generate and verify:** `dart run build_runner build --delete-conflicting-outputs` (prefixed with `fvm`), then `flutter analyze`, and a run on one device only if a device is available and the developer agrees. Add generated files (`*.g.dart`, `*.freezed.dart`, `*.gr.dart`, `*.config.dart`) to `.gitignore` only if the team agreed; otherwise commit them.
 8. **Record the profile**: run `flutter-project-profile` so `AGENTS.md` describes the new project.
 
 ## Riverpod variant

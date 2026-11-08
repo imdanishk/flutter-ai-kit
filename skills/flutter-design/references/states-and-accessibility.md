@@ -15,6 +15,13 @@ Errors: say what happened in plain words, not a code; put the message where the 
 - Sources: https://docs.flutter.dev/ui/accessibility, https://api.flutter.dev/flutter/material/kMinInteractiveDimension-constant.html, https://developer.apple.com/design/human-interface-guidelines/buttons.
 - When the developer asks for tests, `flutter_test` has accessibility guidelines for tap target size, labels and text contrast (`androidTapTargetGuideline`, `iOSTapTargetGuideline`, `labeledTapTargetGuideline`, `textContrastGuideline`); the names are from `flutter_test` and were not re-checked against the API page. Do not add such tests unprompted.
 
+## Layout checks (practice, not verified on an official page)
+
+- Safe areas and system bars: content must not sit under the notch, the status bar or the gesture bar; check `SafeArea` or the project's wrapper, and Android edge-to-edge behaviour on the target version.
+- Keyboard: the focused field and its submit button stay visible when the keyboard is open, on a small phone.
+- Screen sizes: a small phone, a large phone and, if the app supports them, a tablet or landscape; say which were not checked.
+- Text expansion and right-to-left: translated strings are often 30 percent or more longer; if the app is localized, check long strings, and RTL if a RTL language ships.
+
 ## Motion and feedback
 
 Keep animation short and purposeful; respect the platform's reduce-motion setting; give every tap visible feedback; never hide the only path to an action behind a gesture without an alternative.

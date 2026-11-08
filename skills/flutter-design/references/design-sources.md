@@ -17,7 +17,7 @@ Checked 2026-11-08 unless marked.
 
 ## Seeing the running app
 
-- To compare, the agent needs a screenshot of the built screen. Options: `flutter screenshot` on a running device or emulator, or a screenshot the developer sends. Do not start emulators or builds unless asked.
+- To compare, the agent needs a screenshot of the built screen. Options: `flutter screenshot` on a running device or emulator (check `flutter screenshot --help` for the current flags), or a screenshot the developer sends. Do not start emulators or builds unless asked.
 - The Dart and Flutter team's MCP server (`dart mcp-server`) gives agents analyzer, test and runtime access; Flutter's docs page for it does not list screenshot tools, so do not promise them. Source: https://docs.flutter.dev/ai/mcp-server.
 
 ## Inspiration libraries

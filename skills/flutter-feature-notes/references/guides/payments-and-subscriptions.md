@@ -1,5 +1,7 @@
 # 2. Payments and subscriptions
 
+As of 2026-10-14: package versions and store rules below were checked on that date. Re-check them before relying on them.
+
 What you sell decides the payment path: digital goods unlocked in the app go through the store's billing system, while physical goods and real-world services go through a card or wallet processor.
 
 | What you sell | Payment path | Flutter package |

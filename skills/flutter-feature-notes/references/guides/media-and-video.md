@@ -1,5 +1,7 @@
 # 3. Media and video
 
+As of 2026-10-14: package versions and store rules below were checked on that date. Re-check them before relying on them.
+
 Camera, playback and background audio each have a maintained Flutter plugin. Picture-in-Picture and DRM are where Android and iOS diverge most, and both rely on community packages.
 
 | Need | Package | Android | iOS |

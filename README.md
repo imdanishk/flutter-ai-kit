@@ -2,7 +2,7 @@
 
 Small, agent-agnostic instructions that help any AI coding agent build Flutter apps the way your project already does. It works with OpenCode, Claude Code, Codex, Cursor, Gemini CLI, Antigravity, VS Code Copilot, Grok Build and other tools that read the open [Agent Skills](https://agentskills.io) format or `AGENTS.md`.
 
-Status: early (0.x), not benchmarked. Tried so far on two real apps and two fresh projects, all on the Cubit/Freezed stack; the Riverpod recipe is untested. The release lane templates were checked for Ruby syntax only (the version helper is unit-tested) and have not been run; the setup and release references were read from official pages in November 2026 and mark every line they could not confirm. Expect rough edges and please report them. The skills are short on purpose and contain only what an agent does not already know: how to read your project's conventions, complete feature recipes for two stacks (Cubit with Freezed, and Riverpod), a review checklist, an estimation method, store and console setup lists, a release runbook with Fastlane and CI templates, safe git rules, and an on-request testing skill.
+Status: early (0.x), not benchmarked. Tried so far on two real apps and two fresh projects, all on the Cubit/Freezed stack; the Riverpod recipe is untested, and `flutter-design`, `flutter-store-assets`, `flutter-plan` and `flutter-fix` have not been tried on a real project yet. The release lane templates were checked for Ruby syntax only (the version helper is unit-tested) and have not been run; the setup and release references were read from official pages in November 2026 and mark every line they could not confirm. Expect rough edges and please report them. The skills are short on purpose and contain only what an agent does not already know: how to read your project's conventions, complete feature recipes for two stacks (Cubit with Freezed, and Riverpod), a review checklist, an estimation method, store and console setup lists, a release runbook with Fastlane and CI templates, safe git rules, and an on-request testing skill.
 
 ## How it works
 
@@ -17,7 +17,7 @@ An illustrative summary line (invented names):
 ## What it will not do
 
 - It does not make an agent follow rules perfectly: these are instructions, and a model can still miss one. Read the "Rule conflicts" line and the review.
-- It does not write or run tests unless you ask, and it does not start your app unless you ask.
+- It does not write or run tests unless you ask, and it does not run your app unless you ask (`flutter-new-project` runs it once at the end only if a device is available and you agree).
 - It does not replace your own rules. If your project has them, they win.
 - Its feature notes are research: each entry says whether it is verified, and some are not.
 
@@ -88,7 +88,7 @@ npx skills add imdanishk/flutter-ai-kit --yes
 /plugin install flutter-ai-kit@flutter-ai-kit
 ```
 
-Plugin skills are prefixed, for example `/flutter-ai-kit:flutter-feature`.
+Plugin skills are prefixed, for example `/flutter-ai-kit:flutter-feature`. Do not combine the plugin with the other two routes in the same project: the skills would be listed twice.
 
 **3. Full install with the `AGENTS.md` rules** (needs the Dart SDK, which comes with Flutter; with FVM use `fvm dart`). Download the zip from the [latest release](https://github.com/imdanishk/flutter-ai-kit/releases/latest) or clone the repository, then run:
 

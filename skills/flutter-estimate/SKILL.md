@@ -22,7 +22,7 @@ An estimate for AI-assisted work measures the developer's attention time, not th
 4. **Name waits that are not coding time.** If the feature needs store, Firebase or Cloud setup (agreements, billing, identity verification, a closed test, App Review), list each as an elapsed-time blocker, separate from the attention-time range; see `flutter-service-setup` and `flutter-release`.
 5. **Name the Android and iOS differences** that change the work (permissions, background limits, store review, entitlements, extensions) as none, minor or significant.
 6. **Estimate with the drivers in `references/estimation.md`.** Give a low to high range of attention time per part and in total. Show the assumptions that would move the range.
-7. **Report** in this shape: summary line; table (part, approach class, custom work after the package, backend dependency, Android/iOS difference, range); assumptions; risks and unknowns; questions still open; what you would build first to cut the biggest uncertainty.
+7. **Report** in this shape (a request for flows or an ordered build plan is `flutter-plan`'s job; when `flutter-plan` calls this skill, return only the ranges per slice): summary line; table (part, approach class, custom work after the package, backend dependency, Android/iOS difference, range); assumptions; risks and unknowns; questions still open; what you would build first to cut the biggest uncertainty.
 
 ## Rules
 

@@ -1,5 +1,7 @@
 # 4. Notifications, background work and location
 
+As of 2026-10-14: package versions and store rules below were checked on that date. Re-check them before relying on them.
+
 Push, scheduled work and live location look similar in Dart but need very different native setup: Android mostly asks for manifest permissions and a foreground service, while iOS asks for Xcode capabilities, background modes and tighter system limits.
 
 | Need | Package | Android | iOS |

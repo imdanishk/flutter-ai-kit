@@ -1,6 +1,6 @@
 # Debugging playbook
 
-Sources read 2026-11-08: docs.flutter.dev/testing/common-errors and docs.flutter.dev/tools/devtools/overview. Lines marked *Not verified* are general practice, not taken from an official page.
+Sources read 2026-11-08: docs.flutter.dev/testing/common-errors, docs.flutter.dev/tools/devtools/overview and docs.flutter.dev/deployment/obfuscate. Lines marked *Not verified* are general practice, not taken from an official page.
 
 If the official Flutter and Dart skills are installed, `flutter-fix-layout-issues`, `dart-fix-runtime-errors` and `dart-resolve-package-conflicts` may cover narrower cases (their contents were not read); use them for those and this playbook for the surrounding steps.
 
@@ -45,6 +45,16 @@ DevTools tools listed on its overview page: Flutter Inspector, Performance, CPU 
 | `The ScrollController is attached to multiple scroll views` | Several scrolling widgets share one controller (more common on web and desktop) | Use `PrimaryScrollController` |
 
 The page gives no fix for the generic red or grey screen beyond finding the underlying error.
+
+## 3b. Release builds and obfuscated stack traces
+
+If the build used `--obfuscate`, the trace shows meaningless names. Symbols are written to the directory given to `--split-debug-info` (for example `out/android/app.android-arm64.symbols`; the file name carries platform and architecture). The Flutter page says to back these files up after every obfuscated build; without them old traces cannot be read. Decode a trace with:
+
+```
+flutter symbolize -i <stack-trace-file> -d <symbols-file>
+```
+
+Facts from the page: obfuscation only works on release builds, only renames symbols (it does not protect secrets), and code that depends on names breaks (for example `runtimeType.toString()` comparisons); enum names are not obfuscated. The page does not cover Crashlytics, R8 or iOS dSYM files; use the crash provider's docs for those. If the project's release lanes do not keep the symbols directory, say so in the report: it is a gap for the next crash.
 
 ## 4. Fix and verify
 
