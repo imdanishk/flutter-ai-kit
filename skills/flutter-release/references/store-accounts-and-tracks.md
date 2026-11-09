@@ -12,7 +12,7 @@ Verified 2026-11-04 on official pages unless a line says Unverified. Re-check pa
 
 **Before production, personal accounts.** Accounts created after 13 November 2023 need a closed test with at least 12 testers opted in continuously for 14 days, then "Apply for production" in the Dashboard; review usually takes up to seven days. [Testing requirements](https://support.google.com/googleplay/android-developer/answer/14151465)
 
-**Target API.** New apps and updates must target Android 16 (API 36) from 31 August 2026 (an extension to 1 November 2026 was offered, and that date has now passed); existing apps must target API 35 or higher to stay available to new users. Check the page for the current number when you start. [Target API](https://support.google.com/googleplay/android-developer/answer/11926878)
+**Target API.** New apps and updates must target Android 16 (API 36) from 31 August 2026 (an extension to 1 November 2026 was offered, and that date has now passed); existing apps must target API 35 or higher to stay available to new users. Check the page for the current number when you start. Also from 1 February 2027, updates of apps that target API 35 or higher must support 16 KB memory pages; how to check a build is in `flutter-fix/references/native-platform-requirements.md`. [Target API](https://support.google.com/googleplay/android-developer/answer/11926878)
 
 **Signing.** Use Play App Signing; sign uploads with an upload key. See `flutter-service-setup/references/environments-and-signing.md` for the three fingerprints and what to register where.
 

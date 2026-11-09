@@ -321,7 +321,7 @@ Size: small is under 2 days, medium is 2 to 10 days, large is over 10 days (one 
 ## Known gaps (not researched yet)
 - Interactive/lock-screen widgets via Glance, Android 16 live updates
 - Firebase Dynamic Links replacement guidance beyond Branch (own domain links)
-- Android 15 and 16 KB page-size support, Play target-SDK policy, edge-to-edge enforcement
+- (Android 16 KB pages, target-SDK policy, edge-to-edge, UIScene and SwiftPM are now in `flutter-fix/references/native-platform-requirements.md`)
 - Accessibility specifics per platform (Dynamic Type, TalkBack custom actions)
 - Impeller shader jank and fragment shaders for filters
 - Flutter on HarmonyOS/OpenHarmony (fluwx lists support)

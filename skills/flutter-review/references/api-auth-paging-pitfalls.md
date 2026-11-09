@@ -15,6 +15,18 @@ Status: found by reading the source of a small shared base package for Flutter a
 - **Auth handling in one place.** If one call style (GraphQL) reports auth failures to the app-wide handler and the other (REST) does not, half the app never signs out on a 401. Put it in the client's interceptor or link, not in each source class.
 - **Unused parameters and unreachable branches in base helpers** (for example an `onInvalid` callback that only runs when something is thrown, while errors arrive as values). Callers think they handled a case they did not.
 
+## GraphQL (Ferry and similar clients)
+
+- **Errors arrive as values, not exceptions.** A Ferry `OperationResponse` carries `linkException` and `graphqlErrors`; code that only wraps the call in `try`/`catch` never sees them and shows empty or stale data. Check both fields before `data`.
+- **Partial data with errors.** A response can contain data and errors together. Decide per screen whether that is a success; do not ignore the errors silently.
+- **`CacheFirst` is the default for queries.** Pull-to-refresh and "load again" then return the old cached result without a request. The refetch must use `NetworkOnly` (or a policy chosen on purpose).
+- **Objects without `id` are not normalized.** If a selection leaves out `id` (and the object has a `__typename`), a mutation does not update it elsewhere, and screens show old values until a refetch.
+- **Cache survives sign-out.** If the client or its cache is not cleared or rebuilt on sign-out, the next user can see the previous user's data.
+- **Open streams.** `request()` streams stay open; a Cubit that subscribes and never cancels keeps the request alive and rebuilds after it is closed.
+- **Auth in one link.** A 401 handler written in each repository misses operations; use one link. Backends that answer unauthenticated calls with HTTP 200 and an error code need the GraphQL-error handler instead of the HTTP one.
+- **Generated types leaking into the UI.** Ferry's `G...Data` classes in a Cubit state or widget tie the screen to one query shape; map to domain entities in the data layer.
+- **Hand-edited or uncommitted generated files, or an out-of-date schema file.** The build then passes locally and fails in CI, or a removed backend field fails only at runtime.
+
 ## Sessions and sign-out
 
 - **One refresh at a time.** Parallel requests that find an expired token must wait for one refresh (a lock or a queued interceptor), and the refresh call must use a client without the auth interceptor, or it waits for itself. The pattern is in `flutter-feature-notes` ("Token refresh and sessions").

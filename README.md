@@ -40,7 +40,7 @@ An illustrative summary line (invented names):
 | `flutter-design` | On request only: build screens from a provided design and list deviations, apply a design change, design a new feature in the existing look, or propose a direction, theme and key screens when there is no design; states and accessibility checklist |
 | `flutter-store-assets` | On request only: app icon and launcher icons, Google Play and App Store screenshots and graphics at the required sizes (with sources and dates), and a check of existing files against those rules |
 
-The installer also writes a small managed block into `AGENTS.md` (about ten lines) with the always-on rules.
+The installer also writes a small managed block into `AGENTS.md` (about a dozen lines) with the always-on rules. With the other two routes `flutter-project-profile` offers to add the same block when it writes the profile.
 
 ## Where each skill fits in the lifecycle
 

@@ -81,10 +81,10 @@ void main(List<String> args) {
   }
 
   // The always-on block must stay tiny.
-  final block = File(p('templates/AGENTS.block.md')).readAsLinesSync();
-  if (block.length > 20) errors.add('templates/AGENTS.block.md is ${block.length} lines (limit 20)');
+  final block = File(p('skills/flutter-project-profile/assets/AGENTS.block.md')).readAsLinesSync();
+  if (block.length > 20) errors.add('skills/flutter-project-profile/assets/AGENTS.block.md is ${block.length} lines (limit 20)');
   final blockChars = block.join('\n').length;
-  if (blockChars > 2500) errors.add('templates/AGENTS.block.md is $blockChars characters (limit 2500): it is read on every task');
+  if (blockChars > 2500) errors.add('skills/flutter-project-profile/assets/AGENTS.block.md is $blockChars characters (limit 2500): it is read on every task');
 
   if (errors.isEmpty) {
     stdout.writeln('OK: version $version, ${skillsDir.listSync().whereType<Directory>().length} skills');

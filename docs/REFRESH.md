@@ -11,6 +11,10 @@ The notes in `skills/flutter-feature-notes/references/` go stale: packages are u
 5. Add new features to `references/index.md` and, when researched, to the matching area file.
 6. Add a line to `CHANGELOG.md` under `Unreleased` (for example "Refreshed sign-in notes"). Releases that only refresh notes are patch versions.
 
+## Native platform requirements
+
+`skills/flutter-fix/references/native-platform-requirements.md` carries a `Checked` date and lists the source for each line. Re-check it when a new stable Flutter ships, when Google or Apple announce a requirement, and before 1 February 2027 (Play's 16 KB deadline).
+
 ## Guides
 
 The files in `references/guides/` pin package versions and store rules. Each starts with an `As of <date>` line; change it when you re-check the file. The reminder workflow lists guides older than 30 days.

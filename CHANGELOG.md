@@ -4,6 +4,18 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-11-09
+
+### Added
+- `flutter-feature/references/graphql-ferry-recipe.md`: Ferry setup, code generation, client and cache, fetch policies, mapping `OperationResponse` to the project's `Result`, an auth link with refresh, and what to ask the backend owner. Read from Ferry's own repository and docs (commit of 2026-10-27), the `gql` links and an auth-link example, and pub.dev; unverified points are marked. It records that Ferry's stable pub.dev releases date from January 2025 while main carries newer prereleases.
+- GraphQL section in `flutter-review/references/api-auth-paging-pitfalls.md`.
+- `flutter-fix/references/native-platform-requirements.md`: dated tables for the Gradle, Android Gradle plugin, Kotlin and Java versions in Flutter's own tooling and the Android and Kotlin compatibility tables; Play's target API (36) and 16 KB page rule with the 1 February 2027 date and the ways to check a build; edge-to-edge; Xcode 26 and iOS deployment target rules; UIScene (Flutter 3.38 and 3.41, Xcode 27); Swift Package Manager (default from 3.44) and the CocoaPods read-only date. It replaces the unverified native stub in the upgrade checklist.
+- `flutter-plan` lists acceptance criteria and open questions first when the input is a requirements document or ticket.
+
+### Changed
+- The `AGENTS.md` block moved to `skills/flutter-project-profile/assets/AGENTS.block.md` so the skills-only and plugin installs can offer it too (the profile skill asks first). It gained three working rules: read before editing and ask or state an assumption; make the smallest change; say what was and was not checked. The rules restate the guidelines of `multica-ai/andrej-karpathy-skills` in the kit's own words (decision 16).
+- Gaps found by the coverage audit (AI features and evals, release symbols and crash reporting, pull-request CI) are listed in `docs/DECISIONS.md`.
+
 ## [0.13.1] - 2026-11-08
 
 Changes from a final review of the new skills and an independent read-only audit of the whole kit. Each finding was checked against the files first; one audit doubt (Apple's iPhone screenshot sizes) was re-read on Apple's page and the kit's numbers were correct.

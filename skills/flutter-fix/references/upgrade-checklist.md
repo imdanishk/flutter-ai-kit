@@ -34,9 +34,9 @@ An upgrade is its own change, on its own branch, with nothing else in it. Never 
 4. `dart fix --dry-run` shows automated migrations for deprecated APIs; `dart fix --apply` applies them. The breaking-changes page says many, not all, breaking changes are covered this way. Review the diff.
 5. Fix what remains by hand, one error group at a time, following the migration guides. Windows only: a "Filename too long" error during `flutter upgrade` means a shorter install path or long paths enabled (see the upgrade page).
 
-## 3. Native side *(not verified; check the Flutter migration guides for the target version)*
+## 3. Native side
 
-A new Flutter version can require newer Android Gradle plugin, Gradle, Kotlin or Java versions, and newer Xcode or CocoaPods settings. If the build fails in `android/` or `ios/`, read the first error, then the migration guide for that version. Do not edit native files without saying so (they are named in the report).
+A new Flutter version can require newer Android Gradle plugin, Gradle, Kotlin and Java versions and a newer Xcode, and Play and App Store rules add dated requirements (16 KB pages, target API, UIScene, SwiftPM). Read `native-platform-requirements.md` for the dated tables and checks. If a build fails in `android/` or `ios/`, read the first error, then the migration guide for that Flutter version. Do not edit native files without saying so; name them in the report.
 
 ## 4. Check
 

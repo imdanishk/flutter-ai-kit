@@ -27,7 +27,9 @@ Work from evidence, one hypothesis at a time. Change one thing, observe, then ke
 | Slow or janky | Performance and CPU Profiler in DevTools, in profile mode on a real device *(profile mode on a device: not verified on this read)* |
 | Memory grows | Memory tool: what is retained; undisposed controllers, subscriptions and timers |
 | Request fails or returns wrong data | Network tool and Logging in DevTools: status, headers, body; compare with the API contract |
-| Build fails (Gradle, Xcode, pods) | The first error in the build log; versions of the Android and iOS toolchains against what the Flutter version supports *(not verified; check the Flutter release notes and migration guides)* |
+| Build fails (Gradle, Xcode, pods) | The first error in the build log; the Gradle, AGP, Kotlin and Java versions against the tables in `native-platform-requirements.md`; Xcode version and Swift Package Manager or CocoaPods messages |
+| Store upload rejected for native reasons | Target API, 16 KB alignment, Xcode or SDK version: `native-platform-requirements.md` |
+| UI under the status or navigation bar on Android after an upgrade | Edge-to-edge enforcement: `native-platform-requirements.md` |
 
 DevTools tools listed on its overview page: Flutter Inspector, Performance, CPU Profiler, Memory, Network, Debugger, Debug Console, Logging, App Size, Deep Link Validation, and extensions. It can be launched from VS Code, Android Studio or IntelliJ, or the command line (see docs.flutter.dev/tools/devtools); the exact command is on that page, not read here.
 

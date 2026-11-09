@@ -14,7 +14,7 @@ Three kinds of work that change existing code without adding a feature. Pick one
 2. **Pick the mode and open its reference:**
    - **Bug or crash:** `references/debugging-playbook.md`.
    - **Refactor:** the rules below. No reference needed.
-   - **Upgrade** (packages, Dart, Flutter, FVM pin): `references/upgrade-checklist.md`.
+   - **Upgrade** (packages, Dart, Flutter, FVM pin): `references/upgrade-checklist.md` and `references/native-platform-requirements.md` (dated Gradle, AGP, Kotlin, Java, Xcode, 16 KB, target API, UIScene and SwiftPM facts).
    - Failures that appear only in a store build or in CI, or come from keys, consoles or fingerprints, start in `flutter-release` or `flutter-service-setup`.
 3. **Bug: reproduce, find the cause, then fix.** Get the exact error text, the steps, the platform, the build mode and the versions; if the report is vague, ask for those (at most three questions) before searching the code. Read the whole error and stack trace, not the last line. State the cause with the evidence (file, line, log) before editing. If you cannot find the cause, say what you ruled out and what you need (a log, a device, a build mode); do not patch around it.
 4. **Make the smallest change that removes the cause.** Do not fix neighbouring things in the same change; list them instead. Never edit generated files; change the source and run code generation.

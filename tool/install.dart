@@ -49,9 +49,9 @@ void main(List<String> args) {
   final kit = File.fromUri(Platform.script).parent.parent;
   final version = _kitVersion(kit);
   final skillsDir = Directory(_join(kit.path, 'skills'));
-  final blockFile = File(_join(kit.path, 'templates', 'AGENTS.block.md'));
+  final blockFile = File(_join(kit.path, 'skills', 'flutter-project-profile', 'assets', 'AGENTS.block.md'));
   if (!skillsDir.existsSync() || !blockFile.existsSync()) {
-    _fail('Run this from the kit folder: skills/ and templates/ not found next to tool/.');
+    _fail('Run this from the kit folder: skills/ not found next to tool/.');
   }
 
   final project = Directory(target);
