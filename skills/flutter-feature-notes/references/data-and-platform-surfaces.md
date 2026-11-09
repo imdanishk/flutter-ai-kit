@@ -101,7 +101,7 @@ Related first-pass docs: `guides/data-sharing-and-linking.md`, `guides/media-and
 - **Custom work after the package:** Auth link and token refresh, cache key/type policies, pagination, mapping generated types to domain models, WebSocket reconnect.
 - **Pitfalls and store review:** Codegen build time; schema drift between environments.
 - **What to tell the requester:** Works well; ask whether the backend already supports subscriptions.
-- **Status:** Verified 2026-10-30 from https://pub.dev/packages/ferry and https://pub.dev/packages/graphql_flutter.
+- **Status:** Verified 2026-10-30 from https://pub.dev/packages/ferry and https://pub.dev/packages/graphql_flutter. Ferry setup, repository mapping, auth link and cache pitfalls: `flutter-feature/references/graphql-ferry-recipe.md` (checked 2026-11-08; Ferry's main branch is active, with commits as recent as 2026-10-27).
 
 ### gRPC and WebSockets
 <!-- meta: size=M; days=3-8; deps=flutter-only, backend; platform-difference=minor -->

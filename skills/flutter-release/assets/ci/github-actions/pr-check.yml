@@ -1,0 +1,55 @@
+# Starting point for .github/workflows/pr-check.yml. NOT RUN against a real repository.
+# Action tags (checkout v7, flutter-action v2) were checked to exist on 2026-11-09; the runner label was not
+# re-checked: confirm current versions before using it.
+# It reads no secrets and uploads nothing. It checks formatting, runs the analyzer, and runs the tests the
+# project already has (it does not create tests). Delete a step you do not want to enforce.
+name: Pull request check
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          # One version source: .fvmrc must hold an exact version, e.g. {"flutter": "3.35.0"},
+          # not a channel name or a range. Without .fvmrc, remove this line to use the latest stable.
+          flutter-version-file: .fvmrc
+          cache: true
+
+      - name: Dependencies
+        run: flutter pub get
+
+      # Only if the project does not commit generated files (build_runner, l10n, freezed, json_serializable):
+      # - run: dart run build_runner build --delete-conflicting-outputs
+
+      # Fails when a file is not formatted. If the project commits generated files that are not formatted,
+      # list the folders to check instead of "." or format them in the project first.
+      - name: Format
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze
+        run: flutter analyze
+
+      # Runs only when a test folder exists. The kit does not add tests unless the developer asks.
+      - name: Tests
+        run: |
+          if [ -d test ]; then
+            flutter test
+          else
+            echo "No test folder; skipping."
+          fi

@@ -294,7 +294,7 @@ Size: small is under 2 days, medium is 2 to 10 days, large is over 10 days (one 
 | Logistics, fleet, field service | Background location, offline forms, signatures, barcode | moderate to heavy (iOS background rules) |
 | Kiosk/POS/enterprise | Lock-task mode, MDM config, printers, USB | moderate native |
 | Productivity, travel, real estate, news, podcast/audiobook | Calendars, maps, reader UI, background audio (unverified) | friendly |
-| AI assistant apps | LLM chat UI, Firebase AI, on-device models (unverified), speech | friendly |
+| AI assistant apps | LLM chat UI, Firebase AI Logic, own backend, on-device models, store rules, evals: `guides/ai-features-in-apps.md` | friendly |
 | Marketplaces | Listings, chat, payments, ratings (unverified) | friendly |
 
 ---
@@ -306,8 +306,8 @@ Size: small is under 2 days, medium is 2 to 10 days, large is over 10 days (one 
 | Attribution | Installs, deferred links | appsflyer_sdk, adjust_sdk (unverified), flutter_branch_sdk | medium | significant |
 | Crash reporting | Crashlytics, Sentry | firebase_crashlytics, sentry_flutter | small to medium | minor |
 | Remote config, flags, A/B | Change behaviour without a release | firebase_remote_config | small | none |
-| Generative AI | Gemini via Firebase | firebase_ai | medium | none |
-| On-device ML | TFLite, Gemma | tflite_flutter, flutter_gemma (unverified) | medium | minor |
+| Generative AI | Gemini via Firebase AI Logic or an own backend; see `guides/ai-features-in-apps.md` | firebase_ai, firebase_app_check, flutter_ai_toolkit | medium to large | minor |
+| On-device ML | ML Kit GenAI, LiteRT, ONNX, llama.cpp | flutter_edge_ai (flutter_gemma is discontinued), tflite_flutter; see `guides/ai-features-in-apps.md` | medium to large | significant |
 | Flavors and environments | Dev/stage/prod | native flavors (unverified) | medium | significant |
 | Signing and CI/CD | Keystore, provisioning, pipelines | Codemagic, Fastlane, GitHub Actions (unverified) | large | significant |
 | OTA code push | Dart patches without store review | Shorebird | medium | minor |

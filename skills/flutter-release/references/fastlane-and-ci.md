@@ -70,7 +70,7 @@ Needs: app record in App Store Connect; API key; match storage with an App Store
 
 ## 6. CI/CD pipeline checklist
 
-Templates for GitHub Actions (manual trigger only, secrets in per-flavor GitHub Environments, Flutter version read from `.fvmrc`) are in `assets/ci/github-actions/`; they were not run; action tags were checked to exist on 2026-11-05, behavior was not. For Bitbucket Pipelines, Codemagic or others, follow the checklist below in that service's syntax.
+A separate, secret-free pull-request check (format, analyze, tests that already exist) is `assets/ci/github-actions/pr-check.yml`; it is not part of a release and was not run. Templates for GitHub Actions (manual trigger only, secrets in per-flavor GitHub Environments, Flutter version read from `.fvmrc`) are in `assets/ci/github-actions/`; they were not run; action tags were checked to exist on 2026-11-05, behavior was not. For Bitbucket Pipelines, Codemagic or others, follow the checklist below in that service's syntax.
 
 A pipeline should, in order: check out; install the pinned Flutter (read `.fvmrc`); install Ruby gems with Bundler in the platform folder; write secrets and signing inputs from the secret store (keystore decoded from base64, service-account JSON, `.env.<flavor>`, ASC key); run `flutter pub get`, localization and code generation; run analysis; call the lane. Production publishing should be a manual trigger. [Flutter CD](https://docs.flutter.dev/deployment/cd)
 
@@ -82,4 +82,4 @@ A pipeline should, in order: check out; install the pinned Flutter (read `.fvmrc
 
 ## 7. Release checklist
 
-Version and build number decided; changelog or release notes written; analyzer clean; flavors and bundle IDs checked against the target; fingerprints registered for the signing key that will be on users' devices; privacy manifest, data safety and age rating answers current; tester group or track named; production publishing confirmed by a person.
+Version and build number decided; changelog or release notes written; analyzer clean; flavors and bundle IDs checked against the target; fingerprints registered for the signing key that will be on users' devices; privacy manifest, data safety and age rating answers current; tester group or track named; production publishing confirmed by a person. For obfuscated or production builds also the items in `crash-and-symbols.md` (symbols saved and uploaded, staged rollout plan).

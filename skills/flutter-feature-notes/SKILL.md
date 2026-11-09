@@ -16,7 +16,7 @@ Reference notes for planning and building common app features. They are research
    - `references/communication-social.md`: chat, calls, feeds, stories, filters, social features
    - `references/commerce-maps.md`: maps, delivery, booking, live tracking, commerce
    - `references/data-and-platform-surfaces.md`: networking, offline data, sync, home-screen widgets, Live Activities, links and other platform surfaces
-   - `references/guides/`: step-by-step setup for data sharing and linking, payments, media and video, notifications, background work and location
+   - `references/guides/`: step-by-step setup for data sharing and linking, payments, media and video, notifications, background work and location, AI features inside apps (with evals)
 3. **Treat every entry as a dated starting point.** Each entry ends with `Verified <date>`, `Partly verified` or `Unverified (Verify)`. Compare that date with today's date: package versions, prices, store policies and OS rules change within weeks, so an entry older than 30 days is possibly stale, and anything marked Verify is unconfirmed. Before you recommend a package or service:
    - open its current page (pub.dev, official docs, vendor docs) and confirm version, publish date, maintenance, platform support and licence;
    - search for newer or better-maintained alternatives only when the entry is older than 30 days, is marked Verify, or the request differs from it; keep to about five pages in all and say what you did not check;

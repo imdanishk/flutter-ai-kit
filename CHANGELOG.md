@@ -4,6 +4,19 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-11-09
+
+Closes the three gaps the 0.14.0 coverage audit left open. Facts were read on official pages on 2026-11-09; anything the pages did not say is marked Unverified in the files.
+
+### Added
+- `flutter-feature-notes/references/guides/ai-features-in-apps.md`: where the model runs (Firebase AI Logic, own backend, on-device options), no provider keys in the app, App Check and its enforcement dates (2026-11-02, delay possible to 2027-01-21), per-user limits and cost, streaming and chat UI, output as untrusted input, Apple 5.1.2(i) and 1.2 and Google Play's AI-generated content policy, the OWASP LLM Top 10 (2025) risks that matter in a mobile app, and how to evaluate AI features (golden set, code and model grading, when to run it, metrics).
+- `flutter-release/references/crash-and-symbols.md`: `--obfuscate --split-debug-info` and `flutter symbolize`, R8 and Android native debug symbols, Crashlytics and Sentry symbol uploads, Play staged rollout and halt, App Store phased release, and release checklist additions. Linked from the flutter-release skill.
+- `flutter-release/assets/ci/github-actions/pr-check.yml`: secret-free pull-request check (format, analyze, tests that already exist). Not run against a real repository.
+
+### Changed
+- Feature-notes index: AI rows point to the new guide; `flutter_gemma` is marked discontinued (its page points to `flutter_edge_ai`). The GraphQL entry points to the Ferry recipe.
+- Known gaps in `docs/DECISIONS.md` updated; decision 18 added.
+
 ## [0.14.0] - 2026-11-09
 
 ### Added
