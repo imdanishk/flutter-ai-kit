@@ -4,6 +4,17 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-11-12
+
+State management and routing recipes, with `flutter_bloc` (Cubit or Bloc) and Riverpod as the focus. Read from the packages' official docs on 2026-11-12; the Dart in the recipes was not compiled.
+
+### Added
+- `flutter-feature/references/bloc-plain-recipe.md`: a feature slice for `flutter_bloc` without Freezed or injectable (Equatable state, event transformers from `bloc_concurrency`, `RepositoryProvider`, one-off effects, forms).
+- `flutter-feature/references/go-router-recipe.md`: go_router setup, `go` versus `push` and the lost-state bug, `StatefulShellRoute` tabs, redirects and sign-in, type-safe routes, pitfalls, and the move to 18.
+
+### Changed
+- `flutter-review`: go_router and plain Bloc checks added to the stack-specific list.
+
 ## [0.17.0] - 2026-11-12
 
 Flutter 3.50 and Dart 3.14 were released on 2026-11-11. Facts were read from Flutter's "What's new" post, the Dart 3.14 announcement, the breaking-changes page and the `material_ui` migration guide; nothing was run on 3.50.

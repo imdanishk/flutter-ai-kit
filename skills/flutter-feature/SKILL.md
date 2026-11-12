@@ -30,7 +30,9 @@ license: Apache-2.0
 ## References
 
 - `references/bloc-freezed-recipe.md`: a complete feature slice for the Cubit, Freezed, injectable and auto_route stack.
+- `references/bloc-plain-recipe.md`: a feature slice for `flutter_bloc` with Cubit or Bloc without Freezed or injectable (Equatable state, event transformers, `RepositoryProvider`).
 - `references/riverpod-recipe.md`: a complete feature slice for Riverpod 3.
+- `references/go-router-recipe.md`: go_router setup, `go` versus `push` (state lost when a screen is rebuilt), `StatefulShellRoute` tabs, redirects and sign-in, type-safe routes.
 - `references/graphql-ferry-recipe.md`: Ferry (GraphQL) setup, code generation, repository mapping to `Result`, auth link and cache pitfalls; read it when the project uses Ferry or the feature adds GraphQL.
 - `references/localization-recipe.md`: gen-l10n setup, ARB placeholders and plurals, right-to-left, Android and iOS native language settings, and per-language store listings; read it when the project or feature adds a language or user-visible text in an app that has localization.
 
