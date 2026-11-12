@@ -56,6 +56,10 @@ Sentry's docs recommend the `sentry_dart_plugin` (3.4.0, published 2026-05-28) a
 - **App Store** (App Store Connect help): phased release is chosen when you submit a version update (not for the first release). It applies to automatic updates only: 1%, 2%, 5%, 10%, 20%, 50%, 100% over 7 days; anyone can still download the update manually at any time. You can pause (30 days in total across any number of pauses) or release to all users early. The Account Holder, Admin or App Manager role is needed.
 - **Watch before widening:** crash-free users and sessions in Crashlytics or Sentry, new error groups, store reviews, support messages. Widen only after a person has looked. Decide in advance what number makes you halt.
 
+## App size
+
+Before a release that adds packages or assets, note the size from `flutter build appbundle --analyze-size` and compare it with the last release; how to read it and reduce it is in `flutter-fix/references/performance-and-app-size.md`.
+
 ## Release checklist additions
 
 Symbols folder or mapping file saved for this exact build number; symbols uploaded to the crash tool; a forced crash showed a readable trace on a release-like build; the crash tool's environment matches the flavor; privacy answers include the crash tool; staged-rollout percentage and halt criteria written down before production is touched.

@@ -4,6 +4,14 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.19.0] - 2026-11-12
+
+### Added
+- `flutter-fix/references/performance-and-app-size.md`: measuring in profile mode on a device, the performance overlay and frame budget, common causes (build cost, lazy lists, `saveLayer`, opacity and clipping, animations), `Isolate.run` and its limits, DevTools memory and leaks, measuring app size (`--analyze-size`, Play and App Thinning estimates), reducing it (`--split-debug-info`, deferred components), and how to report a before and after. Read from the Flutter docs on 2026-11-12; what the pages did not say (start-up, `--split-per-abi`, WebP, `cacheWidth`) is marked Unverified.
+
+### Changed
+- `flutter-fix` now also covers slow, janky or oversized apps; `flutter-review` has a performance check; the release notes point to the size check.
+
 ## [0.18.0] - 2026-11-12
 
 State management and routing recipes, with `flutter_bloc` (Cubit or Bloc) and Riverpod as the focus. Read from the packages' official docs on 2026-11-12; the Dart in the recipes was not compiled.

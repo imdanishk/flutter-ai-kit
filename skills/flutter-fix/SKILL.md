@@ -1,6 +1,6 @@
 ---
 name: flutter-fix
-description: Finds the root cause of a bug or crash in a Flutter app and fixes it, refactors code without changing behaviour, or upgrades packages, Dart and Flutter (with FVM) one step at a time. Use when asked to debug, fix or investigate an error or crash, refactor existing code, or upgrade packages, Dart or Flutter versions; for new functionality use flutter-feature.
+description: Finds the root cause of a bug, crash, slowdown or size problem in a Flutter app and fixes it, refactors code without changing behaviour, or upgrades packages, Dart and Flutter (with FVM) one step at a time. Use when asked to debug, fix or investigate an error or crash, find why the app is slow, janky or too large, refactor existing code, or upgrade packages, Dart or Flutter versions; for new functionality use flutter-feature.
 license: Apache-2.0
 ---
 
@@ -13,6 +13,7 @@ Three kinds of work that change existing code without adding a feature. Pick one
 1. **Load the project rules** (`AGENTS.md`, project rules folders); project rules win over this skill. If there is no profile, read the files around the problem and go on; do not run `flutter-project-profile` for a small fix.
 2. **Pick the mode and open its reference:**
    - **Bug or crash:** `references/debugging-playbook.md`.
+   - **Slow, janky, too much memory, or an app that is too large:** `references/performance-and-app-size.md` (measure in profile mode first, then fix; report before and after numbers).
    - **Refactor:** the rules below. No reference needed.
    - **Upgrade** (packages, Dart, Flutter, FVM pin): `references/upgrade-checklist.md` and `references/native-platform-requirements.md` (dated Gradle, AGP, Kotlin, Java, Xcode, 16 KB, target API, UIScene and SwiftPM facts).
    - Failures that appear only in a store build or in CI, or come from keys, consoles or fingerprints, start in `flutter-release` or `flutter-service-setup`.
