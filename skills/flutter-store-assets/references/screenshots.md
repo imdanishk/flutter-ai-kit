@@ -19,6 +19,7 @@
 
 - **Google Play, `supply`:** `fastlane/metadata/android/<locale>/images/` with `icon`, `featureGraphic`, `promoGraphic`, `tvBanner` (PNG or JPG) and screenshot folders `phoneScreenshots/`, `sevenInchScreenshots/`, `tenInchScreenshots/`, `tvScreenshots/`, `wearScreenshots/`. Uploaded images replace the existing ones. A build must already have been uploaded manually once. Options: `skip_upload_images`, `skip_upload_screenshots`, `sync_image_upload`. Source: https://docs.fastlane.tools/actions/supply/.
 - **App Store, `deliver`:** `fastlane/screenshots/<language>/` (for example `en-US`); `screenshots_path` points elsewhere. Deliver detects each screenshot's device type from its resolution. Options: `skip_screenshots`, `overwrite_screenshots` (clears earlier uploads first), `skip_metadata`. Source: https://docs.fastlane.tools/actions/deliver/.
+- One set per language you list: the headline text must be in that language, and a language without its own screenshots shows the default language's (Play). Text limits per language and the App Store primary-language fallback are in `flutter-feature/references/localization-recipe.md` (if that skill is installed).
 - Running these is a release action: use the `flutter-release` skill and ask first.
 
 ## Check before handing over

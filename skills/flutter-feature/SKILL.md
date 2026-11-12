@@ -22,7 +22,7 @@ license: Apache-2.0
 - A load or submit that can never leave the loading state because its error path is missing.
 - One shared status for operations that run side by side (load list and delete item need their own).
 - Controllers, focus nodes, timers or stream subscriptions that are never disposed or cancelled.
-- User-visible text outside the project's string table or localization.
+- User-visible text outside the project's string table or localization, or a plural built in code (`count == 1 ? '' : 's'`) instead of an ARB plural.
 - A new package added without asking, or a new feature that needs Android or iOS configuration (permissions, manifest, `Info.plist`, entitlements) and does not say so.
 - Business logic or data access called straight from a widget.
 - A feature that adds API calls, token handling, paging, search or caches without reading the pitfalls list in the `flutter-review` skill (`api-auth-paging-pitfalls.md`, if that skill is installed) first (success codes, error mapping, one refresh at a time, caches cleared on sign-out, paging after cache hydration).
@@ -32,5 +32,6 @@ license: Apache-2.0
 - `references/bloc-freezed-recipe.md`: a complete feature slice for the Cubit, Freezed, injectable and auto_route stack.
 - `references/riverpod-recipe.md`: a complete feature slice for Riverpod 3.
 - `references/graphql-ferry-recipe.md`: Ferry (GraphQL) setup, code generation, repository mapping to `Result`, auth link and cache pitfalls; read it when the project uses Ferry or the feature adds GraphQL.
+- `references/localization-recipe.md`: gen-l10n setup, ARB placeholders and plurals, right-to-left, Android and iOS native language settings, and per-language store listings; read it when the project or feature adds a language or user-visible text in an app that has localization.
 
 Read the recipe that matches the project's stack only when the project has no suitable exemplar feature, or when asked to start a feature from scratch.

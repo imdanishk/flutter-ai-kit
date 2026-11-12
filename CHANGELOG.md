@@ -4,6 +4,21 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-11-12
+
+Adds localization and fixes gaps found by running the plan, fix, design, store-assets and profile skills by hand against a real open-source app (Wonderous, MIT: get_it with `ValueNotifier`, go_router, no BLoC). Nothing was built or run: Flutter and Dart were not available, so the trial read the code, measured the icon files and followed each skill's steps.
+
+### Added
+- `flutter-feature/references/localization-recipe.md`: gen-l10n setup and `l10n.yaml`, ARB placeholders, plurals and select, number and date formats, rules for code, right-to-left, Android per-app language and localized app name, iOS localizations, and per-language store listing limits and screenshots. Dated 2026-11-11, with unverified items marked.
+- `flutter-plan`: extra paths to check when data syncs between devices (first sign-in merge, conflicts, sign-out, migration of existing local data).
+
+### Changed
+- `flutter-project-profile`: the exemplar and state-handling questions no longer assume cubits and a domain/data/presentation split (the trial app has only `logic` and `ui` folders).
+- `flutter-store-assets`: keep the project's own icon tool (the trial app used `icons_launcher`); localized screenshots pointer.
+- `flutter-fix` upgrade checklist: what to do when Flutter or Dart cannot be run.
+- `flutter-review` and `flutter-feature` checklists mention plurals built in code and left/right values in right-to-left apps.
+- Feature-notes localization row points to the recipe.
+
 ## [0.15.0] - 2026-11-09
 
 Closes the three gaps the 0.14.0 coverage audit left open. Facts were read on official pages on 2026-11-09; anything the pages did not say is marked Unverified in the files.

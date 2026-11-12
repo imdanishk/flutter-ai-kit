@@ -69,6 +69,16 @@ The number after the step is a satisfaction score from 1 to 5 and is a judgement
 - Update required or service unavailable.
 - Account deletion and sign out (store review expects an in-app way to delete an account if the app lets people create one; check the current store rule before relying on this, it is not verified here).
 
+## Extra paths when data syncs between devices (check when the plan has sign-in plus cloud data)
+
+- First sign-in on a device that already has local data: merge, ask which to keep, or upload? Decide and draw it.
+- Same account on two devices changing the same item offline: which edit wins, and does the user see a conflict?
+- Sign out: is local data kept, cleared or kept but hidden? Signing in as a different user must never show the previous user's data.
+- Offline changes waiting to upload when the session expires or the app is killed; retry rules; what the user sees while pending.
+- Account deletion: cloud data, local data and anything shared with other users.
+- Existing users updating to the version with sync: how their local-only data migrates (a one-time import slice), and what happens if they never sign in.
+- Where the local data lives today (a single preferences blob, files, a database): moving to per-item records with change tracking is often the first slice, not an afterthought.
+
 ## Rules
 
 - One flow per diagram; link flows with a named exit ("goes to: Checkout").

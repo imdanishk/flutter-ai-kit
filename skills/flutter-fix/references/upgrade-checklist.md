@@ -17,6 +17,7 @@ An upgrade is its own change, on its own branch, with nothing else in it. Never 
    - **Upgradable**: the newest your `pubspec.yaml` constraints allow; what `pub upgrade` gets.
    - **Resolvable**: the newest that works with all your other dependencies if constraints were unbounded; editing `pubspec.yaml` to match is usually the fix.
    - **Latest**: the newest published. Add `--transitive` to include transitive dependencies. The page's own statements on prereleases conflict (`--prereleases` versus `--no-prereleases`); check `dart pub outdated --help` for your version.
+   - **If Flutter or Dart cannot be run** (a sandbox, a review-only task): say so, read the constraints in `pubspec.yaml` and the resolved versions in `pubspec.lock`, and look each package up on pub.dev (version, publish date, changelog tab). Mark the plan "not run" and give the developer the commands to run; do not invent "Upgradable" or "Resolvable" columns.
 2. Preview: `dart pub upgrade --dry-run` (`-n`). It changes nothing.
 3. Compatible upgrades: `dart pub upgrade` raises everything inside the constraints and rewrites `pubspec.lock`, not `pubspec.yaml`. To upgrade named packages only: `dart pub upgrade <package>`; add `--unlock-transitive` to also unlock their transitive dependencies.
 4. Major versions: `dart pub upgrade --major-versions` raises constraints in `pubspec.yaml` to what `outdated` lists as resolvable. Ask first, and prefer naming the package. Before each major upgrade, read that package's changelog and migration notes for the versions in between.

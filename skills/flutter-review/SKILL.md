@@ -42,7 +42,7 @@ End with one line listing what you checked and found fine, and one line for anyt
 - equality missing on state classes, so listeners never fire or always fire
 
 **UI**
-- user-visible text outside the string table or localization
+- user-visible text outside the string table or localization (also plurals built in code, left/right values in a right-to-left app, and fixed date or number formats; see `flutter-feature/references/localization-recipe.md` if that skill is installed)
 - non-lazy lists for long data, missing `const`, unbounded widgets that can overflow, text that cannot scale, tap targets without labels
 
 **Platform**

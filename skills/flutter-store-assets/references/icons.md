@@ -28,4 +28,6 @@ Verified 2026-11-08 from the pages named below.
 
 ## flutter_launcher_icons (https://github.com/fluttercommunity/flutter_launcher_icons)
 
+If the project already uses another icon tool (a trial project used `icons_launcher` with a 1024 px master and a separate 512 px file for web), keep it, read its README for option names and do not add a second tool. Check its config in `pubspec.yaml` first. The notes below are for `flutter_launcher_icons` only.
+
 Option names confirmed in its README: `image_path`; platform flags `android` and `ios` (true, false or a path); Android: `min_sdk_android`, `adaptive_icon_background`, `adaptive_icon_foreground`, `adaptive_icon_foreground_inset`, `adaptive_icon_monochrome`, `image_path_android`; iOS: `remove_alpha_ios`, `background_color_ios`, `image_path_ios`, `image_path_ios_dark_transparent`, `image_path_ios_tinted_grayscale`, `desaturate_tinted_to_grayscale_ios`. Flavors use one file per flavor named `flutter_launcher_icons-<flavor>.yaml` with the same format. The package is a dev dependency: ask before adding it. Run it with the project's `fvm` prefix when pinned. Its release cadence was not visible on the page; check pub.dev for the current version and date before adding.

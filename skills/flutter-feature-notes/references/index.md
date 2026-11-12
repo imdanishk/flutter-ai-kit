@@ -103,7 +103,7 @@ Size: small is under 2 days, medium is 2 to 10 days, large is over 10 days (one 
 | Key-value storage | Simple settings | shared_preferences | small | none |
 | Secure storage | Keychain/Keystore secrets | flutter_secure_storage | small | significant |
 | Local databases | Object/relational stores | drift, sqflite, hive_ce, isar (stale stable), ObjectBox | medium to large | none (ObjectBox minor) |
-| Localization (l10n/ARB), RTL | Translations, plurals, direction | intl, `flutter gen-l10n` | medium | none |
+| Localization (l10n/ARB), RTL | Translations, plurals, direction, per-app language, store listings: `flutter-feature/references/localization-recipe.md` | intl, `flutter gen-l10n` | medium | minor |
 | Date, number, currency formatting; time zones | Locale-aware formatting | intl, flutter_timezone | small | none |
 | URL, phone, SMS, email intents | Open external apps | url_launcher | small | minor (queries, LSApplicationQueriesSchemes) |
 | WebView | Embedded web content | webview_flutter, flutter_inappwebview | medium | minor |
