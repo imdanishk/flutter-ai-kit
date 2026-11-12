@@ -4,6 +4,14 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.19.1] - 2026-11-12
+
+Fixes from four trial runs on real Cubit/Freezed/injectable apps (three current, one old) by a developer with Flutter installed. In all four the profile matched the code, the feature followed each project's own base classes and generated-code pattern, and the review ran read-only; the plan skill was not exercised (no ticket was supplied).
+
+### Changed
+- AGENTS block: never print, copy or recover secrets, including from git history (one run restored old environment files from git history after code generation failed on missing values).
+- `flutter-feature`: when generation or analysis cannot run, do not recreate or recover env files, do not hand-write generated files, give the exact command for the developer, use `flutter analyze --no-pub` when packages must not change (a plain `flutter analyze` resolved and downloaded packages in one run), and stop on a private git dependency that cannot be cloned.
+
 ## [0.19.0] - 2026-11-12
 
 ### Added
