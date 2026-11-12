@@ -4,6 +4,16 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.19.3] - 2026-11-13
+
+Fixes from a run on a project made with the new-project skill: the plan skill (3 flows, 4 slices, assumptions, blockers kept apart) and the feature skill (Cubit, Freezed state, repository, route, generated files; the analyzer found 4 errors in its first draft and they were fixed) both worked, and the app launched on an Android emulator. Nothing was run on iOS.
+
+### Changed
+- `flutter-new-project`: asks whether the app has one language or several, and sets up gen-l10n up front for several.
+- `flutter-feature`: format only the files you created or changed (a format check failed on four new files).
+- `flutter-plan` slicing: the session's own limits (for example no new packages) stay out of the plan; a stand-in is labelled and the real slice follows it.
+- Debugging playbook: the build_runner analyzer-language-version message.
+
 ## [0.19.2] - 2026-11-12
 
 Fixes from a real run of a project created with the new-project skill (Flutter 3.50.0 pin): `pub get`, build_runner, format and analyze passed and the app ran on an Android 15 emulator.

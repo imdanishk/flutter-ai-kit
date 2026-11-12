@@ -31,6 +31,10 @@ Mark the slice "needs design" and plan a design slice before it (`flutter-design
 - App-wise plans start with Foundation and end with Ship; between them, slices follow the journeys.
 - Feature-wise plans start from the project profile and an exemplar feature, list what the feature reuses, and never include foundation or ship slices unless the feature needs a new service or a store change.
 
+## Keep the session's limits out of the plan
+
+Plan for the ticket, not for what the current session may do. If the developer limits this session ("no new packages", "no backend"), note it under assumptions and let the first slice use a stand-in whose goal line says so ("during this session only"), with the slice that makes it real next in the order. Do not reorder or reshape the slices around the limit, and do not write the limit into the risks as if it were a product constraint.
+
 ## Re-planning
 
 After each slice, compare what happened with the plan. If a slice took far more than its range, or a risk came true, update the remaining slices and note the change at the top of the plan. A plan that never changes is not being used.
