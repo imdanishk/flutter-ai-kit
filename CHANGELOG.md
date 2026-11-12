@@ -4,6 +4,15 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.19.2] - 2026-11-12
+
+Fixes from a real run of a project created with the new-project skill (Flutter 3.50.0 pin): `pub get`, build_runner, format and analyze passed and the app ran on an Android 15 emulator.
+
+### Changed
+- `dart run build_runner build` no longer includes `--delete-conflicting-outputs` in the new-project skill, the Ferry recipe and the CI templates: the run printed that the option was removed and ignored.
+- New-project step 7: `flutter run -d <device> --no-resident` for shells with a time limit.
+- Debugging playbook: tool messages seen in the trial runs (kernel binary version, missing env value, private git host key, removed flag).
+
 ## [0.19.1] - 2026-11-12
 
 Fixes from four trial runs on real Cubit/Freezed/injectable apps (three current, one old) by a developer with Flutter installed. In all four the profile matched the code, the feature followed each project's own base classes and generated-code pattern, and the review ran read-only; the plan skill was not exercised (no ticket was supplied).

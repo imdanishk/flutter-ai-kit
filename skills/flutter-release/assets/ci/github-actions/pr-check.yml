@@ -35,7 +35,7 @@ jobs:
         run: flutter pub get
 
       # Only if the project does not commit generated files (build_runner, l10n, freezed, json_serializable):
-      # - run: dart run build_runner build --delete-conflicting-outputs
+      # - run: dart run build_runner build
 
       # Fails when a file is not formatted. If the project commits generated files that are not formatted,
       # list the folders to check instead of "." or format them in the project first.

@@ -48,6 +48,13 @@ DevTools tools listed on its overview page: Flutter Inspector, Performance, CPU 
 
 The page gives no fix for the generic red or grey screen beyond finding the underlying error.
 
+## 3a. Tool messages seen in trial runs
+
+- `Can't load Kernel binary: Invalid kernel binary format version (expected N, found M).` printed by `dart run`, `flutter pub get` or `build_runner`: a cached tool snapshot was built by a different Dart version than the SDK running now (seen after switching Flutter versions or FVM pins; the commands still finished in the runs that reported it). *Cause inferred, not confirmed by a page:* try `dart pub cache repair` (or run the command through the project's pinned SDK, `fvm dart`), and do not treat it as the cause of a build error unless the command actually failed.
+- `Environment variable not found for field X` from the generator: an env source the project generates from local, ignored files is missing a value. Ask for the current files; do not recreate them from git history.
+- `Host key verification failed` during `pub get`: a dependency is a private git repository the machine cannot clone (no SSH access in this shell). Stop and report; do not rewrite the dependency.
+- `build_runner` warns that `--delete-conflicting-outputs` was removed and ignored: harmless, drop the flag.
+
 ## 3b. Release builds and obfuscated stack traces
 
 If the build used `--obfuscate`, the trace shows meaningless names. Symbols are written to the directory given to `--split-debug-info` (for example `out/android/app.android-arm64.symbols`; the file name carries platform and architecture). The Flutter page says to back these files up after every obfuscated build; without them old traces cannot be read. Decode a trace with:

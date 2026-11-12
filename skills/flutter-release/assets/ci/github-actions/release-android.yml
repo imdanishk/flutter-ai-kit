@@ -101,7 +101,7 @@ jobs:
         run: |
           flutter pub get
           # Only if the project does not commit generated files:
-          # dart run build_runner build --delete-conflicting-outputs
+          # dart run build_runner build
 
       - name: Analyze
         working-directory: .

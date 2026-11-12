@@ -42,7 +42,7 @@ targets:
           schema: your_package_name|lib/schema.graphql
 ```
 
-4. Generate with `dart run build_runner build --delete-conflicting-outputs` (through `fvm` if the project uses it). Never edit generated files. Generated names get a `G` prefix: `query AllPokemon` becomes `GAllPokemonReq`, `GAllPokemonVars`, `GAllPokemonData`.
+4. Generate with `dart run build_runner build` (through `fvm` if the project uses it). Never edit generated files. Generated names get a `G` prefix: `query AllPokemon` becomes `GAllPokemonReq`, `GAllPokemonVars`, `GAllPokemonData`.
 5. Select `id` and let `__typename` come through on every object you want cached: the cache keys objects by `__typename` plus `id` or `_id`, so an object without one is not normalized and mutations will not update it elsewhere.
 
 ## Client (one per app, created in the DI container)
