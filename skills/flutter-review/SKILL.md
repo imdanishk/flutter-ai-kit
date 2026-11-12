@@ -10,7 +10,7 @@ Read-only. Never modify files while reviewing.
 
 ## Steps
 
-1. Get the change: `git diff` against the base branch (or the files named). Read the project profile and every rule in `AGENTS.md` (and `CLAUDE.md` or a rules folder if present). List the rules that apply to this change. Findings are judged against these rules first and the checklist below second, not general taste.
+1. Get the change: `git diff` against the base branch, or the files, folders or paths named. When the code is unchanged (a request to review a screen or folder as it is), review the named files in full and say there was no diff. Read the project profile and every rule in `AGENTS.md` (and `CLAUDE.md` or a rules folder if present). List the rules that apply to this change. Findings are judged against these rules first and the checklist below second, not general taste.
 2. Read each changed file in full where it matters. Follow calls into the code the change depends on.
 3. Check each applicable project rule against the diff, then the list below. A rule that existing code elsewhere already breaks is still a rule: if the diff breaks it, report it, and add "follows existing precedent in <file>" so the team can decide whether to fix the rule or the code. Do not excuse a violation because it was copied. Report only what you can point to in the code. If you suspect something you cannot confirm, say so and say what would confirm it.
 4. Report in this format, most important first:
@@ -42,7 +42,7 @@ End with one line listing what you checked and found fine, and one line for anyt
 - equality missing on state classes, so listeners never fire or always fire
 
 **UI**
-- user-visible text outside the string table or localization (also plurals built in code, left/right values in a right-to-left app, and fixed date or number formats; see `flutter-feature/references/localization-recipe.md` if that skill is installed)
+- user-visible text outside the string table or localization (also plurals built in code, left/right values in a right-to-left app, and fixed date or number formats; open `flutter-feature/references/localization-recipe.md` when this skill is installed and the code touches text, dates, numbers or layout direction)
 - non-lazy lists for long data, missing `const`, unbounded widgets that can overflow, text that cannot scale, tap targets without labels
 
 **Platform**
@@ -59,6 +59,8 @@ End with one line listing what you checked and found fine, and one line for anyt
 
 - Cubit or bloc: a cubit created inside `build` or a `BlocProvider` that recreates it on every rebuild; `context.watch` used in a callback or `context.read` used to render; a `BlocListener` that does what a `BlocBuilder` should draw (or the reverse); state classes without equality; the same cubit instance shared by routes that should not share it.
 - Riverpod: `ref.read` inside `build` for values the widget must react to, and `ref.watch` inside callbacks; writing to `state` after an `await` without checking `ref.mounted`; notifier methods called from `build`; one `AsyncValue` shared by operations that run side by side; providers that read `BuildContext`; missing `ProviderScope`; legacy providers (`StateProvider`, `StateNotifierProvider`) in new code; automatic retry left on for calls that must not repeat (payments, one-time actions).
+
+- Any other state pattern (`ValueNotifier`, `ChangeNotifier`, Provider, get_it logic classes, signals): controllers, notifiers and their listeners disposed or removed; state replaced with a new object, not mutated in place; no value set or `notifyListeners` called during `build`; the project's own rules from the profile.
 
 **Network, sessions, paging and caches** (when the change touches them; details in `references/api-auth-paging-pitfalls.md`)
 - success treated as `== 200` only; a catch-all that hides the specific error or a parsing bug; error bodies assumed to be maps

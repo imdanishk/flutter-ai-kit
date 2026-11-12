@@ -23,6 +23,8 @@
 
 19. **Trial on a real open-source app, by hand.** Subagents hit the usage limit, so the plan, fix, design, store-assets and profile skills were followed by the main session on a copy of Wonderous. This found wording that assumed BLoC and clean layers, a missing no-SDK fallback in the upgrade checklist, no sync paths in the flow checklist, and an icon tool the skill did not know. It does not replace a run by a developer on their own project with Flutter installed; the design skill was only read against the app's custom theme layer, not run.
 
+20. **First developer runs (2026-11-12, two models, Wonderous, Flutter 3.44.9).** Both finished all seven tasks; the strongest results were the debug rule "state the cause before editing", the plan's blocker table, and the Play screenshot ratio check on files the repo already had. The two models gave different bug causes without running the app, so static-only conclusions are now labelled as such. Gaps fixed in 0.16.1. The trial did not run the app, so design, screenshots and RTL remain unchecked on a device.
+
 ## Known gaps
 
 Found by the 0.13.1 and 0.14.0 audits and not done yet, most valuable first (localization was added in 0.16.0): performance and app size; plain BLoC, Provider and go_router recipes. Whether a given Flutter version ships a 16 KB-aligned engine is unverified. The lane templates do not pass `--obfuscate` or upload symbols (`flutter-release/references/crash-and-symbols.md` explains how and marks the iOS part unverified); the pull-request workflow template and the AI-features guide were added in 0.15.0 but not tried in a real project. The Android internal lane's `release_status: completed` may fail for an app that has never had a published release (not verified).

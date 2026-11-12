@@ -4,6 +4,18 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.16.1] - 2026-11-12
+
+Fixes from two real runs of the skills by a developer on Flutter 3.44.9 (Windows, OpenCode, Wonderous, two different models). Each report finding was checked against the files first; one was rejected (the skills named `flutter-project-setup`, `flutter-testing-setup` and `replace-with-skill-name` belong to another repository, not this kit).
+
+### Changed
+- `flutter-fix`: when the app cannot be run, a bug cause is labelled "found by reading, not reproduced" with the other plausible causes, and code changes only with the developer's agreement (the two models found different causes). The upgrade checklist now finds held-back and companion packages first (`get_it` with `get_it_mixin`, SDK-pinned `intl`) and stops after the plan on a plan-only request.
+- `flutter-plan`: the effort step says what to do without `flutter-estimate`; a path the developer names is written, not just offered.
+- `flutter-review`: reviews named files with no diff; a check for other state patterns (`ValueNotifier`, `ChangeNotifier`, get_it); the localization recipe is opened when installed.
+- `flutter-store-assets`: an existing logo or icon wins over a new master; clear fallbacks without an image tool or a runnable app.
+- `flutter-design`: case C asks what the screen must show before inventing content.
+- README: open the project folder itself as the agent's workspace so the skills are listed.
+
 ## [0.16.0] - 2026-11-12
 
 Adds localization and fixes gaps found by running the plan, fix, design, store-assets and profile skills by hand against a real open-source app (Wonderous, MIT: get_it with `ValueNotifier`, go_router, no BLoC). Nothing was built or run: Flutter and Dart were not available, so the trial read the code, measured the icon files and followed each skill's steps.

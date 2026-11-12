@@ -79,7 +79,7 @@ It shows a list: choose the skills and agents, then confirm. If it is run where 
 npx skills add imdanishk/flutter-ai-kit --yes
 ```
 
-(`--all` installs for every agent the tool knows, which is usually too many.) Check the result with `ls .agents/skills`.
+(`--all` installs for every agent the tool knows, which is usually too many.) Check the result with `ls .agents/skills`. Open **the project folder itself** as the agent's workspace: skills are installed into that folder, and an agent opened on a parent or different folder will not list them (a trial run failed with "skill not found" for this reason). If an agent cannot load a skill by name, it can still read `.agents/skills/<name>/SKILL.md`.
 
 **2. Claude Code plugin**
 

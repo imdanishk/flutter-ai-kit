@@ -18,6 +18,7 @@ Read the case that matches the request. All cases end with the report in `SKILL.
 
 ## C. New feature in an existing look
 
+0. If the request does not say what the screen must show and do (no brief, spec or data contract), ask at most three questions. If nobody can answer, state the content you assumed and label the result a prototype.
 1. Open two or three existing screens that are closest to the new one. List the components, spacing and states they use.
 2. Design the new screens from those parts only. A new component needs a reason: say why no existing one fits.
 3. Show the screen list with one line each (purpose, main action, states) before building when the feature has more than two screens.
