@@ -4,6 +4,18 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-11-12
+
+Flutter 3.50 and Dart 3.14 were released on 2026-11-11. Facts were read from Flutter's "What's new" post, the Dart 3.14 announcement, the breaking-changes page and the `material_ui` migration guide; nothing was run on 3.50.
+
+### Added
+- `flutter-fix/references/native-platform-requirements.md`: Flutter 3.50 template values (AGP 9.3.1, Gradle 9.5.0, Kotlin plugin 2.4.20, Java 17, SDK 24/36/36), Built-in Kotlin for plugins, restricted Intent extras and engine flags in Android release builds, Xcode 27 and Apple Silicon notes, SwiftPM and CocoaPods changes.
+- `flutter-fix/references/upgrade-checklist.md`: the Material and Cupertino move to `material_ui` and `cupertino_ui` (steps, localization delegates, compatibility bridge, third-party limits), `dart migrate`, legacy web library deprecation, smaller 3.50 breaking changes.
+- AI guide: Genkit Dart 1.0 (`genkit`) and the new MediaPipe package, with what the pages did not say marked Unverified.
+
+### Changed
+- Localization recipe, theme reference and new-project skill note the `material_ui` imports on 3.50.
+
 ## [0.16.1] - 2026-11-12
 
 Fixes from two real runs of the skills by a developer on Flutter 3.44.9 (Windows, OpenCode, Wonderous, two different models). Each report finding was checked against the files first; one was rejected (the skills named `flutter-project-setup`, `flutter-testing-setup` and `replace-with-skill-name` belong to another repository, not this kit).

@@ -37,6 +37,19 @@ An upgrade is its own change, on its own branch, with nothing else in it. Never 
 4. `dart fix --dry-run` shows automated migrations for deprecated APIs; `dart fix --apply` applies them. The breaking-changes page says many, not all, breaking changes are covered this way. Review the diff.
 5. Fix what remains by hand, one error group at a time, following the migration guides. Windows only: a "Filename too long" error during `flutter upgrade` means a shorter install path or long paths enabled (see the upgrade page).
 
+### Flutter 3.50 and Dart 3.14 (released 2026-11-11)
+
+Read from Flutter's "What's new in Flutter 3.50", the Dart 3.14 announcement and the migration guide at docs.flutter.dev/release/breaking-changes/material-ui-and-cupertino-ui, on 2026-11-12.
+
+- **Material and Cupertino become packages.** `package:flutter/material.dart` and `cupertino.dart` are formally deprecated in 3.50 in favour of the standalone `material_ui` and `cupertino_ui` packages (1.0 shipped from Flutter 3.47; the in-SDK code was frozen in 3.44; new projects use `material_ui` by default). The pages do not say when the old imports are removed or whether they still compile in 3.50 *(Unverified: expect deprecation warnings, not errors; check on your project)*.
+  - Migrate as its own step, after the Flutter upgrade builds: `dart fix --apply --code=migrate_design_widgets` (rewrites imports to `package:material_ui/material_ui.dart` and `package:cupertino_ui/cupertino_ui.dart`); if it does not add the dependencies, `flutter pub add material_ui` and `flutter pub add cupertino_ui`; then run `dart fix` again for lint and import-order fixes. Ask before starting; it touches every UI file.
+  - **Localization:** the Material and Cupertino delegates move too. `localizationsDelegates: GlobalMaterialLocalizations.delegates` from `material_ui` includes the Cupertino and Widgets delegates; `flutter_localizations` stays a dependency for the rest. See `flutter-feature/references/localization-recipe.md`.
+  - **Third-party packages** that still import the old libraries can be bridged with `MaterialUiCompatibilityBridge` (wrap the app in `MaterialApp.builder`); it cannot fix packages whose public API takes or returns legacy types (`ColorScheme`, `TextTheme`, `FloatingActionButtonLocation`), which must be updated first. Do not mix both libraries in one file by accident; follow what the project imports today.
+  - Packages you publish: treat the switch as a major version bump (the guide says so).
+- **`dart migrate` (new in Dart 3.14)** moves a package one minor SDK version per run: applies preparatory `dart fix` fixes, raises the SDK lower bound in `pubspec.yaml`, offers cleanup fixes. Flags: `--dry-run`, `--apply`, `--step`, `--target-sdk`. It supports only packages whose SDK constraint already requires Dart 3.0 or later. Start with `--dry-run`. *(Read on the announcement only; not run.)*
+- **Legacy web libraries** (`dart:html`, `dart:js`, `dart:js_util`, `package:js`) are deprecated and will be removed; `dart compile js` and `ddc` take `--no-deprecated-js-interop` to find them. Web builds only.
+- Smaller 3.50 breaking changes: `ignoringSemantics` is removed from `IgnorePointer`, `AbsorbPointer` and `SliverIgnorePointer`; soft hyphens now show a hyphen where a word wraps; `WidgetSpan` order in right-to-left text follows reading order; `SafeArea` on mobile web respects `viewport-fit=cover`.
+
 ## 3. Native side
 
 A new Flutter version can require newer Android Gradle plugin, Gradle, Kotlin and Java versions and a newer Xcode, and Play and App Store rules add dated requirements (16 KB pages, target API, UIScene, SwiftPM). Read `native-platform-requirements.md` for the dated tables and checks. If a build fails in `android/` or `ios/`, read the first error, then the migration guide for that Flutter version. Do not edit native files without saying so; name them in the report.

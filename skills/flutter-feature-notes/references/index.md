@@ -306,7 +306,7 @@ Size: small is under 2 days, medium is 2 to 10 days, large is over 10 days (one 
 | Attribution | Installs, deferred links | appsflyer_sdk, adjust_sdk (unverified), flutter_branch_sdk | medium | significant |
 | Crash reporting | Crashlytics, Sentry | firebase_crashlytics, sentry_flutter | small to medium | minor |
 | Remote config, flags, A/B | Change behaviour without a release | firebase_remote_config | small | none |
-| Generative AI | Gemini via Firebase AI Logic or an own backend; see `guides/ai-features-in-apps.md` | firebase_ai, firebase_app_check, flutter_ai_toolkit | medium to large | minor |
+| Generative AI | Gemini via Firebase AI Logic, Genkit Dart or an own backend; see `guides/ai-features-in-apps.md` | firebase_ai, firebase_app_check, flutter_ai_toolkit, genkit | medium to large | minor |
 | On-device ML | ML Kit GenAI, LiteRT, ONNX, llama.cpp | flutter_edge_ai (flutter_gemma is discontinued), tflite_flutter; see `guides/ai-features-in-apps.md` | medium to large | significant |
 | Flavors and environments | Dev/stage/prod | native flavors (unverified) | medium | significant |
 | Signing and CI/CD | Keystore, provisioning, pipelines | Codemagic, Fastlane, GitHub Actions (unverified) | large | significant |

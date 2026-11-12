@@ -2,6 +2,8 @@
 
 Follow the project's own theme layer if it has one. This is the default for projects that do not.
 
+From Flutter 3.50 the Material and Cupertino widgets are standalone packages (`material_ui`, `cupertino_ui`; `package:flutter/material.dart` is deprecated). The class names below (`ThemeData`, `ColorScheme`, `TextTheme`, `ThemeExtension`) are the same; only the import changes. Use the import the project already has, and see `flutter-fix/references/upgrade-checklist.md` before migrating one.
+
 ## Where values live
 
 - **Colours:** a `ColorScheme` per brightness, passed to `ThemeData(colorScheme: ...)`. For roles that `ColorScheme` does not have (success, warning, brand accent, chart colours) use a `ThemeExtension`.

@@ -25,6 +25,8 @@
 
 20. **First developer runs (2026-11-12, two models, Wonderous, Flutter 3.44.9).** Both finished all seven tasks; the strongest results were the debug rule "state the cause before editing", the plan's blocker table, and the Play screenshot ratio check on files the repo already had. The two models gave different bug causes without running the app, so static-only conclusions are now labelled as such. Gaps fixed in 0.16.1. The trial did not run the app, so design, screenshots and RTL remain unchecked on a device.
 
+21. **Flutter 3.50 is documented as a migration, not applied to templates.** The kit's shipped Dart files import no Material code, so nothing in them changed. The `material_ui` move is a step in the upgrade checklist, and the recipes say to follow the project's own imports. Whether the old imports still compile on 3.50, and the MediaPipe package name, were not on the pages read and are marked Unverified.
+
 ## Known gaps
 
 Found by the 0.13.1 and 0.14.0 audits and not done yet, most valuable first (localization was added in 0.16.0): performance and app size; plain BLoC, Provider and go_router recipes. Whether a given Flutter version ships a 16 KB-aligned engine is unverified. The lane templates do not pass `--obfuscate` or upload symbols (`flutter-release/references/crash-and-symbols.md` explains how and marks the iOS part unverified); the pull-request workflow template and the AI-features guide were added in 0.15.0 but not tried in a real project. The Android internal lane's `release_status: completed` may fail for an app that has never had a published release (not verified).

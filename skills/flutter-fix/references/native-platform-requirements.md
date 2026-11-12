@@ -1,10 +1,19 @@
 # Native toolchain and platform requirements
 
-Checked 2026-11-08. Sources: Flutter's `gradle_utils.dart` on the `stable` branch (the tool's own version tables), developer.android.com (Android Gradle plugin 9.5 release notes, 16 KB page sizes, edge-to-edge), kotlinlang.org Gradle compatibility table, Google Play target API page, developer.apple.com/news/upcoming-requirements, and docs.flutter.dev (Swift Package Manager, UIScene, edge-to-edge). These numbers change every few months: re-check the source named on each line before relying on one. *Unverified* marks what the pages read did not say.
+Checked 2026-11-08; Flutter 3.50 lines added 2026-11-12. Sources: Flutter's `gradle_utils.dart` on the `stable` branch (the tool's own version tables), developer.android.com (Android Gradle plugin 9.5 release notes, 16 KB page sizes, edge-to-edge), kotlinlang.org Gradle compatibility table, Google Play target API page, developer.apple.com/news/upcoming-requirements, and docs.flutter.dev (Swift Package Manager, UIScene, edge-to-edge). These numbers change every few months: re-check the source named on each line before relying on one. *Unverified* marks what the pages read did not say.
 
 ## Android build toolchain
 
-What a new Flutter project uses (stable branch, 2026-11-08):
+**Flutter 3.50** (released 2026-11-11 with Dart 3.14; Flutter's "What's new" post, read 2026-11-12) says a new project uses AGP 9.3.1, Gradle 9.5.0, Kotlin Gradle plugin 2.4.20 (verified by Flutter against these), Java 17 minimum, and `flutter.minSdkVersion` 24, `flutter.compileSdkVersion` and `flutter.targetSdkVersion` 36. The post does not give an NDK version, UIScene or 16 KB facts; keep the lines below for those. Other 3.50 notes from the post:
+- AGP 9's new DSL needs every plugin to support Built-in Kotlin. Plugins that apply the Kotlin Gradle plugin by hand must migrate and declare `flutter: ">=3.44.0"` (the migration guide is listed under 3.44).
+- Release-mode Android builds ignore `route`, `dart_entrypoint` and `cached_engine_id` from Intent extras and reject runtime engine flags such as `--dart-flags` supplied by Intent extras or with a prebuilt APK. Check any native code or tooling that launches Flutter with Intent extras.
+- Building with Xcode 27 restores `flutter screenshot` on physical iPhones and iPads. Flutter no longer tests on Intel Macs and warns once; a future release will require Apple Silicon for iOS, macOS and Android builds. `flutter config --enable-macos-arm64-only` builds Apple Silicon-only macOS apps.
+- Turning Swift Package Manager off now warns on every CLI command; the opt-out and later the CocoaPods fallback will be removed. CocoaPods trunk goes read-only in December 2026.
+- `flutter config --enable-hcpp` opts into Hybrid Composition++ on Android 14 or later with Vulkan. *(Opt-in; not verified.)*
+
+The table below is what the stable branch used before 3.50 (read 2026-11-08); use 3.50's values above for a project on 3.50:
+
+What a new Flutter project used (stable branch, 2026-11-08):
 
 | Item | Value |
 |---|---|
