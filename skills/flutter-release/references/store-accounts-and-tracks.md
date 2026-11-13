@@ -53,6 +53,7 @@ Verified 2026-11-04 on official pages unless a line says Unverified. Re-check pa
 ## Firebase App Distribution
 
 [Fastlane setup](https://firebase.google.com/docs/app-distribution/android/distribute-fastlane)
+- No Fastlane or no Ruby (for example on Windows)? Use `firebase appdistribution:distribute` instead: see `fastlane-and-ci.md` section 3a.
 - Install the plugin: `fastlane add_plugin firebase_app_distribution` in the platform folder (choose RubyGems when asked).
 - Authenticate with a service account that has the **Firebase App Distribution Admin** role (`service_credentials_file` or `GOOGLE_APPLICATION_CREDENTIALS`), or the Firebase CLI sign-in (`firebase_cli_token` on CI). The page does not say whether the CLI token method is deprecated: check the Firebase CLI docs before using it. A service account key grants admin access; store it securely.
 - `app` is the Firebase App ID, not the package name. `groups` takes group aliases from the console, not display names; testers and groups are comma-separated, test devices semicolon-separated.

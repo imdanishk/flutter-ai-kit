@@ -47,6 +47,22 @@ FLUTTER_FLAVOR=development bundle exec fastlane firebase release_notes:"Fix logi
 
 Needs: the plugin (`bundle exec fastlane add_plugin firebase_app_distribution`, run once per platform folder), a service account with the Firebase App Distribution Admin role, the Firebase App ID, a tester group alias. iOS uses ad hoc signing, so each tester's device must be registered in the profile (Unverified).
 
+### 3a. Firebase CLI route (no Ruby, works on Windows)
+
+Verified 2026-11-12 against the [Firebase CLI distribution page](https://firebase.google.com/docs/app-distribution/android/distribute-cli). Use it when the project has no Fastlane setup or the machine has no Ruby. Build the file first, then upload it:
+
+```
+fvm flutter build apk --release --flavor development --dart-define-from-file=.env.development --obfuscate --split-debug-info=build/symbols
+firebase appdistribution:distribute build/app/outputs/flutter-apk/app-development-release.apk \
+  --app <FIREBASE_APP_ID> --groups "<group-alias>" --release-notes "What changed"
+```
+
+- Flags on the page: `--app` (required, the Firebase App ID, not the package name), `--groups` and `--testers` (comma-separated), `--groups-file`, `--testers-file`, `--release-notes`, `--release-notes-file`, `--token` (refresh token for CI), `--debug`. The page says to sign APKs with a debug key or the app signing key.
+- Locally, run `firebase login` once. On CI the page names a `login:ci` refresh token passed with `--token`, and mentions service account sign-in; it does not say which is preferred, so check the page before wiring CI.
+- The page does not say how it handles `.aab` files for non-Play distribution; use an APK for testers.
+- The APK path depends on flavor and Gradle version: list `build/app/outputs/flutter-apk/` after the build instead of guessing the name.
+- Keep `build/symbols` for the crash tool (see `crash-and-symbols.md`); upload it right after the build.
+
 ## 4. Google Play
 
 ```

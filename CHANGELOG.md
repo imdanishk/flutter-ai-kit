@@ -4,6 +4,11 @@ All notable changes are listed here. The format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.19.4] - 2026-11-13
+
+### Added
+- `flutter-release`: a Firebase CLI route for App Distribution (`firebase appdistribution:distribute`, flags checked against the Firebase page of 2026-11-12) for projects without Fastlane or Ruby, including Windows. Fastlane stays the default for projects that already use it.
+
 ## [0.19.3] - 2026-11-13
 
 Fixes from a run on a project made with the new-project skill: the plan skill (3 flows, 4 slices, assumptions, blockers kept apart) and the feature skill (Cubit, Freezed state, repository, route, generated files; the analyzer found 4 errors in its first draft and they were fixed) both worked, and the app launched on an Android emulator. Nothing was run on iOS.
