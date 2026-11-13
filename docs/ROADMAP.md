@@ -6,6 +6,8 @@ What comes next, in order. Last updated 2026-11-13 (kit 0.19.4). Items move or d
 
 The Cubit stack has been run on real projects. The Riverpod recipe has not. Run the feature, plan, review, testing and fix skills on a real Riverpod project (a clone, on a throwaway branch) and on a new project created with the new-project skill and Riverpod chosen. Fix what the reports show.
 
+The step-by-step guide with copy-paste prompts is `RIVERPOD-TRIAL.md`.
+
 ## 2. Rollout kit for colleagues
 
 - README "first 10 minutes" guide.
